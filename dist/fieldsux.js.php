@@ -56,6 +56,10 @@ foreach([
 	'/fields/html/h2.js',
 	'/fields/html/h3.js',
 	'/fields/html/p.js',
+	'/fields/html/img.js',
+	'/fields/html/a.js',
+	'/fields/html/br.js',
+	'/fields/html/hr.js',
 
 
 ] as $filepath ){

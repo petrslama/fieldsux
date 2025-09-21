@@ -2925,6 +2925,89 @@ fu.fields.p = class fu_fields_p extends fu.fields.abstract {
 
 customElements.define('fu-p', fu.fields.p);
 
+// /fields/html/img.js
+
+fu.fields.img = class fu_fields_img extends fu.fields.abstract {
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
+			'children':[{
+				'tag': 'img',
+				'src': template.src ?? ''
+			}]
+		});
+
+		this.set_width( this, template );
+	}
+};
+
+customElements.define('fu-img', fu.fields.img);
+
+// /fields/html/a.js
+
+fu.fields.a = class fu_fields_a extends fu.fields.abstract {
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
+			'children':[{
+				'tag': 'a',
+				'html': template.html ?? '',
+				'href': template.href ?? '#',
+				'target': template.target ?? '_blank',
+			}]
+		});
+
+		this.set_width( this, template );
+	}
+};
+
+customElements.define('fu-a', fu.fields.a);
+
+// /fields/html/br.js
+
+fu.fields.br = class fu_fields_br extends fu.fields.abstract {
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+		const height = template.height ? template.height : '32px';
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
+			'style': 'height:' + height
+		});
+
+		this.set_width( this, template );
+	}
+};
+
+customElements.define('fu-br', fu.fields.br);
+
+// /fields/html/hr.js
+
+fu.fields.hr = class fu_fields_hr extends fu.fields.abstract {
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
+			'children':[{
+				'tag': 'hr',
+			}]
+		});
+
+		this.set_width( this, template );
+	}
+};
+
+customElements.define('fu-hr', fu.fields.hr);
+
 
 fu.init();
 

@@ -17,6 +17,7 @@ Thumbs.db
 # Dot files/directories
 .*
 !.gitignore
+!.gitattributes
 
 # Dependencies
 /vendor/

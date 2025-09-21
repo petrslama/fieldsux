@@ -1,0 +1,12 @@
+# Set all files to use LF line endings
+* text=auto eol=lf
+
+# Explicitly mark text files and ensure LF line endings
+*.json text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+
+# Ensure any other common text files also use LF
+*.md text eol=lf
+*.txt text eol=lf
+*.html text eol=lf

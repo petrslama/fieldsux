@@ -1,9 +1,15 @@
 fu-h1,
 fu-h2,
 fu-h3,
-fu-p{
+fu-p,
+fu-space{
 	&.fu_gw_default{
 		grid-column: 1 / -1;
 		min-width: max-content;
 	}
+}
+
+fu-img img {
+	width: 100%;
+	height: auto;
 }
