@@ -1,13 +1,13 @@
 /**
  * Utility class for DOM and HTMLElements operations
  */
-fc.DOM = class {
+fu.DOM = class {
 
 	static index = 0;
 
 	static getIndex() {
-		fc.DOM.index ++;
-		return 'fc_' + fc.DOM.index;
+		fu.DOM.index ++;
+		return 'fu_' + fu.DOM.index;
 	}
 
 	static escape_html( html ) {
@@ -88,7 +88,7 @@ fc.DOM = class {
 			if('children' == key) {
 				value.forEach((child) => {
 					if(Array.isArray(child)) {
-						fc.DOM.attrs(element, {'children': child});
+						fu.DOM.attrs(element, {'children': child});
 					} else if(child instanceof HTMLElement) {
 						element.appendChild(child);
 					} else if( child ) {
@@ -124,7 +124,7 @@ fc.DOM = class {
 
 	static create(attrs) {
 		const element = document.createElement(attrs.tag ?? 'div');
-		fc.DOM.attrs(element, attrs);
+		fu.DOM.attrs(element, attrs);
 		return element;
 	}
 }

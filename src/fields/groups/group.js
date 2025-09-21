@@ -1,5 +1,5 @@
 
-fc.fields.group = class fc_fields_group extends fc.fields.abstract {
+fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 
 	set children( element ){
 		if( this.children ) {
@@ -10,7 +10,7 @@ fc.fields.group = class fc_fields_group extends fc.fields.abstract {
 	}
 
 	get children(){
-		return this.querySelector('fc-children');
+		return this.querySelector('fu-children');
 	}
 
 	get value(){
@@ -37,21 +37,21 @@ fc.fields.group = class fc_fields_group extends fc.fields.abstract {
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
-		fc.DOM.attrs(this, {
-			'class': 'fc_field',
-			'fc_name': template.fc_name,
+		fu.DOM.attrs(this, {
+			'class': 'fu_field',
+			'fu_name': template.fu_name,
 			'id': index,
 			'children': [{
-				'class': 'fc_container',
+				'class': 'fu_container',
 				'children': [
-					! template.fc_label ? null : {
-						'class': 'fc_label',
-						'html': template.fc_label
+					! template.fu_label ? null : {
+						'class': 'fu_label',
+						'html': template.fu_label
 					},
 					{
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': template.fields
 					}
 				],
@@ -63,4 +63,4 @@ fc.fields.group = class fc_fields_group extends fc.fields.abstract {
 };
 
 
-customElements.define('fc-group', fc.fields.group);
+customElements.define('fu-group', fu.fields.group);

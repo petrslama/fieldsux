@@ -1,4 +1,4 @@
-fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
+fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 
 	get value(){
 		const input = this.get_input();
@@ -8,7 +8,7 @@ fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
 	set value(value){
 		const input = this.get_input();
 		input.checked = ( input.value == value );
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get_input(){
@@ -20,7 +20,7 @@ fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
 		if( ! value ) {
 			return '';
 		}
-		const label = this.querySelector('.fc_after');
+		const label = this.querySelector('.fu_after');
 		if( label ) {
 			return label.innerHTML
 		}
@@ -28,33 +28,33 @@ fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
+		return fu.DOM.create({
 			'tag': 'label',
 			'for': index,
-			'class': 'fc_input_wrapper',
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'input',
 					'type': 'checkbox',
 					'id': index,
-					'class': 'fc_checkbox',
-					'value': template.fc_value || '1',
-					'required': template.fc_required,
-					'aria-required': template.fc_required ? 'true' : '',
-					'readonly': template.fc_readonly,
+					'class': 'fu_checkbox',
+					'value': template.fu_value || '1',
+					'required': template.fu_required,
+					'aria-required': template.fu_required ? 'true' : '',
+					'readonly': template.fu_readonly,
 					'events': {
-						'change': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
 	}
 };
 
-customElements.define('fc-checkbox', fc.fields.checkbox);
+customElements.define('fu-checkbox', fu.fields.checkbox);

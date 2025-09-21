@@ -1,4 +1,4 @@
-fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
+fu.fields.dialog_diff = class fu_fields_dialog_diff extends fu.fields.dialog {
 
 	diff_stringyfy(_val, _spaces){
 		return JSON.stringify( _val, null, 4 )
@@ -84,8 +84,8 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 		this._old_text = _old_text;
 		this._new_text = _new_text;
 
-		const _old = fc.JSON.parse(_old_text);
-		const _new = fc.JSON.parse(_new_text);
+		const _old = fu.JSON.parse(_old_text);
+		const _new = fu.JSON.parse(_new_text);
 
 		if( ! _new ) {
 			this.notice = '<b>Unable to Use</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
@@ -109,16 +109,16 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_dialog',
+		fu.DOM.attrs(this, {
+			'class': 'fu_dialog',
 			'children': [
 				{
-					'class': 'fc_backdrop',
+					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => this.close()
 					}
 				},{
-					'class': 'fc_header',
+					'class': 'fu_header',
 					'children': [
 						{
 							'tag': 'span',
@@ -131,32 +131,32 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 						}
 					]
 				},{
-					'class': 'fc_notice',
+					'class': 'fu_notice',
 					'events': {
 						'click': () => {
 							this.notice = '';
 						}
 					}
 				},{
-					'class': 'fc_section',
+					'class': 'fu_section',
 					'children': [
 						{
 							'tag': 'pre'
 						}
 					]
 				},{
-					'class': 'fc_footer',
+					'class': 'fu_footer',
 					'children': [
 						{
-							'class': 'fc_button fc_beautify_json',
+							'class': 'fu_button fu_beautify_json',
 							'html': 'Cancel',
 							'events': {
 								'click': () => {
-									const caller = document.querySelector('.fc_dialog_caller');
-									const JSON_object = fc.JSON.parse( this._old_text );
+									const caller = document.querySelector('.fu_dialog_caller');
+									const JSON_object = fu.JSON.parse( this._old_text );
 									if( JSON_object ){
 										caller.value = JSON_object;
-										caller.classList.remove('fc_dialog_caller');
+										caller.classList.remove('fu_dialog_caller');
 										this.close();
 									} else {
 										this.notice = '<b>Unable to Use</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
@@ -164,15 +164,15 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 								}
 							}
 						},{
-							'class': 'fc_button fc_button_primary fc_use_json',
+							'class': 'fu_button fu_button_primary fu_use_json',
 							'html': 'Use Anyway',
 							'events': {
 								'click': () => {
-									const caller = document.querySelector('.fc_dialog_caller');
-									const JSON_object = fc.JSON.parse( this._new_text );
+									const caller = document.querySelector('.fu_dialog_caller');
+									const JSON_object = fu.JSON.parse( this._new_text );
 									if( JSON_object ){
 										caller.value = JSON_object;
-										caller.classList.remove('fc_dialog_caller');
+										caller.classList.remove('fu_dialog_caller');
 										this.close();
 									} else {
 										this.notice = '<b>Unable to Use</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
@@ -188,4 +188,4 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 	}
 };
 
-customElements.define('fc-dialog_diff', fc.fields.dialog_diff);
+customElements.define('fu-dialog_diff', fu.fields.dialog_diff);

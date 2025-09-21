@@ -1,4 +1,4 @@
-fc.fields.radios = class fc_fields_radios extends fc.fields.input {
+fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 
 	get value(){
 		const checked = this.querySelector('input[type="radio"]:checked');
@@ -10,36 +10,36 @@ fc.fields.radios = class fc_fields_radios extends fc.fields.input {
 		radios.forEach((input) => {
 			input.checked = ( -1 != value.indexOf( input.value ) )
 		});
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
-		const after = this.querySelector('input:checked + .fc_radios_label')
+		const after = this.querySelector('input:checked + .fu_radios_label')
 		return after ? after.innerHTML : '';
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_choices_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_choices_wrapper',
 			'children': template.values?.map(radio => {
-				index = fc.DOM.getIndex();
+				index = fu.DOM.getIndex();
 				return {
-					'class': 'fc_input_wrapper',
+					'class': 'fu_input_wrapper',
 					'tag': 'label',
 					'for': index,
 					'children': [
 						{
 							'tag': 'input',
 							'id': index,
-							'class': 'fc_radio',
+							'class': 'fu_radio',
 							'type': 'radio',
-							'value': radio.fc_value ?? '1',
+							'value': radio.fu_value ?? '1',
 							'events': {
-								'change': () => this.value = radio.fc_value ?? '1',
+								'change': () => this.value = radio.fu_value ?? '1',
 							},
-						}, ( ! radio.fc_label ) ? null : {
-							'class': 'fc_radios_label',
-							'html': ' ' + radio.fc_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
+						}, ( ! radio.fu_label ) ? null : {
+							'class': 'fu_radios_label',
+							'html': ' ' + radio.fu_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
 						}
 					]
 				};
@@ -48,4 +48,4 @@ fc.fields.radios = class fc_fields_radios extends fc.fields.input {
 	}
 };
 
-customElements.define('fc-radios', fc.fields.radios);
+customElements.define('fu-radios', fu.fields.radios);

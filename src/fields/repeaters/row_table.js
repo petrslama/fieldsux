@@ -1,9 +1,9 @@
-fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
+fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 
 	get value(){
 		let value = {};
-		this.querySelectorAll('.fc_row_fields input[fc_name]').forEach( (field) => {
-			const field_name = field.getAttribute('fc_name');
+		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+			const field_name = field.getAttribute('fu_name');
 			if( ! field_name ) return;
 			const field_value = field.value ?? '';
 			if( ! field_value ) return;
@@ -14,8 +14,8 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 
 	set value(value){
 		if (!value) return;
-		this.querySelectorAll('.fc_row_fields input[fc_name]').forEach( (field) => {
-			const field_name = field.getAttribute('fc_name');
+		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+			const field_name = field.getAttribute('fu_name');
 			const field_value = value[field_name] ?? '';
 			field.value = field_value;
 		});
@@ -26,11 +26,11 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 	 */
 	set template(template){
 
-		fc.DOM.attrs(this, {
-			'class': 'fc_row fc_switch',
+		fu.DOM.attrs(this, {
+			'class': 'fu_row fu_switch',
 			'children':[
 				{
-					'class': 'fc_header fc_row_header',
+					'class': 'fu_header fu_row_header',
 					'children':[
 						this.button_add_to_top(),
 						this.button_add_to_bottom(),
@@ -38,23 +38,23 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 						this.checkbox(),
 						this.index(),
 						{
-							'class': 'fc_row_fields',
+							'class': 'fu_row_fields',
 							'children': template.fields?.map(field => {
-								const index = fc.DOM.getIndex();
+								const index = fu.DOM.getIndex();
 								return {
 									'tag': 'label',
-									'class': 'fc_label',
+									'class': 'fu_label',
 									'for': index,
 									'children':[{
 										'tag': 'input',
-										'type': field.fc_type??'',
-										'fc_name': field.fc_name??'',
+										'type': field.fu_type??'',
+										'fu_name': field.fu_name??'',
 										'id': index,
 									}]
 								};
 							})
 						},{
-							'class': 'fc_actions',
+							'class': 'fu_actions',
 							'children': [
 								this.button_delete(),
 								this.button_duplicate(),
@@ -69,4 +69,4 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 	}
 };
 
-customElements.define('fc-row_table', fc.fields.row_table);
+customElements.define('fu-row_table', fu.fields.row_table);

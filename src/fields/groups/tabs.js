@@ -1,4 +1,4 @@
-fc.fields.tabs = class fc_fields_tabs extends fc.fields.abstract {
+fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 
 	get buttons(){
 		return Array.from( this.childNodes[0].childNodes );
@@ -21,49 +21,49 @@ fc.fields.tabs = class fc_fields_tabs extends fc.fields.abstract {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_tabs fc_field',
+		fu.DOM.attrs(this, {
+			'class': 'fu_tabs fu_field',
 			'children':[
 				{
-					'class': 'fc_tabs_buttons',
+					'class': 'fu_tabs_buttons',
 					'children': [
 						{
 							'tag': 'button', 'type': 'button',
-							'class': 'fc_tab_button fc_tab_button_debug',
+							'class': 'fu_tab_button fu_tab_button_debug',
 							'data-index': '0',
 							'html': '- Everything -',
 							'events': {
 								'click': (e) => {
 									const buttons = this.buttons;
-									buttons.forEach((button) => button.classList.remove('fc_switch') );
-									buttons[ 0 ].classList.add('fc_switch');
+									buttons.forEach((button) => button.classList.remove('fu_switch') );
+									buttons[ 0 ].classList.add('fu_switch');
 
-									this.panels.forEach((button) => button.classList.add('fc_open_tab') );
+									this.panels.forEach((button) => button.classList.add('fu_open_tab') );
 								}
 							}
 						},
 						template.tabs?.map((tab, index)=> ({
 							'tag': 'button', 'type': 'button',
-							'class': 'fc_tab_button',
+							'class': 'fu_tab_button',
 							'data-index': index + 1,
-							'html': tab.fc_label??'',
+							'html': tab.fu_label??'',
 							'events': {
 								'click': (e) => {
 									const buttons = this.buttons;
-									buttons.forEach((button) => button.classList.remove('fc_switch') );
-									buttons[ index + 1 ].classList.add('fc_switch');
+									buttons.forEach((button) => button.classList.remove('fu_switch') );
+									buttons[ index + 1 ].classList.add('fu_switch');
 
 									const panels = [...this.childNodes[1].childNodes];
-									panels.forEach((button) => button.classList.remove('fc_open_tab') );
-									panels[ index ].classList.add('fc_open_tab');
+									panels.forEach((button) => button.classList.remove('fu_open_tab') );
+									panels[ index ].classList.add('fu_open_tab');
 								}
 							}
 						})),
 					]
 				},{
-					'class': 'fc_tabs_panels fc_switch fc_container',
+					'class': 'fu_tabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': tab.fields??[],
 					})),
 				},
@@ -76,4 +76,4 @@ fc.fields.tabs = class fc_fields_tabs extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-tabs', fc.fields.tabs);
+customElements.define('fu-tabs', fu.fields.tabs);

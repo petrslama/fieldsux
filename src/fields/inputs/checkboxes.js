@@ -1,4 +1,4 @@
-fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
+fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 
 	get value(){
 		let value = [];
@@ -14,19 +14,19 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 		this.inputs.forEach((input) => {
 			input.checked = ( -1 != value.indexOf( input.value ) )
 		});
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get inputs(){
 		return Array.from(
-			this.querySelectorAll('.fc_choices_wrapper input[type="checkbox"]')
+			this.querySelectorAll('.fu_choices_wrapper input[type="checkbox"]')
 		);
 	}
 
 	get repeater_label(){
 		const labels = [];
 		Array.from(
-			this.querySelectorAll('input:checked + .fc_checkboxes_label')
+			this.querySelectorAll('input:checked + .fu_checkboxes_label')
 		).forEach((label) => {
 			labels.push( label.innerHTML.trim() )
 		});
@@ -34,12 +34,12 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_choices_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_choices_wrapper',
 			'children': template.values?.map(config => {
-				index = fc.DOM.getIndex();
+				index = fu.DOM.getIndex();
 				return {
-					'class': 'fc_input_wrapper',
+					'class': 'fu_input_wrapper',
 					'tag': 'label',
 					'for': index,
 					'children': [
@@ -47,14 +47,14 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 							'tag': 'input',
 							'type': 'checkbox',
 							'id': index,
-							'class': 'fc_checkbox',
-							'value': config.fc_value ?? '1',
+							'class': 'fu_checkbox',
+							'value': config.fu_value ?? '1',
 							'events': {
-								'change': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+								'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 							},
-						}, ( ! config.fc_label ) ? null : {
-							'class': 'fc_checkboxes_label',
-							'html': ' ' + config.fc_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
+						}, ( ! config.fu_label ) ? null : {
+							'class': 'fu_checkboxes_label',
+							'html': ' ' + config.fu_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
 						}
 					]
 				};
@@ -63,4 +63,4 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 	}
 };
 
-customElements.define('fc-checkboxes', fc.fields.checkboxes);
+customElements.define('fu-checkboxes', fu.fields.checkboxes);

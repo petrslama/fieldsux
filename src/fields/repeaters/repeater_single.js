@@ -1,9 +1,9 @@
 
-fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.repeater {
+fu.fields.repeater_single = class fu_fields_repeater_single extends fu.fields.repeater {
 
 	create_row(value){
-		const row = fc.DOM.create({
-			'tag': 'fc-row',
+		const row = fu.DOM.create({
+			'tag': 'fu-row',
 			'template': this.single_template,
 		});
 
@@ -15,9 +15,9 @@ fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.re
 	init_repeater( template ){
 		const templates = template.templates;
 		this.single_template = templates[0];
-		this.single_template_id = fc.Templates.register_template(templates[0]);
+		this.single_template_id = fu.Templates.register_template(templates[0]);
 
-		return this.template_group_id = fc.Templates.register_group({
+		return this.template_group_id = fu.Templates.register_group({
 			'': this.single_template_id
 		});
 	}
@@ -26,7 +26,7 @@ fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.re
 		document.activeElement.blur();
 
 		const created_row = this.create_row();
-		created_row.classList.add('fc_open');
+		created_row.classList.add('fu_open');
 
 		switch(position){
 			case 'before':
@@ -42,4 +42,4 @@ fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.re
 
 };
 
-customElements.define('fc-repeater_single', fc.fields.repeater_single);
+customElements.define('fu-repeater_single', fu.fields.repeater_single);

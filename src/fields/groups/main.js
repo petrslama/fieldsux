@@ -1,35 +1,35 @@
 
 
-fc.fields.main = class fc_fields_main extends fc.fields.group {
+fu.fields.main = class fu_fields_main extends fu.fields.group {
 
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
 		template.definitions?.forEach(definition => {
-			if( fc.Definitions[definition.fc_name] ) {
-				console.warn( 'Definition ${definition.fc_name} was rewritten');
+			if( fu.Definitions[definition.fu_name] ) {
+				console.warn( 'Definition ${definition.fu_name} was rewritten');
 			}
-			fc.Definitions[definition.fc_name] = definition.fields;
+			fu.Definitions[definition.fu_name] = definition.fields;
 		});
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
 			'id': index,
 			'children': [
 				{
-					'class': 'fc_main_header',
+					'class': 'fu_main_header',
 					'children':[
 						{
 							'tag': 'strong',
-							'html': template.fc_label ?? '',
+							'html': template.fu_label ?? '',
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_debug',
+							'class': 'fu_icon fu_debug',
 							'aria-label': 'Toggle Debug Mode',
 							'events': {
 								'click': () => this.classList.toggle('debug')
@@ -37,7 +37,7 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_json',
+							'class': 'fu_icon fu_json',
 							'aria-label': 'Edit as JSON',
 							'events': {
 								'click': () => this.edit_as_json()
@@ -45,7 +45,7 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_paste',
+							'class': 'fu_icon fu_paste',
 							'aria-label': 'Paste',
 							'events': {
 								'click': async () => this.paste()
@@ -53,7 +53,7 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_copy',
+							'class': 'fu_icon fu_copy',
 							'aria-label': 'Copy',
 							'events': {
 								'click': async () => this.copy()
@@ -61,27 +61,27 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},
 					]
 				}, {
-					'class': 'fc_dialogs',
+					'class': 'fu_dialogs',
 					'children': [
 						{
-							'tag': 'fc-dialog_json',
+							'tag': 'fu-dialog_json',
 							'template': {
 								'title': 'Edit fields as JSON'
 							}
 						},{
-							'tag': 'fc-dialog_copy',
+							'tag': 'fu-dialog_copy',
 							'template': {
 								'title': 'Unable to use clipboard'
 							}
 						},{
-							'tag': 'fc-dialog_diff',
+							'tag': 'fu-dialog_diff',
 							'template': {
 								'title': 'Compare Fields in JSON'
 							}
 						},
 					],
 				},{
-					'class': 'fc_datalists',
+					'class': 'fu_datalists',
 					'children': template.datalists?.map((datalist)=> {
 						return {
 							'tag': 'datalist',
@@ -89,16 +89,16 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 							'children': datalist.values?.map((option)=> {
 								return {
 									'tag': 'option',
-									'value': option.fc_value ?? '',
-									'label': option.fc_label ?? '',
+									'value': option.fu_value ?? '',
+									'label': option.fu_label ?? '',
 								}
 							})
 						};
 					}),
 				},{
-					'class': 'fc_container',
+					'class': 'fu_container',
 					'children': [{
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': template.fields
 					}]
 				}
@@ -107,4 +107,4 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 	}
 };
 
-customElements.define('fc-main', fc.fields.main);
+customElements.define('fu-main', fu.fields.main);

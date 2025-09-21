@@ -1,8 +1,8 @@
-fc-dialog_json .fc_section textarea {
+fu-dialog_json .fu_section textarea {
 	position: absolute;
 	inset: 0;
 	font-family: 'Courier New', Courier, monospace;
-	padding: calc(var(--fc_size) / 2) var(--fc_size);
+	padding: calc(var(--fu_size) / 2) var(--fu_size);
 	resize: none;
 
 	border: none;

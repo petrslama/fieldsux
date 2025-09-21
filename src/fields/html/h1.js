@@ -1,10 +1,10 @@
-fc.fields.h1 = class fc_fields_h1 extends fc.fields.abstract {
+fu.fields.h1 = class fu_fields_h1 extends fu.fields.abstract {
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_html',
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
 			'children':[{
 				'tag': 'h1',
 				'html': template.html ?? ''
@@ -15,4 +15,4 @@ fc.fields.h1 = class fc_fields_h1 extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-h1', fc.fields.h1);
+customElements.define('fu-h1', fu.fields.h1);

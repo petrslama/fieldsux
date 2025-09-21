@@ -13,7 +13,7 @@ echo '\'use strict\';'  . "\n";
 
 foreach([
 
-	'/fc.js',
+	'/fu.js',
 	'/utils/JSON.js',
 	'/utils/DOM.js',
 	'/utils/Templates.js',
@@ -69,7 +69,7 @@ foreach([
 	readfile( $_SRC_DIR . $filepath );
 }
 echo  "\n\n\n";
-echo "fc.init();";
+echo "fu.init();";
 echo "\n\n\n\n";
 
 

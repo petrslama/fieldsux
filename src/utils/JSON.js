@@ -1,7 +1,7 @@
 /**
  * Utility class for JSON operations
  */
-fc.JSON = class {
+fu.JSON = class {
 	static stringify(obj, formatted = true) {
 		if (typeof obj !== 'object') return obj;
 		return formatted

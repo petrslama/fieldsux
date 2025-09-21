@@ -1,23 +1,23 @@
-fc.fields.children = class fc_fields_children extends fc.fields.abstract {
+fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 
 	get value(){
 		const value = [...this.childNodes].reduce((acc, field) => {
-			const fc_name = field.fc_name;
+			const fu_name = field.fu_name;
 			const value = field.value;
 
-			if (!fc_name) {
-				return field.classList.contains('fc_field')
+			if (!fu_name) {
+				return field.classList.contains('fu_field')
 					? { ...acc, ...value }
 					: acc;
 			}
 
 			if (!value) return acc;
 
-			const merged = acc[fc_name] && typeof acc[fc_name] === 'object' && typeof value === 'object'
-				? { ...acc[fc_name], ...value }
+			const merged = acc[fu_name] && typeof acc[fu_name] === 'object' && typeof value === 'object'
+				? { ...acc[fu_name], ...value }
 				: value;
 
-			return { ...acc, [fc_name]: merged };
+			return { ...acc, [fu_name]: merged };
 		}, {});
 
 
@@ -28,12 +28,12 @@ fc.fields.children = class fc_fields_children extends fc.fields.abstract {
 
 	set value(value){
 		[...this.childNodes].forEach(field => {
-			const fc_name = field.fc_name;
+			const fu_name = field.fu_name;
 
 			if( value )
-				if ( fc_name )
-					field.value = value[fc_name] ?? '';
-				else if ( field.classList.contains('fc_field') && ! field.classList.contains('fc_field_input') )
+				if ( fu_name )
+					field.value = value[fu_name] ?? '';
+				else if ( field.classList.contains('fu_field') && ! field.classList.contains('fu_field_input') )
 					field.value = value;
 			else
 				field.value = '';
@@ -43,16 +43,16 @@ fc.fields.children = class fc_fields_children extends fc.fields.abstract {
 	append_fields( children ){
 
 		children?.forEach( (template) => {
-			if( 'from_definition' == template.fc_type) {
-				const definition = fc.Definitions[template.definition];
+			if( 'from_definition' == template.fu_type) {
+				const definition = fu.Definitions[template.definition];
 				this.append_fields(definition);
 				return;
 			}
 
 			const child
-				= fc.fields[template.fc_type]
-				? fc.DOM.create({ 'tag': 'fc-' + template.fc_type } )
-				: fc.DOM.create({ 'tag': 'fc-undefined' } )
+				= fu.fields[template.fu_type]
+				? fu.DOM.create({ 'tag': 'fu-' + template.fu_type } )
+				: fu.DOM.create({ 'tag': 'fu-undefined' } )
 
 			child.template = template;
 			this.appendChild( child );
@@ -73,4 +73,4 @@ fc.fields.children = class fc_fields_children extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-children', fc.fields.children);
+customElements.define('fu-children', fu.fields.children);

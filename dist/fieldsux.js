@@ -2,9 +2,9 @@
 'use strict';
 
 
-// /fc.js
+// /fu.js
 
-const fc = {
+const fu = {
 
 	version: '0.0.1',
 
@@ -17,8 +17,8 @@ const fc = {
 	init: function(){
 		document.querySelectorAll('.fieldsux').forEach((fieldsUX) => {
 
-			let fc_main = fieldsUX.querySelector('fc-main');
-			if( fc_main ) {
+			let fu_main = fieldsUX.querySelector('fu-main');
+			if( fu_main ) {
 				return;
 			}
 
@@ -32,33 +32,33 @@ const fc = {
 				return;
 			}
 
-			fc_main = document.createElement('fc-main');
+			fu_main = document.createElement('fu-main');
 
-			fc_main.template = fc.JSON.parse( templateNode.value.replace(
-				/"fc\.field_templates\.([a-z_]+)"/g,
+			fu_main.template = fu.JSON.parse( templateNode.value.replace(
+				/"fu\.field_templates\.([a-z_]+)"/g,
 				(match, fieldName) => {
-					return fc.field_templates?.[fieldName]??false
-						? fc.JSON.stringify( fc.field_templates[fieldName] )
+					return fu.field_templates?.[fieldName]??false
+						? fu.JSON.stringify( fu.field_templates[fieldName] )
 						: match;
 				})
 			);
-			fc_main.value = fc.JSON.parse( textarea.value.replace(
-				/"fc\.field_templates\.([a-z_]+)"/g,
+			fu_main.value = fu.JSON.parse( textarea.value.replace(
+				/"fu\.field_templates\.([a-z_]+)"/g,
 				(match, fieldName) => {
-					return fc.field_templates?.[fieldName]??false
-						? fc.JSON.stringify( fc.field_templates[fieldName] )
+					return fu.field_templates?.[fieldName]??false
+						? fu.JSON.stringify( fu.field_templates[fieldName] )
 						: match;
 				})
 			);
 
-			fieldsUX.appendChild( fc_main );
+			fieldsUX.appendChild( fu_main );
 
-			this.instances.push(fc_main);
+			this.instances.push(fu_main);
 		});
 	},
 };
 
-window.fc = fc;
+window.fu = fu;
 
 
 
@@ -67,7 +67,7 @@ window.fc = fc;
 /**
  * Utility class for JSON operations
  */
-fc.JSON = class {
+fu.JSON = class {
 	static stringify(obj, formatted = true) {
 		if (typeof obj !== 'object') return obj;
 		return formatted
@@ -160,13 +160,13 @@ fc.JSON = class {
 /**
  * Utility class for DOM and HTMLElements operations
  */
-fc.DOM = class {
+fu.DOM = class {
 
 	static index = 0;
 
 	static getIndex() {
-		fc.DOM.index ++;
-		return 'fc_' + fc.DOM.index;
+		fu.DOM.index ++;
+		return 'fu_' + fu.DOM.index;
 	}
 
 	static escape_html( html ) {
@@ -247,7 +247,7 @@ fc.DOM = class {
 			if('children' == key) {
 				value.forEach((child) => {
 					if(Array.isArray(child)) {
-						fc.DOM.attrs(element, {'children': child});
+						fu.DOM.attrs(element, {'children': child});
 					} else if(child instanceof HTMLElement) {
 						element.appendChild(child);
 					} else if( child ) {
@@ -283,7 +283,7 @@ fc.DOM = class {
 
 	static create(attrs) {
 		const element = document.createElement(attrs.tag ?? 'div');
-		fc.DOM.attrs(element, attrs);
+		fu.DOM.attrs(element, attrs);
 		return element;
 	}
 }
@@ -293,7 +293,7 @@ fc.DOM = class {
 /**
  * Utility class for Repeater templates operations
  */
-fc.Templates = class {
+fu.Templates = class {
 
 	// Templates
 
@@ -302,12 +302,12 @@ fc.Templates = class {
 
 	static register_template( template ){
 		if( 'string' == typeof template ){
-			if( fc.fields?.[template]?.definition ){
-				template = fc.fields[template].definition;
+			if( fu.fields?.[template]?.definition ){
+				template = fu.fields[template].definition;
 			}
 		}
 
-		const hash = fc.JSON.hash(template);
+		const hash = fu.JSON.hash(template);
 		const ID = this.template_ID_to_hash.indexOf(hash);
 		if( -1 != ID ) {
 			return ID;
@@ -329,7 +329,7 @@ fc.Templates = class {
 	static group_ID_to_hash = [""];
 
 	static register_group( group ){
-		const hash = fc.JSON.hash(group);
+		const hash = fu.JSON.hash(group);
 		const ID = this.group_ID_to_hash.indexOf(hash);
 
 		if( -1 != ID ) {
@@ -345,19 +345,19 @@ fc.Templates = class {
 
 // /utils/Definitions.js
 
-fc.Definitions = {};
+fu.Definitions = {};
 
 // /fields/abstract.js
 
-fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
+fu.fields.abstract = class fu_fields_abstract extends HTMLElement {
 
-	get fc_name(){
-		return this.getAttribute('fc_name') ?? '';
+	get fu_name(){
+		return this.getAttribute('fu_name') ?? '';
 	}
 
-	set fc_name(fc_name){
-		if( fc_name )
-			this.setAttribute('fc_name', fc_name);
+	set fu_name(fu_name){
+		if( fu_name )
+			this.setAttribute('fu_name', fu_name);
 	}
 
 	get value(){
@@ -369,12 +369,12 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 	}
 
 	edit_as_json(){
-		this.classList.add('fc_dialog_caller');
+		this.classList.add('fu_dialog_caller');
 
-		const main = this.closest('fc-main');
-		const dialogs = main.querySelector('.fc_dialogs')
-		const dialog_json = dialogs.querySelector('fc-dialog_json');
-		dialog_json.value = fc.JSON.stringify(this.value);
+		const main = this.closest('fu-main');
+		const dialogs = main.querySelector('.fu_dialogs')
+		const dialog_json = dialogs.querySelector('fu-dialog_json');
+		dialog_json.value = fu.JSON.stringify(this.value);
 		dialog_json.notice = '';
 		dialog_json.open();
 
@@ -384,7 +384,7 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 	async paste(){
 		try {
 			const clipboard_text = await navigator.clipboard.readText();
-			const JSON_object = fc.JSON.parse( clipboard_text );
+			const JSON_object = fu.JSON.parse( clipboard_text );
 
 			if( JSON_object ){
 				this.value = JSON.parse( clipboard_text );
@@ -402,12 +402,12 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 
 
 	show_to_copy(){
-		this.classList.add('fc_dialog_caller');
+		this.classList.add('fu_dialog_caller');
 
-		const main = this.closest('fc-main');
-		const dialogs = main.querySelector('.fc_dialogs')
-		const dialog_copy = dialogs.querySelector('fc-dialog_copy');
-		dialog_copy.value = fc.JSON.stringify(this.value);
+		const main = this.closest('fu-main');
+		const dialogs = main.querySelector('.fu_dialogs')
+		const dialog_copy = dialogs.querySelector('fu-dialog_copy');
+		dialog_copy.value = fu.JSON.stringify(this.value);
 		dialog_copy.notice = '';
 		dialog_copy.open();
 
@@ -417,7 +417,7 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 
 	async copy(){
 		try {
-			const JSON_string = fc.JSON.stringify( this.value );
+			const JSON_string = fu.JSON.stringify( this.value );
 			await navigator.clipboard.writeText(JSON_string);
 		} catch (error) {
 			const JSON_dialog = this.show_to_copy();
@@ -429,12 +429,12 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 
 	set_width( element, template ) {
 		if( ! template?.width ) {
-			element.classList.add('fc_gw_default');
+			element.classList.add('fu_gw_default');
 			return;
 		}
 
 		if( 'fullwidth' == template.width ) {
-			element.classList.add('fc_gw_fullwidth');
+			element.classList.add('fu_gw_fullwidth');
 		}
 
 		let class_added = false;
@@ -452,16 +452,16 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 				continue;
 			}
 
-			element.classList.add(`fc_gw_${breakpoint + 1}_${current_size}`);
+			element.classList.add(`fu_gw_${breakpoint + 1}_${current_size}`);
 			class_added = true;
 
 			last_size = current_size;
 		}
 
 		if( class_added ) {
-			element.classList.add('fc_gw_custom');
+			element.classList.add('fu_gw_custom');
 		} else {
-			element.classList.add('fc_gw_default');
+			element.classList.add('fu_gw_default');
 
 		}
 	}
@@ -470,17 +470,17 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 
 // /fields/undefined.js
 
-fc.fields.undefined = class fc_fields_undefined extends fc.fields.abstract {
+fu.fields.undefined = class fu_fields_undefined extends fu.fields.abstract {
 
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
 			'children':[
 				{
-					'class': 'fc_label',
+					'class': 'fu_label',
 					'html': 'Field is not defined!'
 				},{
 					'error_code': JSON.stringify(template, null, 2)
@@ -490,16 +490,16 @@ fc.fields.undefined = class fc_fields_undefined extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-undefined', fc.fields.undefined);
+customElements.define('fu-undefined', fu.fields.undefined);
 
 
 // /fields/dialogs/dialog.js
 
-fc.fields.dialog = class fc_fields_dialog extends fc.fields.abstract {
+fu.fields.dialog = class fu_fields_dialog extends fu.fields.abstract {
 
 	open(){
-		this.classList.add('fc_open');
-		document.body.classList.add('fc_dialog_opened');
+		this.classList.add('fu_open');
+		document.body.classList.add('fu_dialog_opened');
 
 		this.esc_listener = document.addEventListener('keydown', (event) => {
 			if (event.key != 'Escape') {
@@ -510,8 +510,8 @@ fc.fields.dialog = class fc_fields_dialog extends fc.fields.abstract {
 	}
 
 	close(){
-		this.classList.remove('fc_open');
-		document.body.classList.remove('fc_dialog_opened');
+		this.classList.remove('fu_open');
+		document.body.classList.remove('fu_dialog_opened');
 
 		document.removeEventListener('keydown', this.esc_listener);
 	}
@@ -520,22 +520,22 @@ fc.fields.dialog = class fc_fields_dialog extends fc.fields.abstract {
 	 * @param {string} notice
 	 */
 	set notice(notice){
-		const dialog_notice = this.querySelector('.fc_notice');
+		const dialog_notice = this.querySelector('.fu_notice');
 		if( ! notice ) {
 			dialog_notice.innerHTML = '';
 			this.removeAttribute('style');
 			return;
 		}
 
-		dialog_notice.innerHTML = `<div class="fc_content">${notice}</div>`;
-		const fc_content = dialog_notice.querySelector('.fc_content');
-		this.setAttribute('style', '--fc_notice_height:' + Math.ceil( fc_content.scrollHeight ) + 'px');
+		dialog_notice.innerHTML = `<div class="fu_content">${notice}</div>`;
+		const fu_content = dialog_notice.querySelector('.fu_content');
+		this.setAttribute('style', '--fu_notice_height:' + Math.ceil( fu_content.scrollHeight ) + 'px');
 	}
 };
 
 // /fields/dialogs/dialog_json.js
 
-fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
+fu.fields.dialog_json = class fu_fields_dialog_json extends fu.fields.dialog {
 
 	get value(){
 		return this.querySelector('textarea').value;
@@ -547,11 +547,11 @@ fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
 
 	close(){
 		super.close();
-		const caller = document.querySelector('.fc_dialog_caller');
+		const caller = document.querySelector('.fu_dialog_caller');
 		if( null === caller ) {
 			return;
 		}
-		caller.classList.remove('fc_dialog_caller');
+		caller.classList.remove('fu_dialog_caller');
 	}
 
 	select_text(){
@@ -564,16 +564,16 @@ fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_dialog',
+		fu.DOM.attrs(this, {
+			'class': 'fu_dialog',
 			'children': [
 				{
-					'class': 'fc_backdrop',
+					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => this.close()
 					}
 				},{
-					'class': 'fc_header',
+					'class': 'fu_header',
 					'children': [
 						{
 							'tag': 'span',
@@ -586,29 +586,29 @@ fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
 						}
 					]
 				},{
-					'class': 'fc_notice',
+					'class': 'fu_notice',
 					'events': {
 						'click': () => {
 							this.notice = '';
 						}
 					}
 				},{
-					'class': 'fc_section',
+					'class': 'fu_section',
 					'children': [{
 						'tag': 'textarea',
-						'id': fc.DOM.getIndex()
+						'id': fu.DOM.getIndex()
 					}]
 				},{
-					'class': 'fc_footer',
+					'class': 'fu_footer',
 					'children': [
 						{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_button fc_compress_json',
+							'class': 'fu_button fu_compress_json',
 							'html': 'Compress',
 							'events': {
 								'click': () => {
-									let JSON_object = fc.JSON.parse(this.value);
+									let JSON_object = fu.JSON.parse(this.value);
 									if( JSON_object ) {
 										this.value = JSON.stringify(JSON_object);
 									} else {
@@ -619,13 +619,13 @@ fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_button fc_beautify_json',
+							'class': 'fu_button fu_beautify_json',
 							'html': 'Beautify',
 							'events': {
 								'click': () => {
-									let JSON_object = fc.JSON.parse(this.value);
+									let JSON_object = fu.JSON.parse(this.value);
 									if( JSON_object ) {
-										this.value = fc.JSON.stringify(JSON_object);
+										this.value = fu.JSON.stringify(JSON_object);
 									} else {
 										this.notice = '<b>Unable to beautify</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
 									}
@@ -634,12 +634,12 @@ fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_button fc_button_primary fc_use_json',
+							'class': 'fu_button fu_button_primary fu_use_json',
 							'html': 'Use',
 							'events': {
 								'click': () => {
-									const caller = document.querySelector('.fc_dialog_caller');
-									const JSON_object = fc.JSON.parse( this.value );
+									const caller = document.querySelector('.fu_dialog_caller');
+									const JSON_object = fu.JSON.parse( this.value );
 									if( JSON_object ){
 										caller.value = JSON_object;
 										this.close();
@@ -648,8 +648,8 @@ fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
 										const value_before = JSON.stringify( JSON_object );
 
 										if( value_before != value_after ) {
-											caller.classList.add('fc_dialog_caller');
-											const dialog_diff = this.parentNode.querySelector('fc-dialog_diff')
+											caller.classList.add('fu_dialog_caller');
+											const dialog_diff = this.parentNode.querySelector('fu-dialog_diff')
 											dialog_diff.compare(value_before, value_after);
 										}
 									} else {
@@ -665,11 +665,11 @@ fc.fields.dialog_json = class fc_fields_dialog_json extends fc.fields.dialog {
 	}
 };
 
-customElements.define('fc-dialog_json', fc.fields.dialog_json);
+customElements.define('fu-dialog_json', fu.fields.dialog_json);
 
 // /fields/dialogs/dialog_copy.js
 
-fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
+fu.fields.dialog_copy = class fu_fields_dialog_copy extends fu.fields.dialog {
 
 	get value(){
 		return this.querySelector('textarea').value;
@@ -681,11 +681,11 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 
 	close(){
 		super.close();
-		const caller = document.querySelector('.fc_dialog_caller');
+		const caller = document.querySelector('.fu_dialog_caller');
 		if( null === caller ) {
 			return;
 		}
-		caller.classList.remove('fc_dialog_caller');
+		caller.classList.remove('fu_dialog_caller');
 	}
 
 	select_text(){
@@ -698,16 +698,16 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_dialog',
+		fu.DOM.attrs(this, {
+			'class': 'fu_dialog',
 			'children': [
 				{
-					'class': 'fc_backdrop',
+					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => this.close()
 					}
 				},{
-					'class': 'fc_header',
+					'class': 'fu_header',
 					'children': [
 						{
 							'tag': 'span',
@@ -720,29 +720,29 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 						}
 					]
 				},{
-					'class': 'fc_notice',
+					'class': 'fu_notice',
 					'events': {
 						'click': () => {
 							this.notice = '';
 						}
 					}
 				},{
-					'class': 'fc_section',
+					'class': 'fu_section',
 					'children': [{
 						'tag': 'textarea',
-						'id': fc.DOM.getIndex()
+						'id': fu.DOM.getIndex()
 					}]
 				},{
-					'class': 'fc_footer',
+					'class': 'fu_footer',
 					'children': [
 						{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_button fc_compress_json',
+							'class': 'fu_button fu_compress_json',
 							'html': 'Compress',
 							'events': {
 								'click': () => {
-									let JSON_object = fc.JSON.parse(this.value);
+									let JSON_object = fu.JSON.parse(this.value);
 									if( JSON_object ) {
 										this.value = JSON.stringify(JSON_object);
 									} else {
@@ -753,13 +753,13 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_button fc_beautify_json',
+							'class': 'fu_button fu_beautify_json',
 							'html': 'Beautify',
 							'events': {
 								'click': () => {
-									let JSON_object = fc.JSON.parse(this.value);
+									let JSON_object = fu.JSON.parse(this.value);
 									if( JSON_object ) {
-										this.value = fc.JSON.stringify(JSON_object);
+										this.value = fu.JSON.stringify(JSON_object);
 									} else {
 										this.notice = '<b>Unable to beautify</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
 									}
@@ -773,11 +773,11 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 	}
 };
 
-customElements.define('fc-dialog_copy', fc.fields.dialog_copy);
+customElements.define('fu-dialog_copy', fu.fields.dialog_copy);
 
 // /fields/dialogs/dialog_diff.js
 
-fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
+fu.fields.dialog_diff = class fu_fields_dialog_diff extends fu.fields.dialog {
 
 	diff_stringyfy(_val, _spaces){
 		return JSON.stringify( _val, null, 4 )
@@ -863,8 +863,8 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 		this._old_text = _old_text;
 		this._new_text = _new_text;
 
-		const _old = fc.JSON.parse(_old_text);
-		const _new = fc.JSON.parse(_new_text);
+		const _old = fu.JSON.parse(_old_text);
+		const _new = fu.JSON.parse(_new_text);
 
 		if( ! _new ) {
 			this.notice = '<b>Unable to Use</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
@@ -888,16 +888,16 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_dialog',
+		fu.DOM.attrs(this, {
+			'class': 'fu_dialog',
 			'children': [
 				{
-					'class': 'fc_backdrop',
+					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => this.close()
 					}
 				},{
-					'class': 'fc_header',
+					'class': 'fu_header',
 					'children': [
 						{
 							'tag': 'span',
@@ -910,32 +910,32 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 						}
 					]
 				},{
-					'class': 'fc_notice',
+					'class': 'fu_notice',
 					'events': {
 						'click': () => {
 							this.notice = '';
 						}
 					}
 				},{
-					'class': 'fc_section',
+					'class': 'fu_section',
 					'children': [
 						{
 							'tag': 'pre'
 						}
 					]
 				},{
-					'class': 'fc_footer',
+					'class': 'fu_footer',
 					'children': [
 						{
-							'class': 'fc_button fc_beautify_json',
+							'class': 'fu_button fu_beautify_json',
 							'html': 'Cancel',
 							'events': {
 								'click': () => {
-									const caller = document.querySelector('.fc_dialog_caller');
-									const JSON_object = fc.JSON.parse( this._old_text );
+									const caller = document.querySelector('.fu_dialog_caller');
+									const JSON_object = fu.JSON.parse( this._old_text );
 									if( JSON_object ){
 										caller.value = JSON_object;
-										caller.classList.remove('fc_dialog_caller');
+										caller.classList.remove('fu_dialog_caller');
 										this.close();
 									} else {
 										this.notice = '<b>Unable to Use</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
@@ -943,15 +943,15 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 								}
 							}
 						},{
-							'class': 'fc_button fc_button_primary fc_use_json',
+							'class': 'fu_button fu_button_primary fu_use_json',
 							'html': 'Use Anyway',
 							'events': {
 								'click': () => {
-									const caller = document.querySelector('.fc_dialog_caller');
-									const JSON_object = fc.JSON.parse( this._new_text );
+									const caller = document.querySelector('.fu_dialog_caller');
+									const JSON_object = fu.JSON.parse( this._new_text );
 									if( JSON_object ){
 										caller.value = JSON_object;
-										caller.classList.remove('fc_dialog_caller');
+										caller.classList.remove('fu_dialog_caller');
 										this.close();
 									} else {
 										this.notice = '<b>Unable to Use</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
@@ -967,30 +967,30 @@ fc.fields.dialog_diff = class fc_fields_dialog_diff extends fc.fields.dialog {
 	}
 };
 
-customElements.define('fc-dialog_diff', fc.fields.dialog_diff);
+customElements.define('fu-dialog_diff', fu.fields.dialog_diff);
 
 // /fields/groups/children.js
 
-fc.fields.children = class fc_fields_children extends fc.fields.abstract {
+fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 
 	get value(){
 		const value = [...this.childNodes].reduce((acc, field) => {
-			const fc_name = field.fc_name;
+			const fu_name = field.fu_name;
 			const value = field.value;
 
-			if (!fc_name) {
-				return field.classList.contains('fc_field')
+			if (!fu_name) {
+				return field.classList.contains('fu_field')
 					? { ...acc, ...value }
 					: acc;
 			}
 
 			if (!value) return acc;
 
-			const merged = acc[fc_name] && typeof acc[fc_name] === 'object' && typeof value === 'object'
-				? { ...acc[fc_name], ...value }
+			const merged = acc[fu_name] && typeof acc[fu_name] === 'object' && typeof value === 'object'
+				? { ...acc[fu_name], ...value }
 				: value;
 
-			return { ...acc, [fc_name]: merged };
+			return { ...acc, [fu_name]: merged };
 		}, {});
 
 
@@ -1001,12 +1001,12 @@ fc.fields.children = class fc_fields_children extends fc.fields.abstract {
 
 	set value(value){
 		[...this.childNodes].forEach(field => {
-			const fc_name = field.fc_name;
+			const fu_name = field.fu_name;
 
 			if( value )
-				if ( fc_name )
-					field.value = value[fc_name] ?? '';
-				else if ( field.classList.contains('fc_field') && ! field.classList.contains('fc_field_input') )
+				if ( fu_name )
+					field.value = value[fu_name] ?? '';
+				else if ( field.classList.contains('fu_field') && ! field.classList.contains('fu_field_input') )
 					field.value = value;
 			else
 				field.value = '';
@@ -1016,16 +1016,16 @@ fc.fields.children = class fc_fields_children extends fc.fields.abstract {
 	append_fields( children ){
 
 		children?.forEach( (template) => {
-			if( 'from_definition' == template.fc_type) {
-				const definition = fc.Definitions[template.definition];
+			if( 'from_definition' == template.fu_type) {
+				const definition = fu.Definitions[template.definition];
 				this.append_fields(definition);
 				return;
 			}
 
 			const child
-				= fc.fields[template.fc_type]
-				? fc.DOM.create({ 'tag': 'fc-' + template.fc_type } )
-				: fc.DOM.create({ 'tag': 'fc-undefined' } )
+				= fu.fields[template.fu_type]
+				? fu.DOM.create({ 'tag': 'fu-' + template.fu_type } )
+				: fu.DOM.create({ 'tag': 'fu-undefined' } )
 
 			child.template = template;
 			this.appendChild( child );
@@ -1046,13 +1046,13 @@ fc.fields.children = class fc_fields_children extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-children', fc.fields.children);
+customElements.define('fu-children', fu.fields.children);
 
 
 // /fields/groups/group.js
 
 
-fc.fields.group = class fc_fields_group extends fc.fields.abstract {
+fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 
 	set children( element ){
 		if( this.children ) {
@@ -1063,7 +1063,7 @@ fc.fields.group = class fc_fields_group extends fc.fields.abstract {
 	}
 
 	get children(){
-		return this.querySelector('fc-children');
+		return this.querySelector('fu-children');
 	}
 
 	get value(){
@@ -1090,21 +1090,21 @@ fc.fields.group = class fc_fields_group extends fc.fields.abstract {
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
-		fc.DOM.attrs(this, {
-			'class': 'fc_field',
-			'fc_name': template.fc_name,
+		fu.DOM.attrs(this, {
+			'class': 'fu_field',
+			'fu_name': template.fu_name,
 			'id': index,
 			'children': [{
-				'class': 'fc_container',
+				'class': 'fu_container',
 				'children': [
-					! template.fc_label ? null : {
-						'class': 'fc_label',
-						'html': template.fc_label
+					! template.fu_label ? null : {
+						'class': 'fu_label',
+						'html': template.fu_label
 					},
 					{
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': template.fields
 					}
 				],
@@ -1116,42 +1116,42 @@ fc.fields.group = class fc_fields_group extends fc.fields.abstract {
 };
 
 
-customElements.define('fc-group', fc.fields.group);
+customElements.define('fu-group', fu.fields.group);
 
 // /fields/groups/main.js
 
 
 
-fc.fields.main = class fc_fields_main extends fc.fields.group {
+fu.fields.main = class fu_fields_main extends fu.fields.group {
 
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
 		template.definitions?.forEach(definition => {
-			if( fc.Definitions[definition.fc_name] ) {
-				console.warn( 'Definition ${definition.fc_name} was rewritten');
+			if( fu.Definitions[definition.fu_name] ) {
+				console.warn( 'Definition ${definition.fu_name} was rewritten');
 			}
-			fc.Definitions[definition.fc_name] = definition.fields;
+			fu.Definitions[definition.fu_name] = definition.fields;
 		});
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
 			'id': index,
 			'children': [
 				{
-					'class': 'fc_main_header',
+					'class': 'fu_main_header',
 					'children':[
 						{
 							'tag': 'strong',
-							'html': template.fc_label ?? '',
+							'html': template.fu_label ?? '',
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_debug',
+							'class': 'fu_icon fu_debug',
 							'aria-label': 'Toggle Debug Mode',
 							'events': {
 								'click': () => this.classList.toggle('debug')
@@ -1159,7 +1159,7 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_json',
+							'class': 'fu_icon fu_json',
 							'aria-label': 'Edit as JSON',
 							'events': {
 								'click': () => this.edit_as_json()
@@ -1167,7 +1167,7 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_paste',
+							'class': 'fu_icon fu_paste',
 							'aria-label': 'Paste',
 							'events': {
 								'click': async () => this.paste()
@@ -1175,7 +1175,7 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_icon fc_copy',
+							'class': 'fu_icon fu_copy',
 							'aria-label': 'Copy',
 							'events': {
 								'click': async () => this.copy()
@@ -1183,27 +1183,27 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 						},
 					]
 				}, {
-					'class': 'fc_dialogs',
+					'class': 'fu_dialogs',
 					'children': [
 						{
-							'tag': 'fc-dialog_json',
+							'tag': 'fu-dialog_json',
 							'template': {
 								'title': 'Edit fields as JSON'
 							}
 						},{
-							'tag': 'fc-dialog_copy',
+							'tag': 'fu-dialog_copy',
 							'template': {
 								'title': 'Unable to use clipboard'
 							}
 						},{
-							'tag': 'fc-dialog_diff',
+							'tag': 'fu-dialog_diff',
 							'template': {
 								'title': 'Compare Fields in JSON'
 							}
 						},
 					],
 				},{
-					'class': 'fc_datalists',
+					'class': 'fu_datalists',
 					'children': template.datalists?.map((datalist)=> {
 						return {
 							'tag': 'datalist',
@@ -1211,16 +1211,16 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 							'children': datalist.values?.map((option)=> {
 								return {
 									'tag': 'option',
-									'value': option.fc_value ?? '',
-									'label': option.fc_label ?? '',
+									'value': option.fu_value ?? '',
+									'label': option.fu_label ?? '',
 								}
 							})
 						};
 					}),
 				},{
-					'class': 'fc_container',
+					'class': 'fu_container',
 					'children': [{
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': template.fields
 					}]
 				}
@@ -1229,12 +1229,12 @@ fc.fields.main = class fc_fields_main extends fc.fields.group {
 	}
 };
 
-customElements.define('fc-main', fc.fields.main);
+customElements.define('fu-main', fu.fields.main);
 
 
 // /fields/groups/tabs.js
 
-fc.fields.tabs = class fc_fields_tabs extends fc.fields.abstract {
+fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 
 	get buttons(){
 		return Array.from( this.childNodes[0].childNodes );
@@ -1257,49 +1257,49 @@ fc.fields.tabs = class fc_fields_tabs extends fc.fields.abstract {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_tabs fc_field',
+		fu.DOM.attrs(this, {
+			'class': 'fu_tabs fu_field',
 			'children':[
 				{
-					'class': 'fc_tabs_buttons',
+					'class': 'fu_tabs_buttons',
 					'children': [
 						{
 							'tag': 'button', 'type': 'button',
-							'class': 'fc_tab_button fc_tab_button_debug',
+							'class': 'fu_tab_button fu_tab_button_debug',
 							'data-index': '0',
 							'html': '- Everything -',
 							'events': {
 								'click': (e) => {
 									const buttons = this.buttons;
-									buttons.forEach((button) => button.classList.remove('fc_switch') );
-									buttons[ 0 ].classList.add('fc_switch');
+									buttons.forEach((button) => button.classList.remove('fu_switch') );
+									buttons[ 0 ].classList.add('fu_switch');
 
-									this.panels.forEach((button) => button.classList.add('fc_open_tab') );
+									this.panels.forEach((button) => button.classList.add('fu_open_tab') );
 								}
 							}
 						},
 						template.tabs?.map((tab, index)=> ({
 							'tag': 'button', 'type': 'button',
-							'class': 'fc_tab_button',
+							'class': 'fu_tab_button',
 							'data-index': index + 1,
-							'html': tab.fc_label??'',
+							'html': tab.fu_label??'',
 							'events': {
 								'click': (e) => {
 									const buttons = this.buttons;
-									buttons.forEach((button) => button.classList.remove('fc_switch') );
-									buttons[ index + 1 ].classList.add('fc_switch');
+									buttons.forEach((button) => button.classList.remove('fu_switch') );
+									buttons[ index + 1 ].classList.add('fu_switch');
 
 									const panels = [...this.childNodes[1].childNodes];
-									panels.forEach((button) => button.classList.remove('fc_open_tab') );
-									panels[ index ].classList.add('fc_open_tab');
+									panels.forEach((button) => button.classList.remove('fu_open_tab') );
+									panels[ index ].classList.add('fu_open_tab');
 								}
 							}
 						})),
 					]
 				},{
-					'class': 'fc_tabs_panels fc_switch fc_container',
+					'class': 'fu_tabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': tab.fields??[],
 					})),
 				},
@@ -1312,29 +1312,29 @@ fc.fields.tabs = class fc_fields_tabs extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-tabs', fc.fields.tabs);
+customElements.define('fu-tabs', fu.fields.tabs);
 
 
 // /fields/groups/radiotabs.js
 
-fc.fields.radiotabs = class fc_fields_radiotabs extends fc.fields.abstract {
+fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 
 	get buttons(){
-		return Array.from( this.querySelector('.fc_tabs_buttons').childNodes );
+		return Array.from( this.querySelector('.fu_tabs_buttons').childNodes );
 	}
 
 	get panels(){
-		return Array.from( this.querySelector('.fc_tabs_panels').childNodes );
+		return Array.from( this.querySelector('.fu_tabs_panels').childNodes );
 	}
 
 	get value(){
-		const panel_value = this.querySelector('.fc_tabs_panels').querySelector('.fc_open_tab')?.value;
+		const panel_value = this.querySelector('.fu_tabs_panels').querySelector('.fu_open_tab')?.value;
 
-		const button = this.querySelector('.fc_tabs_buttons').querySelector('input:checked');
+		const button = this.querySelector('.fu_tabs_buttons').querySelector('input:checked');
 		if (!button) return panel_value;
 
 		const button_value = button.getAttribute('value');
-		const button_name = this.getAttribute('fc_radio_name');
+		const button_name = this.getAttribute('fu_radio_name');
 
 		if ( !button_value || !button_name) {
 			return panel_value;
@@ -1344,10 +1344,10 @@ fc.fields.radiotabs = class fc_fields_radiotabs extends fc.fields.abstract {
 	}
 
 	set value(value){
-		const fc_radio_name = this.getAttribute('fc_radio_name');
-		const fc_radio_value = value[fc_radio_name];
-		if( ( fc_radio_value ) && ( /[a-zA-Z0-9_\-]+/g.test(fc_radio_value) ) ){
-			const found = this.querySelector('.fc_tabs_buttons').querySelector('input[value="'+fc_radio_value+'"]');
+		const fu_radio_name = this.getAttribute('fu_radio_name');
+		const fu_radio_value = value[fu_radio_name];
+		if( ( fu_radio_value ) && ( /[a-zA-Z0-9_\-]+/g.test(fu_radio_value) ) ){
+			const found = this.querySelector('.fu_tabs_buttons').querySelector('input[value="'+fu_radio_value+'"]');
 			if( found ) {
 				found.parentNode.dispatchEvent( new Event('click') );
 			} else {
@@ -1364,55 +1364,55 @@ fc.fields.radiotabs = class fc_fields_radiotabs extends fc.fields.abstract {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_tabs fc_field',
-			'fc_radio_name': template.fc_name,
+		fu.DOM.attrs(this, {
+			'class': 'fu_tabs fu_field',
+			'fu_radio_name': template.fu_name,
 			'children':[
-				! template.fc_label ? null : {
-					'class': 'fc_label',
-					'html': template.fc_label
+				! template.fu_label ? null : {
+					'class': 'fu_label',
+					'html': template.fu_label
 				},
 				{
-					'class': 'fc_tabs_buttons',
+					'class': 'fu_tabs_buttons',
 					'children': template.tabs?.map((tab, index)=> ({
 						'tag': 'label',
-						'class': 'fc_tab_button',
+						'class': 'fu_tab_button',
 						'data-index': index,
 						'children':[
 							{
 								'tag': 'input',
-								'id': fc.DOM.getIndex(),
-								'class': 'fc_radio',
+								'id': fu.DOM.getIndex(),
+								'class': 'fu_radio',
 								'type': 'radio',
-								'value': tab.fc_value ?? '',
+								'value': tab.fu_value ?? '',
 							},{
 								'tag': 'span',
-								'html': tab.fc_label ?? '',
+								'html': tab.fu_label ?? '',
 							}
 						],
 						'events': {
 							'click': (e) => {
 								const buttons = this.buttons;
 								buttons.forEach((button) => {
-									button.classList.remove('fc_switch');
+									button.classList.remove('fu_switch');
 									const radio = button.querySelector('input');
 									radio.checked = false;
 								});
 
 								const button = buttons[ index ]
-								button.classList.add('fc_switch');
+								button.classList.add('fu_switch');
 								button.querySelector('input').checked = true;
 
 								const panels = this.panels;
-								panels.forEach((button) => button.classList.remove('fc_open_tab') );
-								panels[ index ].classList.add('fc_open_tab');
+								panels.forEach((button) => button.classList.remove('fu_open_tab') );
+								panels[ index ].classList.add('fu_open_tab');
 							}
 						}
 					})),
 				},{
-					'class': 'fc_tabs_panels fc_switch fc_container',
+					'class': 'fu_tabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': tab.fields??[],
 					})),
 				},
@@ -1423,12 +1423,12 @@ fc.fields.radiotabs = class fc_fields_radiotabs extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-radiotabs', fc.fields.radiotabs);
+customElements.define('fu-radiotabs', fu.fields.radiotabs);
 
 
 // /fields/inputs/input.js
 
-fc.fields.input = class fc_fields_input extends fc.fields.abstract {
+fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 
 	get value(){
 		const value = this.get_input().value;
@@ -1444,7 +1444,7 @@ fc.fields.input = class fc_fields_input extends fc.fields.abstract {
 			value = JSON.stringify(value);
 		}
 		input.value = value ?? '';
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
@@ -1456,22 +1456,22 @@ fc.fields.input = class fc_fields_input extends fc.fields.abstract {
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
-			'class': 'fc_field fc_field_input',
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_field fu_field_input',
 			'children':[
-				( ! template.fc_label ) ? null : {
+				( ! template.fu_label ) ? null : {
 					'tag': 'label',
-					'class': 'fc_label',
+					'class': 'fu_label',
 					'for': index,
-					'html': template.fc_label,
+					'html': template.fu_label,
 				},
 				this.create_field( index, template ),
-				( ! template.fc_description ) ? null : {
-					'class': 'fc_description',
-					'html': template.fc_description.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;')
+				( ! template.fu_description ) ? null : {
+					'class': 'fu_description',
+					'html': template.fu_description.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;')
 				},
 			]
 		});
@@ -1483,39 +1483,39 @@ fc.fields.input = class fc_fields_input extends fc.fields.abstract {
 
 // /fields/inputs/text.js
 
-fc.fields.text = class fc_fields_text extends fc.fields.input {
+fu.fields.text = class fu_fields_text extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input');
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'input',
 					'id': index,
-					'class': 'fc_input',
-					'type': template.fc_validate_as ?? 'text',
-					'minlength': template.fc_minlength,
-					'maxlength': template.fc_maxlength,
-					'autocomplete': template.fc_autocomplete,
-					'placeholder': template.fc_placeholder,
-					'pattern': template.fc_pattern,
-					'required': template.fc_required ? true : null,
-					'aria-required': template.fc_required ? 'true' : '',
-					'readonly': template.fc_readonly ? true : null,
-					'list': template.fc_list,
+					'class': 'fu_input',
+					'type': template.fu_validate_as ?? 'text',
+					'minlength': template.fu_minlength,
+					'maxlength': template.fu_maxlength,
+					'autocomplete': template.fu_autocomplete,
+					'placeholder': template.fu_placeholder,
+					'pattern': template.fu_pattern,
+					'required': template.fu_required ? true : null,
+					'aria-required': template.fu_required ? 'true' : '',
+					'readonly': template.fu_readonly ? true : null,
+					'list': template.fu_list,
 					'events': {
-						'input': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
@@ -1523,44 +1523,44 @@ fc.fields.text = class fc_fields_text extends fc.fields.input {
 
 };
 
-customElements.define('fc-text', fc.fields.text);
+customElements.define('fu-text', fu.fields.text);
 
 
 // /fields/inputs/number.js
 
-fc.fields.number = class fc_fields_number extends fc.fields.input {
+fu.fields.number = class fu_fields_number extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input[type="number"]');
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'input',
 					'type': 'number',
 					'id': index,
-					'class': 'fc_input',
-					'min': template.fc_min,
-					'max': template.fc_max,
-					'step': template.fc_step,
-					'placeholder': template.fc_placeholder,
-					'pattern': template.fc_pattern,
-					'required':template.fc_required,
-					'aria-required': template.fc_required ? 'true' : '',
-					'readonly':template.fc_readonly,
-					'list': template.fc_list,
+					'class': 'fu_input',
+					'min': template.fu_min,
+					'max': template.fu_max,
+					'step': template.fu_step,
+					'placeholder': template.fu_placeholder,
+					'pattern': template.fu_pattern,
+					'required':template.fu_required,
+					'aria-required': template.fu_required ? 'true' : '',
+					'readonly':template.fu_readonly,
+					'list': template.fu_list,
 					'events': {
-						'input': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
@@ -1568,30 +1568,30 @@ fc.fields.number = class fc_fields_number extends fc.fields.input {
 
 };
 
-customElements.define('fc-number', fc.fields.number);
+customElements.define('fu-number', fu.fields.number);
 
 // /fields/inputs/textarea.js
 
-fc.fields.textarea = class fc_fields_textarea extends fc.fields.input {
+fu.fields.textarea = class fu_fields_textarea extends fu.fields.input {
 
 	get_input(){ return this.querySelector('textarea'); }
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
 				{
 					'tag': 'textarea',
 					'id': index,
-					'class': 'fc_input',
-					'placeholder': template.fc_placeholder,
-					'minlength': template.fc_minlength,
-					'maxlength': template.fc_maxlength,
-					'required': template.fc_required,
-					'aria-required': template.fc_required    ? 'true' : '',
-					'readonly': template.fc_readonly,
+					'class': 'fu_input',
+					'placeholder': template.fu_placeholder,
+					'minlength': template.fu_minlength,
+					'maxlength': template.fu_maxlength,
+					'required': template.fu_required,
+					'aria-required': template.fu_required    ? 'true' : '',
+					'readonly': template.fu_readonly,
 					'events': {
-						'input': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
 				}
 			]
@@ -1600,12 +1600,12 @@ fc.fields.textarea = class fc_fields_textarea extends fc.fields.input {
 
 };
 
-customElements.define('fc-textarea', fc.fields.textarea);
+customElements.define('fu-textarea', fu.fields.textarea);
 
 
 // /fields/inputs/checkbox.js
 
-fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
+fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 
 	get value(){
 		const input = this.get_input();
@@ -1615,7 +1615,7 @@ fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
 	set value(value){
 		const input = this.get_input();
 		input.checked = ( input.value == value );
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get_input(){
@@ -1627,7 +1627,7 @@ fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
 		if( ! value ) {
 			return '';
 		}
-		const label = this.querySelector('.fc_after');
+		const label = this.querySelector('.fu_after');
 		if( label ) {
 			return label.innerHTML
 		}
@@ -1635,41 +1635,41 @@ fc.fields.checkbox = class fc_fields_checkbox extends fc.fields.input {
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
+		return fu.DOM.create({
 			'tag': 'label',
 			'for': index,
-			'class': 'fc_input_wrapper',
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'input',
 					'type': 'checkbox',
 					'id': index,
-					'class': 'fc_checkbox',
-					'value': template.fc_value || '1',
-					'required': template.fc_required,
-					'aria-required': template.fc_required ? 'true' : '',
-					'readonly': template.fc_readonly,
+					'class': 'fu_checkbox',
+					'value': template.fu_value || '1',
+					'required': template.fu_required,
+					'aria-required': template.fu_required ? 'true' : '',
+					'readonly': template.fu_readonly,
 					'events': {
-						'change': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
 	}
 };
 
-customElements.define('fc-checkbox', fc.fields.checkbox);
+customElements.define('fu-checkbox', fu.fields.checkbox);
 
 
 // /fields/inputs/color.js
 
-fc.fields.color = class fc_fields_color extends fc.fields.input {
+fu.fields.color = class fu_fields_color extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input[type="text"]');
@@ -1691,19 +1691,19 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 
 	get repeater_label(){
 		return /^#[a-fA-F0-9]{6}$/i.test(this.value)
-			? '<i class="fc_color_example" style="background:'+this.value+'"></i>' + this.value
+			? '<i class="fu_color_example" style="background:'+this.value+'"></i>' + this.value
 			: ''
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
-					'class': 'fc_color',
+					'class': 'fu_color',
 					'children': [
 						{
 							'tag': 'input',
@@ -1713,7 +1713,7 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 									const color = this.querySelector('input[type="color"]');
 									const hex = this.querySelector('input[type="text"]');
 									hex.value = color.value;
-									this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+									this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 								}
 							}
 						},{
@@ -1721,8 +1721,8 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 							'type': 'text',
 							'id': index,
 							'pattern': '^#[0-9A-Fa-f]{6}$',
-							'readonly': template.fc_readonly ? true: null,
-							'list': template.fc_list,
+							'readonly': template.fu_readonly ? true: null,
+							'list': template.fu_list,
 							'events': {
 								'input': () => {
 									const color = this.querySelector('input[type="color"]');
@@ -1730,14 +1730,14 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 									if (hex.checkValidity()) {
 										color.value = hex.value;
 									}
-									this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+									this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 								}
 							}
 						}
 					]
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
@@ -1745,11 +1745,11 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 
 };
 
-customElements.define('fc-color', fc.fields.color);
+customElements.define('fu-color', fu.fields.color);
 
 // /fields/inputs/hidden.js
 
-fc.fields.hidden = class fc_fields_hidden extends fc.fields.input {
+fu.fields.hidden = class fu_fields_hidden extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input');
@@ -1760,24 +1760,24 @@ fc.fields.hidden = class fc_fields_hidden extends fc.fields.input {
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
-			'class': 'fc_field fc_field_input fc_field_hidden',
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_field fu_field_input fu_field_hidden',
 			'children':[
 				{
 					'tag': 'label',
-					'class': 'fc_label',
+					'class': 'fu_label',
 					'for': index,
 					'html': '<s>Hidden</s>',
 				},{
-					'class': 'fc_input_wrapper',
+					'class': 'fu_input_wrapper',
 					'children': [{
 						'tag': 'input',
 						'id': index,
 						'type': 'text',
-						'class': 'fc_input',
+						'class': 'fu_input',
 					}]
 				}
 			]
@@ -1786,12 +1786,12 @@ fc.fields.hidden = class fc_fields_hidden extends fc.fields.input {
 
 };
 
-customElements.define('fc-hidden', fc.fields.hidden);
+customElements.define('fu-hidden', fu.fields.hidden);
 
 
 // /fields/inputs/checkboxes.js
 
-fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
+fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 
 	get value(){
 		let value = [];
@@ -1807,19 +1807,19 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 		this.inputs.forEach((input) => {
 			input.checked = ( -1 != value.indexOf( input.value ) )
 		});
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get inputs(){
 		return Array.from(
-			this.querySelectorAll('.fc_choices_wrapper input[type="checkbox"]')
+			this.querySelectorAll('.fu_choices_wrapper input[type="checkbox"]')
 		);
 	}
 
 	get repeater_label(){
 		const labels = [];
 		Array.from(
-			this.querySelectorAll('input:checked + .fc_checkboxes_label')
+			this.querySelectorAll('input:checked + .fu_checkboxes_label')
 		).forEach((label) => {
 			labels.push( label.innerHTML.trim() )
 		});
@@ -1827,12 +1827,12 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_choices_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_choices_wrapper',
 			'children': template.values?.map(config => {
-				index = fc.DOM.getIndex();
+				index = fu.DOM.getIndex();
 				return {
-					'class': 'fc_input_wrapper',
+					'class': 'fu_input_wrapper',
 					'tag': 'label',
 					'for': index,
 					'children': [
@@ -1840,14 +1840,14 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 							'tag': 'input',
 							'type': 'checkbox',
 							'id': index,
-							'class': 'fc_checkbox',
-							'value': config.fc_value ?? '1',
+							'class': 'fu_checkbox',
+							'value': config.fu_value ?? '1',
 							'events': {
-								'change': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+								'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 							},
-						}, ( ! config.fc_label ) ? null : {
-							'class': 'fc_checkboxes_label',
-							'html': ' ' + config.fc_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
+						}, ( ! config.fu_label ) ? null : {
+							'class': 'fu_checkboxes_label',
+							'html': ' ' + config.fu_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
 						}
 					]
 				};
@@ -1856,12 +1856,12 @@ fc.fields.checkboxes = class fc_fields_checkboxes extends fc.fields.input {
 	}
 };
 
-customElements.define('fc-checkboxes', fc.fields.checkboxes);
+customElements.define('fu-checkboxes', fu.fields.checkboxes);
 
 
 // /fields/inputs/radios.js
 
-fc.fields.radios = class fc_fields_radios extends fc.fields.input {
+fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 
 	get value(){
 		const checked = this.querySelector('input[type="radio"]:checked');
@@ -1873,36 +1873,36 @@ fc.fields.radios = class fc_fields_radios extends fc.fields.input {
 		radios.forEach((input) => {
 			input.checked = ( -1 != value.indexOf( input.value ) )
 		});
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
-		const after = this.querySelector('input:checked + .fc_radios_label')
+		const after = this.querySelector('input:checked + .fu_radios_label')
 		return after ? after.innerHTML : '';
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_choices_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_choices_wrapper',
 			'children': template.values?.map(radio => {
-				index = fc.DOM.getIndex();
+				index = fu.DOM.getIndex();
 				return {
-					'class': 'fc_input_wrapper',
+					'class': 'fu_input_wrapper',
 					'tag': 'label',
 					'for': index,
 					'children': [
 						{
 							'tag': 'input',
 							'id': index,
-							'class': 'fc_radio',
+							'class': 'fu_radio',
 							'type': 'radio',
-							'value': radio.fc_value ?? '1',
+							'value': radio.fu_value ?? '1',
 							'events': {
-								'change': () => this.value = radio.fc_value ?? '1',
+								'change': () => this.value = radio.fu_value ?? '1',
 							},
-						}, ( ! radio.fc_label ) ? null : {
-							'class': 'fc_radios_label',
-							'html': ' ' + radio.fc_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
+						}, ( ! radio.fu_label ) ? null : {
+							'class': 'fu_radios_label',
+							'html': ' ' + radio.fu_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
 						}
 					]
 				};
@@ -1911,12 +1911,12 @@ fc.fields.radios = class fc_fields_radios extends fc.fields.input {
 	}
 };
 
-customElements.define('fc-radios', fc.fields.radios);
+customElements.define('fu-radios', fu.fields.radios);
 
 
 // /fields/inputs/select.js
 
-fc.fields.select = class fc_fields_select extends fc.fields.input {
+fu.fields.select = class fu_fields_select extends fu.fields.input {
 
 	get value(){
 		const select = this.querySelector('select');
@@ -1926,7 +1926,7 @@ fc.fields.select = class fc_fields_select extends fc.fields.input {
 	set value(value){
 		const select = this.querySelector('select');
 		select.value = value;
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
@@ -1937,59 +1937,59 @@ fc.fields.select = class fc_fields_select extends fc.fields.input {
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'select',
 					'id': index,
-					'class': 'fc_input',
+					'class': 'fu_input',
 					'children': template.values?.map(config => {
 						return {
 							'tag': 'option',
-							'value': config.fc_value,
-							'html': config.fc_label,
+							'value': config.fu_value,
+							'html': config.fu_label,
 						};
 					}),
 					'events': {
-						'change': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
 	}
 };
 
-customElements.define('fc-select', fc.fields.select);
+customElements.define('fu-select', fu.fields.select);
 
 
 // /fields/repeaters/row.js
 
-fc.fields.row = class fc_fields_row extends fc.fields.group {
+fu.fields.row = class fu_fields_row extends fu.fields.group {
 
 	get repeater(){
-		return this.closest('.fc_repeater');
+		return this.closest('.fu_repeater');
 	}
 
 	toggle_open_state(){
-		if( this.classList.contains('fc_open') ){
-			Array.from( this.querySelectorAll('.fc_open') ).forEach(
-				el => el.classList.remove('fc_open')
+		if( this.classList.contains('fu_open') ){
+			Array.from( this.querySelectorAll('.fu_open') ).forEach(
+				el => el.classList.remove('fu_open')
 			);
 		}
-		this.classList.toggle('fc_open');
+		this.classList.toggle('fu_open');
 		this.repeater.update_open_state();
 	}
 
 	button_add_to_top(){ return {
 		'tag': 'button', 'type': 'button',
-		'class': 'fc_icon fc_add to_top',
+		'class': 'fu_icon fu_add to_top',
 		'aria-label': 'Add before row',
 		'events': {
 			'click': (e) => {
@@ -2000,7 +2000,7 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 
 	button_add_to_bottom(){ return {
 		'tag': 'button', 'type': 'button',
-		'class': 'fc_icon fc_add to_bottom',
+		'class': 'fu_icon fu_add to_bottom',
 		'aria-label': 'Add after row',
 		'events': {
 			'click': (e) => {
@@ -2010,17 +2010,17 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 	}}
 
 	icon_move(){ return {
-		'class': 'fc_icon fc_move'
+		'class': 'fu_icon fu_move'
 	}}
 
 	checkbox(){ return {
 		'tag': 'label',
-		'class': 'fc_r_checkbox',
+		'class': 'fu_r_checkbox',
 		'children': [
 			{
 				'tag': 'input',
 				'type': 'checkbox',
-				'id': fc.DOM.getIndex(),
+				'id': fu.DOM.getIndex(),
 				'events': {
 					'change': (e) => {
 						this.repeater.update_check_state();
@@ -2031,12 +2031,12 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 	}}
 
 	index(){ return  {
-		'class': 'fc_index'
+		'class': 'fu_index'
 	}}
 
 	button_delete(){ return {
 		'tag': 'button', 'type': 'button',
-		'class': 'fc_icon fc_delete',
+		'class': 'fu_icon fu_delete',
 		'aria-label': 'Delete',
 		'events': {
 			'click': () => {
@@ -2050,13 +2050,13 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 
 	button_duplicate(){ return {
 		'tag': 'button', 'type': 'button',
-		'class': 'fc_icon fc_x2',
+		'class': 'fu_icon fu_x2',
 		'aria-label': 'Duplicate',
 		'events': {
 			'click': () => {
 				const new_row = this.repeater.create_row( this.value );
-				if( this.classList.contains('fc_open') ){
-					new_row.classList.add('fc_open');
+				if( this.classList.contains('fu_open') ){
+					new_row.classList.add('fu_open');
 				}
 				this.after(new_row);
 			},
@@ -2065,7 +2065,7 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 
 	button_up(){ return {
 		'tag': 'button', 'type': 'button',
-		'class': 'fc_icon fc_up',
+		'class': 'fu_icon fu_up',
 		'aria-label': 'Move Up',
 		'events': {
 			'click': () => {
@@ -2077,7 +2077,7 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 
 	button_down(){ return {
 		'tag': 'button', 'type': 'button',
-		'class': 'fc_icon fc_down',
+		'class': 'fu_icon fu_down',
 		'aria-label': 'Move Down',
 		'events': {
 			'click': () => {
@@ -2089,7 +2089,7 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 
 	button_toggle(){ return {
 		'tag': 'button', 'type': 'button',
-		'class': 'fc_icon fc_toggle',
+		'class': 'fu_icon fu_toggle',
 		'aria-label': 'Open / Close',
 		'events': {
 			'click': () => this.toggle_open_state(),
@@ -2102,11 +2102,11 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 	 */
 	set template(template){
 
-		fc.DOM.attrs(this, {
-			'class': 'fc_row fc_switch',
+		fu.DOM.attrs(this, {
+			'class': 'fu_row fu_switch',
 			'children':[
 				{
-					'class': 'fc_header fc_row_header',
+					'class': 'fu_header fu_row_header',
 					'children':[
 						this.icon_move(),
 						this.checkbox(),
@@ -2114,22 +2114,22 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 						this.button_add_to_bottom(),
 						this.index(),
 						{
-							'class': 'fc_row__labels',
+							'class': 'fu_row__labels',
 							'events': {
 								'click': () => this.toggle_open_state(),
 							},
-							'children': template.fc_row__labels?.map(config => {
+							'children': template.fu_row__labels?.map(config => {
 								if( ! config ){
 									return;
 								}
 								return {
-									'class': 'fc_label',
+									'class': 'fu_label',
 									'style': config.width ? `flex-grow:${config.width}` : '',
-									'children': [{ 'html': config.fc_label ?? '' }],
+									'children': [{ 'html': config.fu_label ?? '' }],
 								};
 							}),
 						},{
-							'class': 'fc_actions',
+							'class': 'fu_actions',
 							'children': [
 								this.button_delete(),
 								this.button_duplicate(),
@@ -2140,46 +2140,46 @@ fc.fields.row = class fc_fields_row extends fc.fields.group {
 						},
 					],
 				},{
-					'class': 'fc_container',
+					'class': 'fu_container',
 					'children': [{
-						'tag': 'fc-children',
+						'tag': 'fu-children',
 						'template': template.fields
 					}]
 				}
 			]
 		});
 
-		this.querySelector('.fc_row_header').querySelectorAll('[data-from]')?.forEach( (label) => {
+		this.querySelector('.fu_row_header').querySelectorAll('[data-from]')?.forEach( (label) => {
 			const from = label.getAttribute('data-from');
 			let field;
 
-			field = this.querySelector('[fc_name="'+from+'"]');
+			field = this.querySelector('[fu_name="'+from+'"]');
 			if( ! field ) {
 				return
 			}
 
-			field.addEventListener( 'fc_field_input', (e) => {
+			field.addEventListener( 'fu_field_input', (e) => {
 				label.innerHTML = '';
-				fc.DOM.attrs( label, {
+				fu.DOM.attrs( label, {
 					'html': field.repeater_label
 				});
 			});
-			field.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+			field.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 		});
 	}
 };
 
-customElements.define('fc-row', fc.fields.row);
+customElements.define('fu-row', fu.fields.row);
 
 
 // /fields/repeaters/row_table.js
 
-fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
+fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 
 	get value(){
 		let value = {};
-		this.querySelectorAll('.fc_row_fields input[fc_name]').forEach( (field) => {
-			const field_name = field.getAttribute('fc_name');
+		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+			const field_name = field.getAttribute('fu_name');
 			if( ! field_name ) return;
 			const field_value = field.value ?? '';
 			if( ! field_value ) return;
@@ -2190,8 +2190,8 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 
 	set value(value){
 		if (!value) return;
-		this.querySelectorAll('.fc_row_fields input[fc_name]').forEach( (field) => {
-			const field_name = field.getAttribute('fc_name');
+		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+			const field_name = field.getAttribute('fu_name');
 			const field_value = value[field_name] ?? '';
 			field.value = field_value;
 		});
@@ -2202,11 +2202,11 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 	 */
 	set template(template){
 
-		fc.DOM.attrs(this, {
-			'class': 'fc_row fc_switch',
+		fu.DOM.attrs(this, {
+			'class': 'fu_row fu_switch',
 			'children':[
 				{
-					'class': 'fc_header fc_row_header',
+					'class': 'fu_header fu_row_header',
 					'children':[
 						this.button_add_to_top(),
 						this.button_add_to_bottom(),
@@ -2214,23 +2214,23 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 						this.checkbox(),
 						this.index(),
 						{
-							'class': 'fc_row_fields',
+							'class': 'fu_row_fields',
 							'children': template.fields?.map(field => {
-								const index = fc.DOM.getIndex();
+								const index = fu.DOM.getIndex();
 								return {
 									'tag': 'label',
-									'class': 'fc_label',
+									'class': 'fu_label',
 									'for': index,
 									'children':[{
 										'tag': 'input',
-										'type': field.fc_type??'',
-										'fc_name': field.fc_name??'',
+										'type': field.fu_type??'',
+										'fu_name': field.fu_name??'',
 										'id': index,
 									}]
 								};
 							})
 						},{
-							'class': 'fc_actions',
+							'class': 'fu_actions',
 							'children': [
 								this.button_delete(),
 								this.button_duplicate(),
@@ -2245,17 +2245,17 @@ fc.fields.row_table = class fc_fields_row_table extends fc.fields.row {
 	}
 };
 
-customElements.define('fc-row_table', fc.fields.row_table);
+customElements.define('fu-row_table', fu.fields.row_table);
 
 
 // /fields/repeaters/repeater.js
 
 
-fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
+fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 	get value(){
 		const value = Array.from(this.rows.childNodes)
-			.filter(row => row.tagName.toLowerCase() === 'fc-row')
+			.filter(row => row.tagName.toLowerCase() === 'fu-row')
 			.map(row => row.value);
 
 		return value.length ? value : [];
@@ -2277,31 +2277,31 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 	update_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fc_open'));
-		this.classList.toggle('fc_open', allRowsOpen);
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
+		this.classList.toggle('fu_open', allRowsOpen);
 	}
 
 	toggle_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fc_open'));
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
 		if( allRowsOpen ) {
-			Array.from( this.querySelectorAll('.fc_open') ).forEach(
-				el => el.classList.remove('fc_open')
+			Array.from( this.querySelectorAll('.fu_open') ).forEach(
+				el => el.classList.remove('fu_open')
 			);
 		} else {
-			rowNodes.forEach(row => row.classList.add('fc_open'));
+			rowNodes.forEach(row => row.classList.add('fu_open'));
 		}
-		this.classList.toggle('fc_open', !allRowsOpen);
+		this.classList.toggle('fu_open', !allRowsOpen);
 	}
 
 	update_check_state(){
 		const repeater_checkbox
-			= this.querySelector('.fc_repeater_header')
+			= this.querySelector('.fu_repeater_header')
 			.querySelector('input[type="checkbox"]');
 
 		const rowNodes = Array.from(this.rows.childNodes);
 		const checked = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fc_row_header')
+			const row_checkbox = row.querySelector('.fu_row_header')
 				.querySelector('input[type="checkbox"]');
 			return row_checkbox.checked;
 		});
@@ -2320,7 +2320,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 	toggle_check_state(){
 		const repeater_checkbox
-			= this.querySelector('.fc_repeater_header')
+			= this.querySelector('.fu_repeater_header')
 			.querySelector('input[type="checkbox"]');
 
 		const repeater_checked = repeater_checkbox.checked;
@@ -2328,7 +2328,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		rows.forEach( (row) => {
 			const row_checkbox
-				= row.querySelector('.fc_row_header')
+				= row.querySelector('.fu_row_header')
 				.querySelector('input[type="checkbox"]');
 			row_checkbox.checked = repeater_checked;
 		});
@@ -2338,7 +2338,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 		const rowNodes = Array.from(this.rows.childNodes);
 
 		const checkedRows = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fc_row_header')
+			const row_checkbox = row.querySelector('.fu_row_header')
 				.querySelector('input[type="checkbox"]');
 			return row_checkbox && row_checkbox.checked;
 		});
@@ -2352,11 +2352,11 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 	async copy_selected(){
 		const values = Array.from(this.get_checked_rows())
-			.filter(row => row.tagName.toLowerCase() === 'fc-row')
+			.filter(row => row.tagName.toLowerCase() === 'fu-row')
 			.map(row => row.value);
 
 		try {
-			const JSON_string = fc.JSON.stringify( values );
+			const JSON_string = fu.JSON.stringify( values );
 			await navigator.clipboard.writeText(JSON_string);
 		} catch (error) {
 			const JSON_dialog = this.show_to_copy();
@@ -2374,10 +2374,10 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		// Prepare labels
 
-		if( ( ! template.fc_repeater__labels ) || ( 0 == template.fc_repeater__labels.length ) ){
-			this.template_labels = [{ 'fc_label': '' }];
+		if( ( ! template.fu_repeater__labels ) || ( 0 == template.fu_repeater__labels.length ) ){
+			this.template_labels = [{ 'fu_label': '' }];
 		} else {
-			this.template_labels = template.fc_repeater__labels
+			this.template_labels = template.fu_repeater__labels
 		}
 
 		// Set up templates
@@ -2386,28 +2386,28 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		// Do it
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
-			'class': 'fc_repeater fc_field',
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_repeater fu_field',
 			'data-group': template_group_id,
 			'children': [
-				! template.fc_label || {
-					'class': 'fc_label',
-					'html': template.fc_label,
+				! template.fu_label || {
+					'class': 'fu_label',
+					'html': template.fu_label,
 				},
 				{
-					'class': 'fc_input_wrapper fc_repeater_wrapper',
+					'class': 'fu_input_wrapper fu_repeater_wrapper',
 					'children': [
 						{
-							'class': 'fc_header fc_repeater_header',
+							'class': 'fu_header fu_repeater_header',
 							'children':[
 								{
 									'tag': 'label',
-									'class': 'fc_r_checkbox',
+									'class': 'fu_r_checkbox',
 									'children': [{
 										'tag': 'input',
 										'type': 'checkbox',
-										'id': fc.DOM.getIndex(),
+										'id': fu.DOM.getIndex(),
 										'events': {
 											'change': (e) => {
 												this.toggle_check_state();
@@ -2416,11 +2416,11 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 										},
 									}]
 								},{
-									'class': 'fc_for_selected_menu',
+									'class': 'fu_for_selected_menu',
 									'children': [
 										{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_delete',
+											'class': 'fu_icon fu_delete',
 											'aria-label': 'Delete Selected',
 											'events': {
 												'click': (e) => {
@@ -2431,7 +2431,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_copy',
+											'class': 'fu_icon fu_copy',
 											'aria-label': 'Copy Selected',
 											'events': {
 												'click': async () => {
@@ -2441,23 +2441,23 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 										}
 									],
 								},{
-									'class': 'fc_repeater__labels',
+									'class': 'fu_repeater__labels',
 									'events': {
 										'click': (e) => this.toggle_open_state(),
 									},
 									'children': this.template_labels?.map(label => ({
-										'class': 'fc_label',
+										'class': 'fu_label',
 										'style': label.width ? `flex-grow: ${label.width}` : '',
 										'children': [{
-											'html': label.fc_label ?? ''
+											'html': label.fu_label ?? ''
 										}],
 									})),
 								},{
-									'class': 'fc_actions',
+									'class': 'fu_actions',
 									'children': [
 										{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_delete',
+											'class': 'fu_icon fu_delete',
 											'aria-label': 'Delete',
 											'events': {
 												'click': (e) => {
@@ -2468,7 +2468,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_json',
+											'class': 'fu_icon fu_json',
 											'aria-label': 'Edit as JSON',
 											'events': {
 												'click': () => {
@@ -2477,7 +2477,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_paste',
+											'class': 'fu_icon fu_paste',
 											'aria-label': 'Paste',
 											'events': {
 												'click': async (e) => {
@@ -2486,14 +2486,14 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_copy',
+											'class': 'fu_icon fu_copy',
 											'aria-label': 'Copy',
 											'events': {
 												'click': async () => this.copy()
 											}
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_toggle',
+											'class': 'fu_icon fu_toggle',
 											'aria-label': 'Open / Close',
 											'events': {
 												'click': (e) => this.toggle_open_state(),
@@ -2503,10 +2503,10 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 								},
 							],
 						},{
-							'tag': 'fc-rows',
+							'tag': 'fu-rows',
 						},{
 							'tag': 'button', 'type': 'button',
-							'class': 'add_button fc_icon fc_add',
+							'class': 'add_button fu_icon fu_add',
 							'events': {
 								'click': () => this.add_row(this, 'append')
 							}
@@ -2518,11 +2518,11 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		this.set_width( this, template );
 
-		this.rows = this.querySelector('fc-rows');
+		this.rows = this.querySelector('fu-rows');
 
 		this.Sortable = new Sortable( this.rows, {
 			group: template_group_id,
-			handle: '.fc_icon.fc_move',
+			handle: '.fu_icon.fu_move',
 			//ghostClass: '',
 			animation: 150,
 		});
@@ -2535,11 +2535,11 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 // /fields/repeaters/repeater_single.js
 
 
-fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.repeater {
+fu.fields.repeater_single = class fu_fields_repeater_single extends fu.fields.repeater {
 
 	create_row(value){
-		const row = fc.DOM.create({
-			'tag': 'fc-row',
+		const row = fu.DOM.create({
+			'tag': 'fu-row',
 			'template': this.single_template,
 		});
 
@@ -2551,9 +2551,9 @@ fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.re
 	init_repeater( template ){
 		const templates = template.templates;
 		this.single_template = templates[0];
-		this.single_template_id = fc.Templates.register_template(templates[0]);
+		this.single_template_id = fu.Templates.register_template(templates[0]);
 
-		return this.template_group_id = fc.Templates.register_group({
+		return this.template_group_id = fu.Templates.register_group({
 			'': this.single_template_id
 		});
 	}
@@ -2562,7 +2562,7 @@ fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.re
 		document.activeElement.blur();
 
 		const created_row = this.create_row();
-		created_row.classList.add('fc_open');
+		created_row.classList.add('fu_open');
 
 		switch(position){
 			case 'before':
@@ -2578,17 +2578,17 @@ fc.fields.repeater_single = class fc_fields_repeater_single extends fc.fields.re
 
 };
 
-customElements.define('fc-repeater_single', fc.fields.repeater_single);
+customElements.define('fu-repeater_single', fu.fields.repeater_single);
 
 
 // /fields/repeaters/repeater_table.js
 
 
-fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repeater_single {
+fu.fields.repeater_table = class fu_fields_repeater_table extends fu.fields.repeater_single {
 
 	get value(){
 		const value = Array.from(this.rows.childNodes)
-			.filter(row => row.tagName.toLowerCase() === 'fc-row_table')
+			.filter(row => row.tagName.toLowerCase() === 'fu-row_table')
 			.map(row => row.value);
 
 		return value.length ? value : null;
@@ -2599,8 +2599,8 @@ fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repe
 	}
 
 	create_row(value){
-		const row = fc.DOM.create({
-			'tag': 'fc-row_table',
+		const row = fu.DOM.create({
+			'tag': 'fu-row_table',
 			'template': this.single_template,
 		});
 
@@ -2611,16 +2611,16 @@ fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repe
 
 	init_repeater( template ){
 		this.single_template = template.templates[0];
-		this.single_template_id = fc.Templates.register_template(template.templates[0]);
+		this.single_template_id = fu.Templates.register_template(template.templates[0]);
 
 		this.template_labels = this.single_template.fields?.map(field => {
 			return {
-				'fc_label': field.fc_label??'',
+				'fu_label': field.fu_label??'',
 				'width': field.width??'',
 			};
 		});
 
-		return this.template_group_id = fc.Templates.register_group({
+		return this.template_group_id = fu.Templates.register_group({
 			'': this.single_template_id
 		});
 	}
@@ -2643,43 +2643,43 @@ fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repe
 
 };
 
-customElements.define('fc-repeater_table', fc.fields.repeater_table);
+customElements.define('fu-repeater_table', fu.fields.repeater_table);
 
 
 // /fields/repeaters/repeater_multiple.js
 
 
-fc.fields.repeater_multiple = class fc_fields_repeater_multiple extends fc.fields.repeater {
+fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.fields.repeater {
 
 	init_repeater( template ){
 		const templates = template.templates;
 		this.type_to_ID = templates.reduce((acc, tmpl) => {
-			acc[tmpl.fc_type] = fc.Templates.register_template(tmpl);
+			acc[tmpl.fu_type] = fu.Templates.register_template(tmpl);
 			return acc;
 		}, {});
 
 		if( 0 == Object.keys(this.type_to_ID).length ) {
-			fc.DOM.attrs(this, {
+			fu.DOM.attrs(this, {
 				'html': 'No Templates'
 			});
 			return;
 		}
 
 		this.picker_options = [{}].concat(templates.map(template => ({
-			'fc_type': template.fc_type,
-			'fc_label': template.fc_label
+			'fu_type': template.fu_type,
+			'fu_label': template.fu_label
 		})));
 
 		if( template.picker ){
 			this.picker = template.picker;
 		}
 
-		return this.template_group_id = fc.Templates.register_group( this.type_to_ID );
+		return this.template_group_id = fu.Templates.register_group( this.type_to_ID );
 	}
 
 	create_row(value){
-		let ID = this.type_to_ID[ value['fc_type'] ];
-		let template_type = value.fc_type;
+		let ID = this.type_to_ID[ value['fu_type'] ];
+		let template_type = value.fu_type;
 
 		if( ! ID ){
 			console.warn("Template type is not defined for this repeater", {
@@ -2695,21 +2695,21 @@ fc.fields.repeater_multiple = class fc_fields_repeater_multiple extends fc.field
 		}
 
 
-		const template = fc.Templates.get_template( ID );
+		const template = fu.Templates.get_template( ID );
 
-		const row = fc.DOM.create({
-			'tag': 'fc-row',
+		const row = fu.DOM.create({
+			'tag': 'fu-row',
 			'template': template,
 		});
 
-		const picker = row.querySelector('[fc_name="fc_type"]');
+		const picker = row.querySelector('[fu_name="fu_type"]');
 		if( picker ) {
 			picker.addEventListener( 'input', (e) => {
 				const new_row = this.create_row( row.value );
 				if( new_row ) {
 					new_row.value = row.value;
-					if(row.classList.contains('fc_open')){
-						new_row.classList.add('fc_open');
+					if(row.classList.contains('fu_open')){
+						new_row.classList.add('fu_open');
 					}
 					row.replaceWith(new_row);
 				}
@@ -2732,8 +2732,8 @@ fc.fields.repeater_multiple = class fc_fields_repeater_multiple extends fc.field
 		if( datalist ) {
 			picker = Array.from( datalist.childNodes ).map(option => {
 				return {
-					'fc_type': option.getAttribute('value'),
-					'fc_label': option.getAttribute('label'),
+					'fu_type': option.getAttribute('value'),
+					'fu_label': option.getAttribute('label'),
 				}
 			});
 		} else {
@@ -2748,27 +2748,27 @@ fc.fields.repeater_multiple = class fc_fields_repeater_multiple extends fc.field
 			document.activeElement.blur();
 		});
 
-		const pseudo_row = fc.DOM.create({
-			'class': 'row_add_row fc_switch fc_picker_' + picker_id,
+		const pseudo_row = fu.DOM.create({
+			'class': 'row_add_row fu_switch fu_picker_' + picker_id,
 			'children': [
 				{
-					'class': 'fc_backdrop',
+					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => pseudo_row.remove()
 					},
 				},{
-					'class': 'fc_add_header',
+					'class': 'fu_add_header',
 					'children': [
 						{
-							'class': 'fc_icon fc_add_row',
+							'class': 'fu_icon fu_add_row',
 						},{
-							'class': 'fc_add_label',
+							'class': 'fu_add_label',
 							'children': [{
 								'html': 'Add new row',
 							}],
 						},{
 							'tag': 'button', 'type': 'button',
-							'class': 'fc_icon fc_delete',
+							'class': 'fu_icon fu_delete',
 							'aria-label': 'Cancel new row',
 							'events': {
 								'click': (e) => {
@@ -2779,31 +2779,31 @@ fc.fields.repeater_multiple = class fc_fields_repeater_multiple extends fc.field
 						}
 					]
 				},{
-					'class': 'fc_add_options',
+					'class': 'fu_add_options',
 					'children': (()=>{
 						let actual = null;
 						const optgroup = [];
 						picker.forEach(option => {
-							if( option.fc_type ) {
+							if( option.fu_type ) {
 								if( ! actual ) {
-									optgroup.push({'class': 'fc_label'});
+									optgroup.push({'class': 'fu_label'});
 									optgroup.push( actual = {
-										'class': 'fc_group',
+										'class': 'fu_group',
 										'children': []
 									} );
 								}
 								actual.children.push({
 									'tag': 'button', 'type': 'button',
-									'class': ( ! this.type_to_ID[option.fc_type] ) ? 'template_not_defined' : '',
-									'html': option.fc_label ?? '???',
-									'data-fc_type': option.fc_type,
+									'class': ( ! this.type_to_ID[option.fu_type] ) ? 'template_not_defined' : '',
+									'html': option.fu_label ?? '???',
+									'data-fu_type': option.fu_type,
 									'events': {
 										'click': (e) => {
-											const created_row = this.create_row({ 'fc_type': option.fc_type });
+											const created_row = this.create_row({ 'fu_type': option.fu_type });
 											if( null === created_row ) {
 												return;
 											}
-											created_row.classList.add('fc_open');
+											created_row.classList.add('fu_open');
 											pseudo_row.replaceWith(created_row);
 											document.removeEventListener('keydown', this.esc_listener);
 										},
@@ -2811,11 +2811,11 @@ fc.fields.repeater_multiple = class fc_fields_repeater_multiple extends fc.field
 								});
 							} else {
 								optgroup.push({
-									'class': 'fc_label',
-									'html': option.fc_label ?? '???',
+									'class': 'fu_label',
+									'html': option.fu_label ?? '???',
 								});
 								optgroup.push( actual = {
-									'class': 'fc_group',
+									'class': 'fu_group',
 									'children': []
 								} );
 							}
@@ -2839,17 +2839,17 @@ fc.fields.repeater_multiple = class fc_fields_repeater_multiple extends fc.field
 	}
 };
 
-customElements.define('fc-repeater_multiple', fc.fields.repeater_multiple);
+customElements.define('fu-repeater_multiple', fu.fields.repeater_multiple);
 
 // /fields/html/h1.js
 
-fc.fields.h1 = class fc_fields_h1 extends fc.fields.abstract {
+fu.fields.h1 = class fu_fields_h1 extends fu.fields.abstract {
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_html',
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
 			'children':[{
 				'tag': 'h1',
 				'html': template.html ?? ''
@@ -2860,17 +2860,17 @@ fc.fields.h1 = class fc_fields_h1 extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-h1', fc.fields.h1);
+customElements.define('fu-h1', fu.fields.h1);
 
 // /fields/html/h2.js
 
-fc.fields.h2 = class fc_fields_h2 extends fc.fields.abstract {
+fu.fields.h2 = class fu_fields_h2 extends fu.fields.abstract {
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_html',
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
 			'children':[{
 				'tag': 'h2',
 				'html': template.html ?? ''
@@ -2881,17 +2881,17 @@ fc.fields.h2 = class fc_fields_h2 extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-h2', fc.fields.h2);
+customElements.define('fu-h2', fu.fields.h2);
 
 // /fields/html/h3.js
 
-fc.fields.h3 = class fc_fields_h3 extends fc.fields.abstract {
+fu.fields.h3 = class fu_fields_h3 extends fu.fields.abstract {
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_html',
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
 			'children':[{
 				'tag': 'h3',
 				'html': template.html ?? ''
@@ -2902,17 +2902,17 @@ fc.fields.h3 = class fc_fields_h3 extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-h3', fc.fields.h3);
+customElements.define('fu-h3', fu.fields.h3);
 
 // /fields/html/p.js
 
-fc.fields.p = class fc_fields_p extends fc.fields.abstract {
+fu.fields.p = class fu_fields_p extends fu.fields.abstract {
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_html',
+		fu.DOM.attrs(this, {
+			'class': 'fu_html',
 			'children':[{
 				'tag': 'p',
 				'html': template.html ?? ''
@@ -2923,10 +2923,10 @@ fc.fields.p = class fc_fields_p extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-p', fc.fields.p);
+customElements.define('fu-p', fu.fields.p);
 
 
-fc.init();
+fu.init();
 
 
 

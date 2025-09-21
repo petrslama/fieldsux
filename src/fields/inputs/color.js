@@ -1,4 +1,4 @@
-fc.fields.color = class fc_fields_color extends fc.fields.input {
+fu.fields.color = class fu_fields_color extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input[type="text"]');
@@ -20,19 +20,19 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 
 	get repeater_label(){
 		return /^#[a-fA-F0-9]{6}$/i.test(this.value)
-			? '<i class="fc_color_example" style="background:'+this.value+'"></i>' + this.value
+			? '<i class="fu_color_example" style="background:'+this.value+'"></i>' + this.value
 			: ''
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
-					'class': 'fc_color',
+					'class': 'fu_color',
 					'children': [
 						{
 							'tag': 'input',
@@ -42,7 +42,7 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 									const color = this.querySelector('input[type="color"]');
 									const hex = this.querySelector('input[type="text"]');
 									hex.value = color.value;
-									this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+									this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 								}
 							}
 						},{
@@ -50,8 +50,8 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 							'type': 'text',
 							'id': index,
 							'pattern': '^#[0-9A-Fa-f]{6}$',
-							'readonly': template.fc_readonly ? true: null,
-							'list': template.fc_list,
+							'readonly': template.fu_readonly ? true: null,
+							'list': template.fu_list,
 							'events': {
 								'input': () => {
 									const color = this.querySelector('input[type="color"]');
@@ -59,14 +59,14 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 									if (hex.checkValidity()) {
 										color.value = hex.value;
 									}
-									this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+									this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 								}
 							}
 						}
 					]
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
@@ -74,4 +74,4 @@ fc.fields.color = class fc_fields_color extends fc.fields.input {
 
 };
 
-customElements.define('fc-color', fc.fields.color);
+customElements.define('fu-color', fu.fields.color);

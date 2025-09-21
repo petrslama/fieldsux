@@ -1,36 +1,36 @@
-fc.fields.number = class fc_fields_number extends fc.fields.input {
+fu.fields.number = class fu_fields_number extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input[type="number"]');
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'input',
 					'type': 'number',
 					'id': index,
-					'class': 'fc_input',
-					'min': template.fc_min,
-					'max': template.fc_max,
-					'step': template.fc_step,
-					'placeholder': template.fc_placeholder,
-					'pattern': template.fc_pattern,
-					'required':template.fc_required,
-					'aria-required': template.fc_required ? 'true' : '',
-					'readonly':template.fc_readonly,
-					'list': template.fc_list,
+					'class': 'fu_input',
+					'min': template.fu_min,
+					'max': template.fu_max,
+					'step': template.fu_step,
+					'placeholder': template.fu_placeholder,
+					'pattern': template.fu_pattern,
+					'required':template.fu_required,
+					'aria-required': template.fu_required ? 'true' : '',
+					'readonly':template.fu_readonly,
+					'list': template.fu_list,
 					'events': {
-						'input': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
@@ -38,4 +38,4 @@ fc.fields.number = class fc_fields_number extends fc.fields.input {
 
 };
 
-customElements.define('fc-number', fc.fields.number);
+customElements.define('fu-number', fu.fields.number);

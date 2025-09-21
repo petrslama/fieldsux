@@ -1,10 +1,10 @@
-body.fc_dialog_opened {
+body.fu_dialog_opened {
 	overflow: hidden;
 }
 
-.fc_dialog{
+.fu_dialog{
 	padding: 0;
-	background-color: var(--fc_bg);
+	background-color: var(--fu_bg);
 	z-index: 9999;
 	overflow: hidden;
 	position: fixed;
@@ -19,31 +19,31 @@ body.fc_dialog_opened {
 		--dialog_height: 80dvh;
 	}
 
-	&.fc_open {
+	&.fu_open {
 		display: block;
 	}
 
-	.fc_backdrop {
+	.fu_backdrop {
 		position: fixed;
 		z-index: -1;
 		inset: 0;
-		background-color: var(--fc_backdrop_bg);
+		background-color: var(--fu_backdrop_bg);
 		cursor: pointer;
 	}
 
-	.fc_header {
+	.fu_header {
 		position: relative;
-		height: calc( 2 * var(--fc_size) );
-		line-height: calc( 2 * var(--fc_size) );
+		height: calc( 2 * var(--fu_size) );
+		line-height: calc( 2 * var(--fu_size) );
 
-		padding: 0 var(--fc_size);
-		background: var(--fc_row_hover_bg);
-		font-size: calc(1.4 * var(--fc_fontsize));
+		padding: 0 var(--fu_size);
+		background: var(--fu_row_hover_bg);
+		font-size: calc(1.4 * var(--fu_fontsize));
 		font-weight: 500;
 
 		&:after{
 			font-weight: 600;
-			font-size: calc(0.6* var(--fc_size));
+			font-size: calc(0.6* var(--fu_size));
 		}
 
 		i {
@@ -51,28 +51,28 @@ body.fc_dialog_opened {
 			top: 0;
 			right: 0;
 			bottom: 1px;
-			width: calc( 2 * var(--fc_size) );
+			width: calc( 2 * var(--fu_size) );
 			text-align: center;
 			cursor: pointer;
 
 			&:after {
 				content: '\00D7'; /* x */
 				font-style: normal;
-				font-size: calc( 1.5 * var(--fc_size_half) );
+				font-size: calc( 1.5 * var(--fu_size_half) );
 			}
 		}
 	}
 
-	.fc_notice {
+	.fu_notice {
 		display: flex;
 		flex-direction: column;
 		cursor: pointer;
 		position: relative;
-		background: var(--fc_bg);
+		background: var(--fu_bg);
 		z-index: 1;
 		overflow: auto;
-		height: var(--fc_notice_height);
-		max-height: calc( var(--dialog_height) - 4 * var(--fc_size) );
+		height: var(--fu_notice_height);
+		max-height: calc( var(--dialog_height) - 4 * var(--fu_size) );
 
 		&:before {
 			content: ' ';
@@ -84,9 +84,9 @@ body.fc_dialog_opened {
 			opacity: .1;
 		}
 
-		.fc_content {
-			padding: var(--fc_size);
-			padding-right: calc( 2 * var(--fc_size) );
+		.fu_content {
+			padding: var(--fu_size);
+			padding-right: calc( 2 * var(--fu_size) );
 		}
 
 		&:after {
@@ -94,10 +94,10 @@ body.fc_dialog_opened {
 			position: absolute;
 			display: inline-block;
 			z-index: 1;
-			top: calc( .5 * var(--fc_size) );
-			right: calc( .5 * var(--fc_size) );
+			top: calc( .5 * var(--fu_size) );
+			right: calc( .5 * var(--fu_size) );
 			font-style: normal;
-			font-size: var(--fc_size_half);
+			font-size: var(--fu_size_half);
 		}
 
 		&:empty {
@@ -105,47 +105,47 @@ body.fc_dialog_opened {
 		}
 	}
 
-	.fc_section {
+	.fu_section {
 		position: relative;
-		background: var(--fc_bg);
-		height: calc( var(--dialog_height) - 4 * var(--fc_size) - var(--fc_notice_height, 0px) );
+		background: var(--fu_bg);
+		height: calc( var(--dialog_height) - 4 * var(--fu_size) - var(--fu_notice_height, 0px) );
 	}
 
-	.fc_footer {
+	.fu_footer {
 		position: relative;
-		height: calc( 2 * var(--fc_size) );
-		line-height: calc( 2 * var(--fc_size) );
-		background: var(--fc_row_hover_bg);
-		font-size: var(--fc_fontsize);
+		height: calc( 2 * var(--fu_size) );
+		line-height: calc( 2 * var(--fu_size) );
+		background: var(--fu_row_hover_bg);
+		font-size: var(--fu_fontsize);
 		text-align: right;
 		overflow: auto;
 
 		@media screen and (max-width: 850px) {
-			padding: 0 var(--fc_size_half);
+			padding: 0 var(--fu_size_half);
 		}
 		@media screen and (min-width: 851px) {
-			padding: 0 var(--fc_size);
+			padding: 0 var(--fu_size);
 		}
 
-		.fc_button {
+		.fu_button {
 			display: inline-block;
-			line-height: var(--fc_size);
+			line-height: var(--fu_size);
 			cursor: pointer;
 			border: none;
-			color: var(--fc_primary);
-			background-color: var(--fc_bg);
-			margin: 0 0 0 var(--fc_size_half);
-			padding: 0 var(--fc_size_half);
+			color: var(--fu_primary);
+			background-color: var(--fu_bg);
+			margin: 0 0 0 var(--fu_size_half);
+			padding: 0 var(--fu_size_half);
 
 			&:hover {
-				background-color: var(--fc_primary);
-				color: var(--fc_bg);
+				background-color: var(--fu_primary);
+				color: var(--fu_bg);
 			}
 		}
 
-		.fc_button_primary {
-			background-color: var(--fc_primary);
-			color: var(--fc_bg);
+		.fu_button_primary {
+			background-color: var(--fu_primary);
+			color: var(--fu_bg);
 		}
 	}
 }

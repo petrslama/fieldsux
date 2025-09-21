@@ -1,4 +1,4 @@
-fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
+fu.fields.dialog_copy = class fu_fields_dialog_copy extends fu.fields.dialog {
 
 	get value(){
 		return this.querySelector('textarea').value;
@@ -10,11 +10,11 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 
 	close(){
 		super.close();
-		const caller = document.querySelector('.fc_dialog_caller');
+		const caller = document.querySelector('.fu_dialog_caller');
 		if( null === caller ) {
 			return;
 		}
-		caller.classList.remove('fc_dialog_caller');
+		caller.classList.remove('fu_dialog_caller');
 	}
 
 	select_text(){
@@ -27,16 +27,16 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'class': 'fc_dialog',
+		fu.DOM.attrs(this, {
+			'class': 'fu_dialog',
 			'children': [
 				{
-					'class': 'fc_backdrop',
+					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => this.close()
 					}
 				},{
-					'class': 'fc_header',
+					'class': 'fu_header',
 					'children': [
 						{
 							'tag': 'span',
@@ -49,29 +49,29 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 						}
 					]
 				},{
-					'class': 'fc_notice',
+					'class': 'fu_notice',
 					'events': {
 						'click': () => {
 							this.notice = '';
 						}
 					}
 				},{
-					'class': 'fc_section',
+					'class': 'fu_section',
 					'children': [{
 						'tag': 'textarea',
-						'id': fc.DOM.getIndex()
+						'id': fu.DOM.getIndex()
 					}]
 				},{
-					'class': 'fc_footer',
+					'class': 'fu_footer',
 					'children': [
 						{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_button fc_compress_json',
+							'class': 'fu_button fu_compress_json',
 							'html': 'Compress',
 							'events': {
 								'click': () => {
-									let JSON_object = fc.JSON.parse(this.value);
+									let JSON_object = fu.JSON.parse(this.value);
 									if( JSON_object ) {
 										this.value = JSON.stringify(JSON_object);
 									} else {
@@ -82,13 +82,13 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 						},{
 							'tag': 'button',
 							'type': 'button',
-							'class': 'fc_button fc_beautify_json',
+							'class': 'fu_button fu_beautify_json',
 							'html': 'Beautify',
 							'events': {
 								'click': () => {
-									let JSON_object = fc.JSON.parse(this.value);
+									let JSON_object = fu.JSON.parse(this.value);
 									if( JSON_object ) {
-										this.value = fc.JSON.stringify(JSON_object);
+										this.value = fu.JSON.stringify(JSON_object);
 									} else {
 										this.notice = '<b>Unable to beautify</b><p>Your JSON is not valid.<br>Please recheck your JSON.</p>';
 									}
@@ -102,4 +102,4 @@ fc.fields.dialog_copy = class fc_fields_dialog_copy extends fc.fields.dialog {
 	}
 };
 
-customElements.define('fc-dialog_copy', fc.fields.dialog_copy);
+customElements.define('fu-dialog_copy', fu.fields.dialog_copy);

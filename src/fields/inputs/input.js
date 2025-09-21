@@ -1,4 +1,4 @@
-fc.fields.input = class fc_fields_input extends fc.fields.abstract {
+fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 
 	get value(){
 		const value = this.get_input().value;
@@ -14,7 +14,7 @@ fc.fields.input = class fc_fields_input extends fc.fields.abstract {
 			value = JSON.stringify(value);
 		}
 		input.value = value ?? '';
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
@@ -26,22 +26,22 @@ fc.fields.input = class fc_fields_input extends fc.fields.abstract {
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
-			'class': 'fc_field fc_field_input',
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_field fu_field_input',
 			'children':[
-				( ! template.fc_label ) ? null : {
+				( ! template.fu_label ) ? null : {
 					'tag': 'label',
-					'class': 'fc_label',
+					'class': 'fu_label',
 					'for': index,
-					'html': template.fc_label,
+					'html': template.fu_label,
 				},
 				this.create_field( index, template ),
-				( ! template.fc_description ) ? null : {
-					'class': 'fc_description',
-					'html': template.fc_description.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;')
+				( ! template.fu_description ) ? null : {
+					'class': 'fu_description',
+					'html': template.fu_description.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;')
 				},
 			]
 		});

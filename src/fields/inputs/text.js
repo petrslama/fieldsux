@@ -1,36 +1,36 @@
-fc.fields.text = class fc_fields_text extends fc.fields.input {
+fu.fields.text = class fu_fields_text extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input');
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'input',
 					'id': index,
-					'class': 'fc_input',
-					'type': template.fc_validate_as ?? 'text',
-					'minlength': template.fc_minlength,
-					'maxlength': template.fc_maxlength,
-					'autocomplete': template.fc_autocomplete,
-					'placeholder': template.fc_placeholder,
-					'pattern': template.fc_pattern,
-					'required': template.fc_required ? true : null,
-					'aria-required': template.fc_required ? 'true' : '',
-					'readonly': template.fc_readonly ? true : null,
-					'list': template.fc_list,
+					'class': 'fu_input',
+					'type': template.fu_validate_as ?? 'text',
+					'minlength': template.fu_minlength,
+					'maxlength': template.fu_maxlength,
+					'autocomplete': template.fu_autocomplete,
+					'placeholder': template.fu_placeholder,
+					'pattern': template.fu_pattern,
+					'required': template.fu_required ? true : null,
+					'aria-required': template.fu_required ? 'true' : '',
+					'readonly': template.fu_readonly ? true : null,
+					'list': template.fu_list,
 					'events': {
-						'input': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
@@ -38,4 +38,4 @@ fc.fields.text = class fc_fields_text extends fc.fields.input {
 
 };
 
-customElements.define('fc-text', fc.fields.text);
+customElements.define('fu-text', fu.fields.text);

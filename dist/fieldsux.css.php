@@ -9,6 +9,8 @@ $_SRC_DIR =  dirname( __DIR__ )  . '/src';
 ob_start();
 
 foreach([
+	'/fu.css',
+
 	'/misc/icon.css',
 	'/misc/debug.css',
 	'/misc/wp.css',
@@ -26,8 +28,6 @@ foreach([
 	'/fields/repeaters/row.css',
 
 	'/fields/html/html.css',
-
-	'/fc.css',
 
 ] as $filepath ){
 	if( ! file_exists( $_SRC_DIR . $filepath )) {

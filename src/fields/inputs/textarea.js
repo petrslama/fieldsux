@@ -1,23 +1,23 @@
-fc.fields.textarea = class fc_fields_textarea extends fc.fields.input {
+fu.fields.textarea = class fu_fields_textarea extends fu.fields.input {
 
 	get_input(){ return this.querySelector('textarea'); }
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
 				{
 					'tag': 'textarea',
 					'id': index,
-					'class': 'fc_input',
-					'placeholder': template.fc_placeholder,
-					'minlength': template.fc_minlength,
-					'maxlength': template.fc_maxlength,
-					'required': template.fc_required,
-					'aria-required': template.fc_required    ? 'true' : '',
-					'readonly': template.fc_readonly,
+					'class': 'fu_input',
+					'placeholder': template.fu_placeholder,
+					'minlength': template.fu_minlength,
+					'maxlength': template.fu_maxlength,
+					'required': template.fu_required,
+					'aria-required': template.fu_required    ? 'true' : '',
+					'readonly': template.fu_readonly,
 					'events': {
-						'input': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
 				}
 			]
@@ -26,4 +26,4 @@ fc.fields.textarea = class fc_fields_textarea extends fc.fields.input {
 
 };
 
-customElements.define('fc-textarea', fc.fields.textarea);
+customElements.define('fu-textarea', fu.fields.textarea);

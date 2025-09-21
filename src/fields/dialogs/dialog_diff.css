@@ -1,8 +1,8 @@
-fc-dialog_diff .fc_section  pre{
+fu-dialog_diff .fu_section  pre{
 	position: absolute;
 	inset: 0;
 	font-family: 'Courier New', Courier, monospace;
-	padding: calc(var(--fc_size) / 2);
+	padding: calc(var(--fu_size) / 2);
 	margin: 0;
 	resize: none;
 	tab-size: 4;

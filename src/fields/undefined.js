@@ -1,14 +1,14 @@
-fc.fields.undefined = class fc_fields_undefined extends fc.fields.abstract {
+fu.fields.undefined = class fu_fields_undefined extends fu.fields.abstract {
 
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
 			'children':[
 				{
-					'class': 'fc_label',
+					'class': 'fu_label',
 					'html': 'Field is not defined!'
 				},{
 					'error_code': JSON.stringify(template, null, 2)
@@ -18,4 +18,4 @@ fc.fields.undefined = class fc_fields_undefined extends fc.fields.abstract {
 	}
 };
 
-customElements.define('fc-undefined', fc.fields.undefined);
+customElements.define('fu-undefined', fu.fields.undefined);

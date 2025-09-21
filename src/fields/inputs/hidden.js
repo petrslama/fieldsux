@@ -1,4 +1,4 @@
-fc.fields.hidden = class fc_fields_hidden extends fc.fields.input {
+fu.fields.hidden = class fu_fields_hidden extends fu.fields.input {
 
 	get_input(){
 		return this.querySelector('input');
@@ -9,24 +9,24 @@ fc.fields.hidden = class fc_fields_hidden extends fc.fields.input {
 	 */
 	set template(template){
 
-		const index = fc.DOM.getIndex();
+		const index = fu.DOM.getIndex();
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
-			'class': 'fc_field fc_field_input fc_field_hidden',
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_field fu_field_input fu_field_hidden',
 			'children':[
 				{
 					'tag': 'label',
-					'class': 'fc_label',
+					'class': 'fu_label',
 					'for': index,
 					'html': '<s>Hidden</s>',
 				},{
-					'class': 'fc_input_wrapper',
+					'class': 'fu_input_wrapper',
 					'children': [{
 						'tag': 'input',
 						'id': index,
 						'type': 'text',
-						'class': 'fc_input',
+						'class': 'fu_input',
 					}]
 				}
 			]
@@ -35,4 +35,4 @@ fc.fields.hidden = class fc_fields_hidden extends fc.fields.input {
 
 };
 
-customElements.define('fc-hidden', fc.fields.hidden);
+customElements.define('fu-hidden', fu.fields.hidden);

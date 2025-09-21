@@ -1,4 +1,4 @@
-fc.fields.select = class fc_fields_select extends fc.fields.input {
+fu.fields.select = class fu_fields_select extends fu.fields.input {
 
 	get value(){
 		const select = this.querySelector('select');
@@ -8,7 +8,7 @@ fc.fields.select = class fc_fields_select extends fc.fields.input {
 	set value(value){
 		const select = this.querySelector('select');
 		select.value = value;
-		this.dispatchEvent( new CustomEvent( 'fc_field_input' ) );
+		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
@@ -19,33 +19,33 @@ fc.fields.select = class fc_fields_select extends fc.fields.input {
 	}
 
 	create_field( index, template ){
-		return fc.DOM.create({
-			'class': 'fc_input_wrapper',
+		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fc_before ) ? null : {
-					'class': 'fc_before',
-					'html': ' ' + template.fc_before + ' ',
+				( ! template.fu_before ) ? null : {
+					'class': 'fu_before',
+					'html': ' ' + template.fu_before + ' ',
 				},{
 					'tag': 'select',
 					'id': index,
-					'class': 'fc_input',
+					'class': 'fu_input',
 					'children': template.values?.map(config => {
 						return {
 							'tag': 'option',
-							'value': config.fc_value,
-							'html': config.fc_label,
+							'value': config.fu_value,
+							'html': config.fu_label,
 						};
 					}),
 					'events': {
-						'change': () => this.dispatchEvent( new CustomEvent( 'fc_field_input' ) )
+						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fc_after ) ? null : {
-					'class': 'fc_after',
-					'html': ' ' + template.fc_after + ' ',
+				},( ! template.fu_after ) ? null : {
+					'class': 'fu_after',
+					'html': ' ' + template.fu_after + ' ',
 				}
 			]
 		});
 	}
 };
 
-customElements.define('fc-select', fc.fields.select);
+customElements.define('fu-select', fu.fields.select);

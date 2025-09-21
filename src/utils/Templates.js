@@ -1,7 +1,7 @@
 /**
  * Utility class for Repeater templates operations
  */
-fc.Templates = class {
+fu.Templates = class {
 
 	// Templates
 
@@ -10,12 +10,12 @@ fc.Templates = class {
 
 	static register_template( template ){
 		if( 'string' == typeof template ){
-			if( fc.fields?.[template]?.definition ){
-				template = fc.fields[template].definition;
+			if( fu.fields?.[template]?.definition ){
+				template = fu.fields[template].definition;
 			}
 		}
 
-		const hash = fc.JSON.hash(template);
+		const hash = fu.JSON.hash(template);
 		const ID = this.template_ID_to_hash.indexOf(hash);
 		if( -1 != ID ) {
 			return ID;
@@ -37,7 +37,7 @@ fc.Templates = class {
 	static group_ID_to_hash = [""];
 
 	static register_group( group ){
-		const hash = fc.JSON.hash(group);
+		const hash = fu.JSON.hash(group);
 		const ID = this.group_ID_to_hash.indexOf(hash);
 
 		if( -1 != ID ) {

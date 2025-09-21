@@ -1,9 +1,9 @@
 
-fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repeater_single {
+fu.fields.repeater_table = class fu_fields_repeater_table extends fu.fields.repeater_single {
 
 	get value(){
 		const value = Array.from(this.rows.childNodes)
-			.filter(row => row.tagName.toLowerCase() === 'fc-row_table')
+			.filter(row => row.tagName.toLowerCase() === 'fu-row_table')
 			.map(row => row.value);
 
 		return value.length ? value : null;
@@ -14,8 +14,8 @@ fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repe
 	}
 
 	create_row(value){
-		const row = fc.DOM.create({
-			'tag': 'fc-row_table',
+		const row = fu.DOM.create({
+			'tag': 'fu-row_table',
 			'template': this.single_template,
 		});
 
@@ -26,16 +26,16 @@ fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repe
 
 	init_repeater( template ){
 		this.single_template = template.templates[0];
-		this.single_template_id = fc.Templates.register_template(template.templates[0]);
+		this.single_template_id = fu.Templates.register_template(template.templates[0]);
 
 		this.template_labels = this.single_template.fields?.map(field => {
 			return {
-				'fc_label': field.fc_label??'',
+				'fu_label': field.fu_label??'',
 				'width': field.width??'',
 			};
 		});
 
-		return this.template_group_id = fc.Templates.register_group({
+		return this.template_group_id = fu.Templates.register_group({
 			'': this.single_template_id
 		});
 	}
@@ -58,4 +58,4 @@ fc.fields.repeater_table = class fc_fields_repeater_table extends fc.fields.repe
 
 };
 
-customElements.define('fc-repeater_table', fc.fields.repeater_table);
+customElements.define('fu-repeater_table', fu.fields.repeater_table);

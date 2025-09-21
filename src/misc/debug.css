@@ -1,72 +1,72 @@
-fc-main.debug {
-	fc-text { --field_type: 'Text';}
-	fc-textarea { --field_type: 'Text Area';}
-	fc-hidden { --field_type: 'Hidden';}
+fu-main.debug {
+	fu-text { --field_type: 'Text';}
+	fu-textarea { --field_type: 'Text Area';}
+	fu-hidden { --field_type: 'Hidden';}
 
-	fc-number { --field_type: 'Number'; }
-	fc-checkbox { --field_type: 'Checkbox'; }
-	fc-color { --field_type: 'Color'; }
-	fc-hidden { --field_type: 'Hidden'; }
-	fc-select { --field_type: 'Select'; }
-	fc-checkboxes { --field_type: 'Checkboxes'; }
-	fc-radios { --field_type: 'Radios'; }
+	fu-number { --field_type: 'Number'; }
+	fu-checkbox { --field_type: 'Checkbox'; }
+	fu-color { --field_type: 'Color'; }
+	fu-hidden { --field_type: 'Hidden'; }
+	fu-select { --field_type: 'Select'; }
+	fu-checkboxes { --field_type: 'Checkboxes'; }
+	fu-radios { --field_type: 'Radios'; }
 
-	fc-repeater_multiple { --field_type: 'Repeater Multiple'; }
-	fc-repeater_single { --field_type: 'Repeater Single'; }
-	fc-repeater_table { --field_type: 'Repeater Table'; }
+	fu-repeater_multiple { --field_type: 'Repeater Multiple'; }
+	fu-repeater_single { --field_type: 'Repeater Single'; }
+	fu-repeater_table { --field_type: 'Repeater Table'; }
 
-	/* fc-html{ --field_type: 'HTML Code'; }
-	fc-space { --field_type: 'Space'; } */
+	/* fu-html{ --field_type: 'HTML Code'; }
+	fu-space { --field_type: 'Space'; } */
 
-	fc-group { --field_type: 'Group'; }
-	fc-tabs { --field_type: 'Tabs'; }
-	fc-radiotabs { --field_type: 'Radio Tabs'; }
+	fu-group { --field_type: 'Group'; }
+	fu-tabs { --field_type: 'Tabs'; }
+	fu-radiotabs { --field_type: 'Radio Tabs'; }
 
-	/* fc-select { --field_type: 'select';}
-	fc-picker { --field_type: 'picker';} */
+	/* fu-select { --field_type: 'select';}
+	fu-picker { --field_type: 'picker';} */
 
-	.fc_icon.fc_debug{
-		background-color: var(--fc_primary);
+	.fu_icon.fu_debug{
+		background-color: var(--fu_primary);
 		&::before{
-			background-color: var(--fc_bg);
+			background-color: var(--fu_bg);
 		}
 	}
 
-	.fc_field {
+	.fu_field {
 		position: relative;
 	}
 
-	.fc_field_hidden{
+	.fu_field_hidden{
 		display: block;
 	}
 
-	.fc_field:before {
+	.fu_field:before {
 		display: inline-block;
-		color: var(--fc_primary);
+		color: var(--fu_primary);
 		position: absolute;
-		top: calc( -.5 * var(--fc_size_half) );
+		top: calc( -.5 * var(--fu_size_half) );
 		/* top: 0; */
 		left: 0;
-		line-height: calc( .325 * var(--fc_size) );
+		line-height: calc( .325 * var(--fu_size) );
 		font-family: 'Courier New', Courier, monospace;
 
-		content: attr(fc_name) ' / ' var(--field_type);
+		content: attr(fu_name) ' / ' var(--field_type);
 		white-space: pre;
-		background-color: var(--fc_body_bg);
+		background-color: var(--fu_body_bg);
 	}
 
-	fc-radiotabs.fc_field:before {
-		content: attr(fc_radio_name) ' / ' var(--field_type);
+	fu-radiotabs.fu_field:before {
+		content: attr(fu_radio_name) ' / ' var(--field_type);
 	}
 
-	fc-children > :not(.fc_field){
+	fu-children > :not(.fu_field){
 		border: 3px solid red;
 		position: relative;
-		min-height: var(--fc_size);
+		min-height: var(--fu_size);
 		&::after{
 			content: '???';
 			color:red;
-			font-size: calc( 0.4 * var(--fc_size) );
+			font-size: calc( 0.4 * var(--fu_size) );
 			display: block;
 			position: absolute;
 			top: 50%;
@@ -75,11 +75,11 @@ fc-main.debug {
 		}
 	}
 
-	fc-group {
-		padding: var(--fc_size);
+	fu-group {
+		padding: var(--fu_size);
 	}
 
-	.fc_repeater[data-group]{
+	.fu_repeater[data-group]{
 		position: relative;
 		&::after {
 			content: attr(data-group);
@@ -88,27 +88,27 @@ fc-main.debug {
 			top: 0;
 			right: 0;
 			z-index: 99;
-			width: var(--fc_size);
-			height: var(--fc_size) ;
-			line-height: var(--fc_size);
+			width: var(--fu_size);
+			height: var(--fu_size) ;
+			line-height: var(--fu_size);
 			background-color: yellowgreen;
 		}
 	}
 
-	fc-rows {
+	fu-rows {
 		counter-reset: line-number -1; /* MUST BE exactly "-1" */
 	}
-	fc-row{
-		.fc_index {
-			background-color: var(--fc_primary);
-			color: var(--fc_bg);
+	fu-row{
+		.fu_index {
+			background-color: var(--fu_primary);
+			color: var(--fu_bg);
 		}
-		& > .fc_row_header .fc_index::after {
+		& > .fu_row_header .fu_index::after {
 			content: calc( 20 + counter(line-number) );
 		}
 	}
 }
 
-fc-main:not(.debug) .fc_tabs .fc_tabs_buttons .fc_tab_button_debug{
+fu-main:not(.debug) .fu_tabs .fu_tabs_buttons .fu_tab_button_debug{
 	display: none;
 }

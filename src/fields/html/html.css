@@ -1,8 +1,8 @@
-fc-h1,
-fc-h2,
-fc-h3,
-fc-p{
-	&.fc_gw_default{
+fu-h1,
+fu-h2,
+fu-h3,
+fu-p{
+	&.fu_gw_default{
 		grid-column: 1 / -1;
 		min-width: max-content;
 	}

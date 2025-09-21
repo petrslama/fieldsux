@@ -1,8 +1,8 @@
-fc.fields.dialog = class fc_fields_dialog extends fc.fields.abstract {
+fu.fields.dialog = class fu_fields_dialog extends fu.fields.abstract {
 
 	open(){
-		this.classList.add('fc_open');
-		document.body.classList.add('fc_dialog_opened');
+		this.classList.add('fu_open');
+		document.body.classList.add('fu_dialog_opened');
 
 		this.esc_listener = document.addEventListener('keydown', (event) => {
 			if (event.key != 'Escape') {
@@ -13,8 +13,8 @@ fc.fields.dialog = class fc_fields_dialog extends fc.fields.abstract {
 	}
 
 	close(){
-		this.classList.remove('fc_open');
-		document.body.classList.remove('fc_dialog_opened');
+		this.classList.remove('fu_open');
+		document.body.classList.remove('fu_dialog_opened');
 
 		document.removeEventListener('keydown', this.esc_listener);
 	}
@@ -23,15 +23,15 @@ fc.fields.dialog = class fc_fields_dialog extends fc.fields.abstract {
 	 * @param {string} notice
 	 */
 	set notice(notice){
-		const dialog_notice = this.querySelector('.fc_notice');
+		const dialog_notice = this.querySelector('.fu_notice');
 		if( ! notice ) {
 			dialog_notice.innerHTML = '';
 			this.removeAttribute('style');
 			return;
 		}
 
-		dialog_notice.innerHTML = `<div class="fc_content">${notice}</div>`;
-		const fc_content = dialog_notice.querySelector('.fc_content');
-		this.setAttribute('style', '--fc_notice_height:' + Math.ceil( fc_content.scrollHeight ) + 'px');
+		dialog_notice.innerHTML = `<div class="fu_content">${notice}</div>`;
+		const fu_content = dialog_notice.querySelector('.fu_content');
+		this.setAttribute('style', '--fu_notice_height:' + Math.ceil( fu_content.scrollHeight ) + 'px');
 	}
 };

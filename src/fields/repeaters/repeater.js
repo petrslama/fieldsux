@@ -1,9 +1,9 @@
 
-fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
+fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 	get value(){
 		const value = Array.from(this.rows.childNodes)
-			.filter(row => row.tagName.toLowerCase() === 'fc-row')
+			.filter(row => row.tagName.toLowerCase() === 'fu-row')
 			.map(row => row.value);
 
 		return value.length ? value : [];
@@ -25,31 +25,31 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 	update_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fc_open'));
-		this.classList.toggle('fc_open', allRowsOpen);
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
+		this.classList.toggle('fu_open', allRowsOpen);
 	}
 
 	toggle_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fc_open'));
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
 		if( allRowsOpen ) {
-			Array.from( this.querySelectorAll('.fc_open') ).forEach(
-				el => el.classList.remove('fc_open')
+			Array.from( this.querySelectorAll('.fu_open') ).forEach(
+				el => el.classList.remove('fu_open')
 			);
 		} else {
-			rowNodes.forEach(row => row.classList.add('fc_open'));
+			rowNodes.forEach(row => row.classList.add('fu_open'));
 		}
-		this.classList.toggle('fc_open', !allRowsOpen);
+		this.classList.toggle('fu_open', !allRowsOpen);
 	}
 
 	update_check_state(){
 		const repeater_checkbox
-			= this.querySelector('.fc_repeater_header')
+			= this.querySelector('.fu_repeater_header')
 			.querySelector('input[type="checkbox"]');
 
 		const rowNodes = Array.from(this.rows.childNodes);
 		const checked = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fc_row_header')
+			const row_checkbox = row.querySelector('.fu_row_header')
 				.querySelector('input[type="checkbox"]');
 			return row_checkbox.checked;
 		});
@@ -68,7 +68,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 	toggle_check_state(){
 		const repeater_checkbox
-			= this.querySelector('.fc_repeater_header')
+			= this.querySelector('.fu_repeater_header')
 			.querySelector('input[type="checkbox"]');
 
 		const repeater_checked = repeater_checkbox.checked;
@@ -76,7 +76,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		rows.forEach( (row) => {
 			const row_checkbox
-				= row.querySelector('.fc_row_header')
+				= row.querySelector('.fu_row_header')
 				.querySelector('input[type="checkbox"]');
 			row_checkbox.checked = repeater_checked;
 		});
@@ -86,7 +86,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 		const rowNodes = Array.from(this.rows.childNodes);
 
 		const checkedRows = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fc_row_header')
+			const row_checkbox = row.querySelector('.fu_row_header')
 				.querySelector('input[type="checkbox"]');
 			return row_checkbox && row_checkbox.checked;
 		});
@@ -100,11 +100,11 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 	async copy_selected(){
 		const values = Array.from(this.get_checked_rows())
-			.filter(row => row.tagName.toLowerCase() === 'fc-row')
+			.filter(row => row.tagName.toLowerCase() === 'fu-row')
 			.map(row => row.value);
 
 		try {
-			const JSON_string = fc.JSON.stringify( values );
+			const JSON_string = fu.JSON.stringify( values );
 			await navigator.clipboard.writeText(JSON_string);
 		} catch (error) {
 			const JSON_dialog = this.show_to_copy();
@@ -122,10 +122,10 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		// Prepare labels
 
-		if( ( ! template.fc_repeater__labels ) || ( 0 == template.fc_repeater__labels.length ) ){
-			this.template_labels = [{ 'fc_label': '' }];
+		if( ( ! template.fu_repeater__labels ) || ( 0 == template.fu_repeater__labels.length ) ){
+			this.template_labels = [{ 'fu_label': '' }];
 		} else {
-			this.template_labels = template.fc_repeater__labels
+			this.template_labels = template.fu_repeater__labels
 		}
 
 		// Set up templates
@@ -134,28 +134,28 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		// Do it
 
-		fc.DOM.attrs(this, {
-			'fc_name': template.fc_name,
-			'class': 'fc_repeater fc_field',
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_repeater fu_field',
 			'data-group': template_group_id,
 			'children': [
-				! template.fc_label || {
-					'class': 'fc_label',
-					'html': template.fc_label,
+				! template.fu_label || {
+					'class': 'fu_label',
+					'html': template.fu_label,
 				},
 				{
-					'class': 'fc_input_wrapper fc_repeater_wrapper',
+					'class': 'fu_input_wrapper fu_repeater_wrapper',
 					'children': [
 						{
-							'class': 'fc_header fc_repeater_header',
+							'class': 'fu_header fu_repeater_header',
 							'children':[
 								{
 									'tag': 'label',
-									'class': 'fc_r_checkbox',
+									'class': 'fu_r_checkbox',
 									'children': [{
 										'tag': 'input',
 										'type': 'checkbox',
-										'id': fc.DOM.getIndex(),
+										'id': fu.DOM.getIndex(),
 										'events': {
 											'change': (e) => {
 												this.toggle_check_state();
@@ -164,11 +164,11 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 										},
 									}]
 								},{
-									'class': 'fc_for_selected_menu',
+									'class': 'fu_for_selected_menu',
 									'children': [
 										{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_delete',
+											'class': 'fu_icon fu_delete',
 											'aria-label': 'Delete Selected',
 											'events': {
 												'click': (e) => {
@@ -179,7 +179,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_copy',
+											'class': 'fu_icon fu_copy',
 											'aria-label': 'Copy Selected',
 											'events': {
 												'click': async () => {
@@ -189,23 +189,23 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 										}
 									],
 								},{
-									'class': 'fc_repeater__labels',
+									'class': 'fu_repeater__labels',
 									'events': {
 										'click': (e) => this.toggle_open_state(),
 									},
 									'children': this.template_labels?.map(label => ({
-										'class': 'fc_label',
+										'class': 'fu_label',
 										'style': label.width ? `flex-grow: ${label.width}` : '',
 										'children': [{
-											'html': label.fc_label ?? ''
+											'html': label.fu_label ?? ''
 										}],
 									})),
 								},{
-									'class': 'fc_actions',
+									'class': 'fu_actions',
 									'children': [
 										{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_delete',
+											'class': 'fu_icon fu_delete',
 											'aria-label': 'Delete',
 											'events': {
 												'click': (e) => {
@@ -216,7 +216,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_json',
+											'class': 'fu_icon fu_json',
 											'aria-label': 'Edit as JSON',
 											'events': {
 												'click': () => {
@@ -225,7 +225,7 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_paste',
+											'class': 'fu_icon fu_paste',
 											'aria-label': 'Paste',
 											'events': {
 												'click': async (e) => {
@@ -234,14 +234,14 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 											},
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_copy',
+											'class': 'fu_icon fu_copy',
 											'aria-label': 'Copy',
 											'events': {
 												'click': async () => this.copy()
 											}
 										},{
 											'tag': 'button', 'type': 'button',
-											'class': 'fc_icon fc_toggle',
+											'class': 'fu_icon fu_toggle',
 											'aria-label': 'Open / Close',
 											'events': {
 												'click': (e) => this.toggle_open_state(),
@@ -251,10 +251,10 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 								},
 							],
 						},{
-							'tag': 'fc-rows',
+							'tag': 'fu-rows',
 						},{
 							'tag': 'button', 'type': 'button',
-							'class': 'add_button fc_icon fc_add',
+							'class': 'add_button fu_icon fu_add',
 							'events': {
 								'click': () => this.add_row(this, 'append')
 							}
@@ -266,11 +266,11 @@ fc.fields.repeater = class fc_fields_repeater extends fc.fields.abstract {
 
 		this.set_width( this, template );
 
-		this.rows = this.querySelector('fc-rows');
+		this.rows = this.querySelector('fu-rows');
 
 		this.Sortable = new Sortable( this.rows, {
 			group: template_group_id,
-			handle: '.fc_icon.fc_move',
+			handle: '.fu_icon.fu_move',
 			//ghostClass: '',
 			animation: 150,
 		});

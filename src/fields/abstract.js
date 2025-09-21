@@ -1,12 +1,12 @@
-fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
+fu.fields.abstract = class fu_fields_abstract extends HTMLElement {
 
-	get fc_name(){
-		return this.getAttribute('fc_name') ?? '';
+	get fu_name(){
+		return this.getAttribute('fu_name') ?? '';
 	}
 
-	set fc_name(fc_name){
-		if( fc_name )
-			this.setAttribute('fc_name', fc_name);
+	set fu_name(fu_name){
+		if( fu_name )
+			this.setAttribute('fu_name', fu_name);
 	}
 
 	get value(){
@@ -18,12 +18,12 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 	}
 
 	edit_as_json(){
-		this.classList.add('fc_dialog_caller');
+		this.classList.add('fu_dialog_caller');
 
-		const main = this.closest('fc-main');
-		const dialogs = main.querySelector('.fc_dialogs')
-		const dialog_json = dialogs.querySelector('fc-dialog_json');
-		dialog_json.value = fc.JSON.stringify(this.value);
+		const main = this.closest('fu-main');
+		const dialogs = main.querySelector('.fu_dialogs')
+		const dialog_json = dialogs.querySelector('fu-dialog_json');
+		dialog_json.value = fu.JSON.stringify(this.value);
 		dialog_json.notice = '';
 		dialog_json.open();
 
@@ -33,7 +33,7 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 	async paste(){
 		try {
 			const clipboard_text = await navigator.clipboard.readText();
-			const JSON_object = fc.JSON.parse( clipboard_text );
+			const JSON_object = fu.JSON.parse( clipboard_text );
 
 			if( JSON_object ){
 				this.value = JSON.parse( clipboard_text );
@@ -51,12 +51,12 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 
 
 	show_to_copy(){
-		this.classList.add('fc_dialog_caller');
+		this.classList.add('fu_dialog_caller');
 
-		const main = this.closest('fc-main');
-		const dialogs = main.querySelector('.fc_dialogs')
-		const dialog_copy = dialogs.querySelector('fc-dialog_copy');
-		dialog_copy.value = fc.JSON.stringify(this.value);
+		const main = this.closest('fu-main');
+		const dialogs = main.querySelector('.fu_dialogs')
+		const dialog_copy = dialogs.querySelector('fu-dialog_copy');
+		dialog_copy.value = fu.JSON.stringify(this.value);
 		dialog_copy.notice = '';
 		dialog_copy.open();
 
@@ -66,7 +66,7 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 
 	async copy(){
 		try {
-			const JSON_string = fc.JSON.stringify( this.value );
+			const JSON_string = fu.JSON.stringify( this.value );
 			await navigator.clipboard.writeText(JSON_string);
 		} catch (error) {
 			const JSON_dialog = this.show_to_copy();
@@ -78,12 +78,12 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 
 	set_width( element, template ) {
 		if( ! template?.width ) {
-			element.classList.add('fc_gw_default');
+			element.classList.add('fu_gw_default');
 			return;
 		}
 
 		if( 'fullwidth' == template.width ) {
-			element.classList.add('fc_gw_fullwidth');
+			element.classList.add('fu_gw_fullwidth');
 		}
 
 		let class_added = false;
@@ -101,16 +101,16 @@ fc.fields.abstract = class fc_fields_abstract extends HTMLElement {
 				continue;
 			}
 
-			element.classList.add(`fc_gw_${breakpoint + 1}_${current_size}`);
+			element.classList.add(`fu_gw_${breakpoint + 1}_${current_size}`);
 			class_added = true;
 
 			last_size = current_size;
 		}
 
 		if( class_added ) {
-			element.classList.add('fc_gw_custom');
+			element.classList.add('fu_gw_custom');
 		} else {
-			element.classList.add('fc_gw_default');
+			element.classList.add('fu_gw_default');
 
 		}
 	}
