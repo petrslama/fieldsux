@@ -1,0 +1,9 @@
+fc-h1,
+fc-h2,
+fc-h3,
+fc-p{
+	&.fc_gw_default{
+		grid-column: 1 / -1;
+		min-width: max-content;
+	}
+}

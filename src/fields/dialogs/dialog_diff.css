@@ -1,0 +1,24 @@
+fc-dialog_diff .fc_section  pre{
+	position: absolute;
+	inset: 0;
+	font-family: 'Courier New', Courier, monospace;
+	padding: calc(var(--fc_size) / 2);
+	margin: 0;
+	resize: none;
+	tab-size: 4;
+
+	overflow-wrap: normal;
+	overflow-x: auto;
+
+	s {
+		background-color: #ffeef0;
+		color: #cf222e;
+		text-decoration-color: #cf222e;
+	}
+
+	b {
+		background-color: #e6ffed;
+		color: #1a7f37;
+
+	}
+}

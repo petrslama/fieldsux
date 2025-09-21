@@ -1,0 +1,22 @@
+.wp-admin {
+	fc-main input[type=checkbox]:indeterminate::before {
+		content: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M4%208h12v4H4z%27%20fill%3D%27%233582c4%27%2F%3E%3C%2Fsvg%3E);
+	}
+
+	.wp_options{
+		fc-main{
+			--fc_primary: #2271b1;
+
+			@media screen and (max-width: 600px) {
+				margin: -56px -12px 0 -10px;
+			}
+			@media screen and (min-width: 601px) and (max-width: 782px) {
+				margin: -10px -12px 0 -10px;
+			}
+
+			@media screen and (min-width: 783px) {
+				margin: -10px -20px 0 -22px;
+			}
+		}
+	}
+}

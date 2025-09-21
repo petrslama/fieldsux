@@ -1,0 +1,106 @@
+fc-rows{
+	counter-reset: line-number;
+	display: block;
+	position: relative;
+
+	&:empty {
+		height: 0;
+		overflow: visible;
+		&::before{
+			content: '';
+			box-shadow: 0 -1px 0 0 var(--fc_border_color);
+			display: block;
+			height: 1px;
+		}
+	}
+}
+
+.fc_row {
+	display: block;
+	position: relative;
+	counter-increment: line-number;
+	box-shadow: 0 -1px 0 0 var(--fc_border_color);
+
+	&:first-child > .fc_row_header .fc_icon.fc_up,
+	&:last-child > .fc_row_header .fc_icon.fc_down {
+		visibility: hidden;
+	}
+
+	& > .fc_row_header .fc_index::after {
+		content: counter(line-number);
+	}
+
+	&:nth-child(n + 10)   .fc_index::after { font-size: calc(0.9 * var(--fc_fontsize)); }
+	&:nth-child(n + 100)  .fc_index::after { font-size: calc(0.8 * var(--fc_fontsize)); }
+	&:nth-child(n + 1000) .fc_index::after { font-size: calc(0.7 * var(--fc_fontsize)); }
+
+	&.fc_open > .fc_row_header {
+		background-color: var(--fc_row_hover_bg);
+	}
+
+	& > .fc_container {
+		padding-left: calc( 2.5 * var(--fc_size) );
+	}
+
+	&:not(.fc_open) > .fc_container {
+		display: none;
+	}
+
+}
+
+.fc_row_header {
+	display: flex;
+	height: var(--fc_size);
+
+	.fc_index {
+		display: block;
+		width: var(--fc_size);
+		height: var(--fc_size);
+		line-height: var(--fc_size);
+		text-align: center;
+		font-weight: 700;
+		font-family: 'Courier New', Courier, monospace;
+	}
+
+	.fc_icon.fc_add{
+		display: none;
+	}
+
+	.fc_move {
+		cursor: move;
+	}
+}
+
+/* .fc_row_header:focus-within, */
+.fc_row:hover > .fc_row_header {
+	.fc_add.to_top,
+	.fc_add.to_bottom {
+		position: absolute;
+		left: calc( 2 * var(--fc_size) );
+		display: block;
+		z-index: 3;
+		background: var(--fc_row_hover_bg);
+
+		&:after{
+			top: 0;
+			left: calc( 1.5 * var(--fc_size) );
+			right: auto;
+		}
+
+		&:hover {
+			background: var(--fc_primary);
+		}
+	}
+
+	.fc_add.to_top{
+		top: calc( -.5* var(--fc_size));
+	}
+	.fc_add.to_bottom{
+		bottom: calc( -.5* var(--fc_size));
+	}
+}
+
+.fc_row.sortable-chosen .fc_row_header .fc_icon.fc_add{
+	display: none;
+}
+

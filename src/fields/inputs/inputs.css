@@ -1,0 +1,131 @@
+.fc_field {
+	display: block;
+
+	.fc_label {
+		display: block;
+		font-weight: 500;
+		line-height: var(--fc_size);
+		font-size: var(--fc_fontsize_xs);
+
+		&:is(label){
+			cursor: pointer;
+		}
+	}
+}
+
+.fc_field_input {
+
+	label {
+		cursor: pointer;
+	}
+
+	.fc_input_wrapper {
+		display: flex;
+		align-items: flex-start;
+		flex-grow: 1;
+		line-height: var(--fc_size);
+		gap: calc( .25 * var(--fc_size) );
+
+		input[type="checkbox"],
+		input[type="radio"] {
+			min-width: var(--fc_size_half);
+			height: var(--fc_size_half);
+			margin: calc( .25 * var(--fc_size) ) 0 0 0;
+		}
+	}
+
+	.fc_choices_wrapper{
+		display: flex;
+		flex-direction: column;
+		gap: calc(.25 * var(--fc_size));
+	}
+
+	.fc_before, .fc_after {
+		display: flex;
+		flex: 0 0 auto;
+	}
+
+	.fc_description{
+		padding: calc( .5 * var(--fc_size_half) ) 0;
+		line-height: calc( .75 * var(--fc_size) );
+		font-size: var(--fc_fontsize_xs);
+		color: var(--fc_text_color_light);
+		text-wrap: pretty;
+	}
+
+	.fc_input {
+		display: block;
+		flex: 1;
+		width: var(--fc_size);
+		font-size: var(--fc_fontsize);
+		line-height: var(--fc_size);
+		min-height: var(--fc_size);
+		padding: 0 var(--fc_size_half);
+		border: none;
+		box-shadow: 0 0 0 1px var(--fc_border_color);
+	}
+
+	.fc_checkbox {
+		display: inline-block;
+		line-height: var(--fc_size);
+		cursor: pointer;
+	}
+
+	[readonly] {
+		background: var(--fc_body_bg);
+	}
+
+	input[type="text"]::-webkit-calendar-picker-indicator{
+		block-size: var(--fc_size) !important;
+		line-height: var(--fc_size);
+		height: var(--fc_size);
+		width: var(--fc_size);
+		position: relative;
+		margin-right: calc( -1 * var(--fc_size_half) );
+		padding: 0;
+		text-align: center;
+		opacity: 1;
+		box-shadow: 0 0 0 1px var(--fc_border_color);
+	}
+
+	input[type="number"] {
+		padding-right: 0;
+	}
+
+	textarea.fc_input {
+		field-sizing: content;
+		padding: calc( 0.5 * var(--fc_size_half) ) var(--fc_size_half);
+		line-height: calc( 0.75 * var(--fc_size) );
+	}
+
+	.fc_color{
+		display: inline-flex;
+		box-shadow: 0 0 0 1px var(--fc_border_color);
+
+		input[type="color"]{
+            width: var(--fc_size);
+            height: var(--fc_size);;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+
+			&::-webkit-color-swatch-wrapper,
+			&::-webkit-color-swatch {
+				padding: 0;
+				border: none;
+			}
+		}
+		input[type="text"]{
+            width: calc( 3 * var(--fc_size) );
+            height: var(--fc_size);;
+            border: none;
+            padding: 0 var(--fc_size_half);
+		}
+	}
+}
+
+.fc_field_hidden{
+	grid-column: span 2;
+	display: none;
+}
+

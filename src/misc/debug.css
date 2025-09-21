@@ -1,0 +1,114 @@
+fc-main.debug {
+	fc-text { --field_type: 'Text';}
+	fc-textarea { --field_type: 'Text Area';}
+	fc-hidden { --field_type: 'Hidden';}
+
+	fc-number { --field_type: 'Number'; }
+	fc-checkbox { --field_type: 'Checkbox'; }
+	fc-color { --field_type: 'Color'; }
+	fc-hidden { --field_type: 'Hidden'; }
+	fc-select { --field_type: 'Select'; }
+	fc-checkboxes { --field_type: 'Checkboxes'; }
+	fc-radios { --field_type: 'Radios'; }
+
+	fc-repeater_multiple { --field_type: 'Repeater Multiple'; }
+	fc-repeater_single { --field_type: 'Repeater Single'; }
+	fc-repeater_table { --field_type: 'Repeater Table'; }
+
+	/* fc-html{ --field_type: 'HTML Code'; }
+	fc-space { --field_type: 'Space'; } */
+
+	fc-group { --field_type: 'Group'; }
+	fc-tabs { --field_type: 'Tabs'; }
+	fc-radiotabs { --field_type: 'Radio Tabs'; }
+
+	/* fc-select { --field_type: 'select';}
+	fc-picker { --field_type: 'picker';} */
+
+	.fc_icon.fc_debug{
+		background-color: var(--fc_primary);
+		&::before{
+			background-color: var(--fc_bg);
+		}
+	}
+
+	.fc_field {
+		position: relative;
+	}
+
+	.fc_field_hidden{
+		display: block;
+	}
+
+	.fc_field:before {
+		display: inline-block;
+		color: var(--fc_primary);
+		position: absolute;
+		top: calc( -.5 * var(--fc_size_half) );
+		/* top: 0; */
+		left: 0;
+		line-height: calc( .325 * var(--fc_size) );
+		font-family: 'Courier New', Courier, monospace;
+
+		content: attr(fc_name) ' / ' var(--field_type);
+		white-space: pre;
+		background-color: var(--fc_body_bg);
+	}
+
+	fc-radiotabs.fc_field:before {
+		content: attr(fc_radio_name) ' / ' var(--field_type);
+	}
+
+	fc-children > :not(.fc_field){
+		border: 3px solid red;
+		position: relative;
+		min-height: var(--fc_size);
+		&::after{
+			content: '???';
+			color:red;
+			font-size: calc( 0.4 * var(--fc_size) );
+			display: block;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+
+	fc-group {
+		padding: var(--fc_size);
+	}
+
+	.fc_repeater[data-group]{
+		position: relative;
+		&::after {
+			content: attr(data-group);
+			text-align: center;
+			position: absolute;
+			top: 0;
+			right: 0;
+			z-index: 99;
+			width: var(--fc_size);
+			height: var(--fc_size) ;
+			line-height: var(--fc_size);
+			background-color: yellowgreen;
+		}
+	}
+
+	fc-rows {
+		counter-reset: line-number -1; /* MUST BE exactly "-1" */
+	}
+	fc-row{
+		.fc_index {
+			background-color: var(--fc_primary);
+			color: var(--fc_bg);
+		}
+		& > .fc_row_header .fc_index::after {
+			content: calc( 20 + counter(line-number) );
+		}
+	}
+}
+
+fc-main:not(.debug) .fc_tabs .fc_tabs_buttons .fc_tab_button_debug{
+	display: none;
+}
