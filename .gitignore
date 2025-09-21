@@ -1,0 +1,58 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE and Editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.sublime-*
+
+# Dot files/directories
+.*
+!.gitignore
+
+# Configuration files
+config.php
+*.config.php
+settings.php
+database.php
+
+# Compiled CSS
+*.css
+*.css.map
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Cache and temporary files
+/cache/
+/tmp/
+*.tmp
+*.temp
+
+# Build directories
+/dist/
+/build/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Environment files
+.env
+.env.*
+!.env.example
