@@ -19,7 +19,7 @@ body.fu_dialog_opened {
 		--dialog_height: 80dvh;
 	}
 
-	&.fu_open {
+	&.fu_open_dialog {
 		display: block;
 	}
 

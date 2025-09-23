@@ -25,21 +25,21 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 	update_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
-		this.classList.toggle('fu_open', allRowsOpen);
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open_row'));
+		this.classList.toggle('fu_open_repeater', allRowsOpen);
 	}
 
 	toggle_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open_row'));
 		if( allRowsOpen ) {
-			Array.from( this.querySelectorAll('.fu_open') ).forEach(
-				el => el.classList.remove('fu_open')
+			Array.from( this.querySelectorAll('.fu_open_row') ).forEach(
+				el => el.classList.remove('fu_open_row')
 			);
 		} else {
-			rowNodes.forEach(row => row.classList.add('fu_open'));
+			rowNodes.forEach(row => row.classList.add('fu_open_row'));
 		}
-		this.classList.toggle('fu_open', !allRowsOpen);
+		this.classList.toggle('fu_open_repeater', !allRowsOpen);
 	}
 
 	update_check_state(){

@@ -1,17 +1,17 @@
 fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 
 	get buttons(){
-		return Array.from( this.querySelector('.fu_tabs_buttons').childNodes );
+		return Array.from( this.querySelector('.fu_radiotabs_buttons').childNodes );
 	}
 
 	get panels(){
-		return Array.from( this.querySelector('.fu_tabs_panels').childNodes );
+		return Array.from( this.querySelector('.fu_radiotabs_panels').childNodes );
 	}
 
 	get value(){
-		const panel_value = this.querySelector('.fu_tabs_panels').querySelector('.fu_open_tab')?.value;
+		const panel_value = this.querySelector('.fu_radiotabs_panels').querySelector('.fu_open_tab')?.value;
 
-		const button = this.querySelector('.fu_tabs_buttons').querySelector('input:checked');
+		const button = this.querySelector('.fu_radiotabs_buttons').querySelector('input:checked');
 		if (!button) return panel_value;
 
 		const button_value = button.getAttribute('value');
@@ -28,7 +28,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 		const fu_radio_name = this.getAttribute('fu_radio_name');
 		const fu_radio_value = value[fu_radio_name];
 		if( ( fu_radio_value ) && ( /[a-zA-Z0-9_\-]+/g.test(fu_radio_value) ) ){
-			const found = this.querySelector('.fu_tabs_buttons').querySelector('input[value="'+fu_radio_value+'"]');
+			const found = this.querySelector('.fu_radiotabs_buttons').querySelector('input[value="'+fu_radio_value+'"]');
 			if( found ) {
 				found.parentNode.dispatchEvent( new Event('click') );
 			} else {
@@ -46,7 +46,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 	 */
 	set template(template){
 		fu.DOM.attrs(this, {
-			'class': 'fu_tabs fu_field',
+			'class': 'fu_radiotabs fu_field',
 			'fu_radio_name': template.fu_name,
 			'children':[
 				! template.fu_label ? null : {
@@ -54,10 +54,10 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 					'html': template.fu_label
 				},
 				{
-					'class': 'fu_tabs_buttons',
+					'class': 'fu_radiotabs_buttons',
 					'children': template.tabs?.map((tab, index)=> ({
 						'tag': 'label',
-						'class': 'fu_tab_button',
+						'class': 'fu_radiotab_button',
 						'data-index': index,
 						'children':[
 							{
@@ -91,7 +91,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 						}
 					})),
 				},{
-					'class': 'fu_tabs_panels fu_switch fu_container',
+					'class': 'fu_radiotabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
 						'tag': 'fu-children',
 						'template': tab.fields??[],

@@ -18,6 +18,7 @@ foreach([
 	'/utils/DOM.js',
 	'/utils/Templates.js',
 	'/utils/Definitions.js',
+	'/utils/Opened.js',
 
 	'/fields/abstract.js',
 	'/fields/undefined.js',

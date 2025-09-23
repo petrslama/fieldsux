@@ -89,8 +89,8 @@ button.fu_icon {
 .fu_icon.fu_move:before {   mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>') }
 .fu_icon.fu_add_row:before {mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>'); }
 
-.fu_repeater.fu_open > .fu_input_wrapper > .fu_repeater_header .fu_toggle:before,
-fu-row.fu_open > .fu_row_header .fu_toggle:before {
+.fu_repeater.fu_open_repeater > .fu_input_wrapper > .fu_repeater_header .fu_toggle:before,
+fu-row.fu_open_row > .fu_row_header .fu_toggle:before {
 	mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 20 5-5 5 5"/><path d="m7 4 5 5 5-5"/></svg>');
 }
 

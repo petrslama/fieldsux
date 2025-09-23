@@ -1,7 +1,7 @@
 fu.fields.dialog = class fu_fields_dialog extends fu.fields.abstract {
 
 	open(){
-		this.classList.add('fu_open');
+		this.classList.add('fu_open_dialog');
 		document.body.classList.add('fu_dialog_opened');
 
 		this.esc_listener = document.addEventListener('keydown', (event) => {
@@ -13,7 +13,7 @@ fu.fields.dialog = class fu_fields_dialog extends fu.fields.abstract {
 	}
 
 	close(){
-		this.classList.remove('fu_open');
+		this.classList.remove('fu_open_dialog');
 		document.body.classList.remove('fu_dialog_opened');
 
 		document.removeEventListener('keydown', this.esc_listener);

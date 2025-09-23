@@ -22,38 +22,29 @@ const fu = {
 				return;
 			}
 
-			const templateNode = fieldsUX.querySelector('.template');
-			if( ! templateNode ) {
+			const template = fieldsUX.querySelector('.template');
+			if( ! template ) {
 				return;
 			}
 
-			const textarea = fieldsUX.querySelector('.data');
-			if( ! textarea ) {
+			const data = fieldsUX.querySelector('.data');
+			if( ! data ) {
 				return;
 			}
 
 			fu_main = document.createElement('fu-main');
 
-			fu_main.template = fu.JSON.parse( templateNode.value.replace(
-				/"fu\.field_templates\.([a-z_]+)"/g,
-				(match, fieldName) => {
-					return fu.field_templates?.[fieldName]??false
-						? fu.JSON.stringify( fu.field_templates[fieldName] )
-						: match;
-				})
-			);
-			fu_main.value = fu.JSON.parse( textarea.value.replace(
-				/"fu\.field_templates\.([a-z_]+)"/g,
-				(match, fieldName) => {
-					return fu.field_templates?.[fieldName]??false
-						? fu.JSON.stringify( fu.field_templates[fieldName] )
-						: match;
-				})
-			);
+			fu_main.template = fu.JSON.parse( template.value );
+			fu_main.value = fu.JSON.parse( data.value );
 
 			fieldsUX.appendChild( fu_main );
 
 			this.instances.push(fu_main);
+
+			const opened = fieldsUX.querySelector('.opened');
+			if( opened ) {
+				fu.Opened.set(opened.value);
+			}
 		});
 	},
 };
@@ -347,6 +338,38 @@ fu.Templates = class {
 
 fu.Definitions = {};
 
+// /utils/Opened.js
+
+fu.Opened = {
+	selectors: [
+		'.fu_tab_button.fu_switch:not([data-index="0"])',
+		'.fu_open_row',
+	],
+	get: function(){
+		const opened = Array.from( document.querySelectorAll( fu.Opened.selectors.join(',') ) );
+
+		const IDs = [];
+		opened.forEach( fuel => {
+			IDs.push( fuel.id.replace(/\D/g, '') );
+		});
+		return IDs.join(',');
+	},
+	set: function(IDs){
+		IDs.split(',').forEach( id_part => {
+			const ID = 'fu_' + id_part;
+			const el = document.getElementById(ID);
+
+			if( ! el ) return;
+
+			if( 'function' === typeof el.open ){
+				el.open();
+			} else {
+				el.dispatchEvent( new Event('click') );
+			}
+		});
+	}
+};
+
 // /fields/abstract.js
 
 fu.fields.abstract = class fu_fields_abstract extends HTMLElement {
@@ -498,7 +521,7 @@ customElements.define('fu-undefined', fu.fields.undefined);
 fu.fields.dialog = class fu_fields_dialog extends fu.fields.abstract {
 
 	open(){
-		this.classList.add('fu_open');
+		this.classList.add('fu_open_dialog');
 		document.body.classList.add('fu_dialog_opened');
 
 		this.esc_listener = document.addEventListener('keydown', (event) => {
@@ -510,7 +533,7 @@ fu.fields.dialog = class fu_fields_dialog extends fu.fields.abstract {
 	}
 
 	close(){
-		this.classList.remove('fu_open');
+		this.classList.remove('fu_open_dialog');
 		document.body.classList.remove('fu_dialog_opened');
 
 		document.removeEventListener('keydown', this.esc_listener);
@@ -1257,44 +1280,48 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 	 * @param {Object} template
 	 */
 	set template(template){
+
+		let last_index = 0;
+
 		fu.DOM.attrs(this, {
 			'class': 'fu_tabs fu_field',
 			'children':[
 				{
 					'class': 'fu_tabs_buttons',
 					'children': [
-						{
-							'tag': 'button', 'type': 'button',
-							'class': 'fu_tab_button fu_tab_button_debug',
-							'data-index': '0',
-							'html': '- Everything -',
-							'events': {
-								'click': (e) => {
-									const buttons = this.buttons;
-									buttons.forEach((button) => button.classList.remove('fu_switch') );
-									buttons[ 0 ].classList.add('fu_switch');
-
-									this.panels.forEach((button) => button.classList.add('fu_open_tab') );
-								}
-							}
-						},
 						template.tabs?.map((tab, index)=> ({
 							'tag': 'button', 'type': 'button',
+							'id': fu.DOM.getIndex(),
 							'class': 'fu_tab_button',
-							'data-index': index + 1,
+							'data-index': last_index = index,
 							'html': tab.fu_label??'',
 							'events': {
 								'click': (e) => {
 									const buttons = this.buttons;
 									buttons.forEach((button) => button.classList.remove('fu_switch') );
-									buttons[ index + 1 ].classList.add('fu_switch');
+									buttons[ index ].classList.add('fu_switch');
 
 									const panels = [...this.childNodes[1].childNodes];
 									panels.forEach((button) => button.classList.remove('fu_open_tab') );
 									panels[ index ].classList.add('fu_open_tab');
 								}
 							}
-						})),
+						})),						{
+							'tag': 'button', 'type': 'button',
+							'id': fu.DOM.getIndex(),
+							'class': 'fu_tab_button fu_tab_button_debug',
+							'data-index': last_index + 1,
+							'html': '- Everything -',
+							'events': {
+								'click': (e) => {
+									const buttons = this.buttons;
+									buttons.forEach((button) => button.classList.remove('fu_switch') );
+									buttons[ last_index + 1 ].classList.add('fu_switch');
+
+									this.panels.forEach((button) => button.classList.add('fu_open_tab') );
+								}
+							}
+						},
 					]
 				},{
 					'class': 'fu_tabs_panels fu_switch fu_container',
@@ -1308,7 +1335,7 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 
 		this.set_width( this, template );
 
-		this.buttons[1]?.dispatchEvent( new Event('click') );
+		this.buttons[0]?.dispatchEvent( new Event('click') );
 	}
 };
 
@@ -1320,17 +1347,17 @@ customElements.define('fu-tabs', fu.fields.tabs);
 fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 
 	get buttons(){
-		return Array.from( this.querySelector('.fu_tabs_buttons').childNodes );
+		return Array.from( this.querySelector('.fu_radiotabs_buttons').childNodes );
 	}
 
 	get panels(){
-		return Array.from( this.querySelector('.fu_tabs_panels').childNodes );
+		return Array.from( this.querySelector('.fu_radiotabs_panels').childNodes );
 	}
 
 	get value(){
-		const panel_value = this.querySelector('.fu_tabs_panels').querySelector('.fu_open_tab')?.value;
+		const panel_value = this.querySelector('.fu_radiotabs_panels').querySelector('.fu_open_tab')?.value;
 
-		const button = this.querySelector('.fu_tabs_buttons').querySelector('input:checked');
+		const button = this.querySelector('.fu_radiotabs_buttons').querySelector('input:checked');
 		if (!button) return panel_value;
 
 		const button_value = button.getAttribute('value');
@@ -1347,7 +1374,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 		const fu_radio_name = this.getAttribute('fu_radio_name');
 		const fu_radio_value = value[fu_radio_name];
 		if( ( fu_radio_value ) && ( /[a-zA-Z0-9_\-]+/g.test(fu_radio_value) ) ){
-			const found = this.querySelector('.fu_tabs_buttons').querySelector('input[value="'+fu_radio_value+'"]');
+			const found = this.querySelector('.fu_radiotabs_buttons').querySelector('input[value="'+fu_radio_value+'"]');
 			if( found ) {
 				found.parentNode.dispatchEvent( new Event('click') );
 			} else {
@@ -1365,7 +1392,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 	 */
 	set template(template){
 		fu.DOM.attrs(this, {
-			'class': 'fu_tabs fu_field',
+			'class': 'fu_radiotabs fu_field',
 			'fu_radio_name': template.fu_name,
 			'children':[
 				! template.fu_label ? null : {
@@ -1373,10 +1400,10 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 					'html': template.fu_label
 				},
 				{
-					'class': 'fu_tabs_buttons',
+					'class': 'fu_radiotabs_buttons',
 					'children': template.tabs?.map((tab, index)=> ({
 						'tag': 'label',
-						'class': 'fu_tab_button',
+						'class': 'fu_radiotab_button',
 						'data-index': index,
 						'children':[
 							{
@@ -1410,7 +1437,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 						}
 					})),
 				},{
-					'class': 'fu_tabs_panels fu_switch fu_container',
+					'class': 'fu_radiotabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
 						'tag': 'fu-children',
 						'template': tab.fields??[],
@@ -1977,13 +2004,17 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 		return this.closest('.fu_repeater');
 	}
 
+	open(){
+		this.toggle_open_state(); // Open things after initialization
+	}
+
 	toggle_open_state(){
-		if( this.classList.contains('fu_open') ){
-			Array.from( this.querySelectorAll('.fu_open') ).forEach(
-				el => el.classList.remove('fu_open')
+		if( this.classList.contains('fu_open_row') ){
+			Array.from( this.querySelectorAll('.fu_open_row') ).forEach(
+				el => el.classList.remove('fu_open_row')
 			);
 		}
-		this.classList.toggle('fu_open');
+		this.classList.toggle('fu_open_row');
 		this.repeater.update_open_state();
 	}
 
@@ -2055,9 +2086,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 		'events': {
 			'click': () => {
 				const new_row = this.repeater.create_row( this.value );
-				if( this.classList.contains('fu_open') ){
-					new_row.classList.add('fu_open');
-				}
+				new_row.classList.add('fu_open_row');
 				this.after(new_row);
 			},
 		},
@@ -2103,6 +2132,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 	set template(template){
 
 		fu.DOM.attrs(this, {
+			'id': fu.DOM.getIndex(),
 			'class': 'fu_row fu_switch',
 			'children':[
 				{
@@ -2277,21 +2307,21 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 	update_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
-		this.classList.toggle('fu_open', allRowsOpen);
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open_row'));
+		this.classList.toggle('fu_open_repeater', allRowsOpen);
 	}
 
 	toggle_open_state(){
 		const rowNodes = Array.from(this.rows.childNodes);
-		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open'));
+		const allRowsOpen = rowNodes.every(row => row.classList.contains('fu_open_row'));
 		if( allRowsOpen ) {
-			Array.from( this.querySelectorAll('.fu_open') ).forEach(
-				el => el.classList.remove('fu_open')
+			Array.from( this.querySelectorAll('.fu_open_row') ).forEach(
+				el => el.classList.remove('fu_open_row')
 			);
 		} else {
-			rowNodes.forEach(row => row.classList.add('fu_open'));
+			rowNodes.forEach(row => row.classList.add('fu_open_row'));
 		}
-		this.classList.toggle('fu_open', !allRowsOpen);
+		this.classList.toggle('fu_open_repeater', !allRowsOpen);
 	}
 
 	update_check_state(){
@@ -2562,7 +2592,7 @@ fu.fields.repeater_single = class fu_fields_repeater_single extends fu.fields.re
 		document.activeElement.blur();
 
 		const created_row = this.create_row();
-		created_row.classList.add('fu_open');
+		created_row.classList.add('fu_open_row');
 
 		switch(position){
 			case 'before':
@@ -2708,9 +2738,7 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 				const new_row = this.create_row( row.value );
 				if( new_row ) {
 					new_row.value = row.value;
-					if(row.classList.contains('fu_open')){
-						new_row.classList.add('fu_open');
-					}
+					new_row.classList.add('fu_open_row');
 					row.replaceWith(new_row);
 				}
 			});
@@ -2803,7 +2831,7 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 											if( null === created_row ) {
 												return;
 											}
-											created_row.classList.add('fu_open');
+											created_row.classList.add('fu_open_row');
 											pseudo_row.replaceWith(created_row);
 											document.removeEventListener('keydown', this.esc_listener);
 										},

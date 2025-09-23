@@ -58,9 +58,7 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 				const new_row = this.create_row( row.value );
 				if( new_row ) {
 					new_row.value = row.value;
-					if(row.classList.contains('fu_open')){
-						new_row.classList.add('fu_open');
-					}
+					new_row.classList.add('fu_open_row');
 					row.replaceWith(new_row);
 				}
 			});
@@ -153,7 +151,7 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 											if( null === created_row ) {
 												return;
 											}
-											created_row.classList.add('fu_open');
+											created_row.classList.add('fu_open_row');
 											pseudo_row.replaceWith(created_row);
 											document.removeEventListener('keydown', this.esc_listener);
 										},

@@ -4,13 +4,17 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 		return this.closest('.fu_repeater');
 	}
 
+	open(){
+		this.toggle_open_state(); // Open things after initialization
+	}
+
 	toggle_open_state(){
-		if( this.classList.contains('fu_open') ){
-			Array.from( this.querySelectorAll('.fu_open') ).forEach(
-				el => el.classList.remove('fu_open')
+		if( this.classList.contains('fu_open_row') ){
+			Array.from( this.querySelectorAll('.fu_open_row') ).forEach(
+				el => el.classList.remove('fu_open_row')
 			);
 		}
-		this.classList.toggle('fu_open');
+		this.classList.toggle('fu_open_row');
 		this.repeater.update_open_state();
 	}
 
@@ -82,9 +86,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 		'events': {
 			'click': () => {
 				const new_row = this.repeater.create_row( this.value );
-				if( this.classList.contains('fu_open') ){
-					new_row.classList.add('fu_open');
-				}
+				new_row.classList.add('fu_open_row');
 				this.after(new_row);
 			},
 		},
@@ -130,6 +132,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 	set template(template){
 
 		fu.DOM.attrs(this, {
+			'id': fu.DOM.getIndex(),
 			'class': 'fu_row fu_switch',
 			'children':[
 				{

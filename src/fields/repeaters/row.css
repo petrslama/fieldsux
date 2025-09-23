@@ -34,7 +34,7 @@ fu-rows{
 	&:nth-child(n + 100)  .fu_index::after { font-size: calc(0.8 * var(--fu_fontsize)); }
 	&:nth-child(n + 1000) .fu_index::after { font-size: calc(0.7 * var(--fu_fontsize)); }
 
-	&.fu_open > .fu_row_header {
+	&.fu_open_row > .fu_row_header {
 		background-color: var(--fu_row_hover_bg);
 	}
 
@@ -42,7 +42,7 @@ fu-rows{
 		padding-left: calc( 2.5 * var(--fu_size) );
 	}
 
-	&:not(.fu_open) > .fu_container {
+	&:not(.fu_open_row) > .fu_container {
 		display: none;
 	}
 

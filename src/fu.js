@@ -16,38 +16,29 @@ const fu = {
 				return;
 			}
 
-			const templateNode = fieldsUX.querySelector('.template');
-			if( ! templateNode ) {
+			const template = fieldsUX.querySelector('.template');
+			if( ! template ) {
 				return;
 			}
 
-			const textarea = fieldsUX.querySelector('.data');
-			if( ! textarea ) {
+			const data = fieldsUX.querySelector('.data');
+			if( ! data ) {
 				return;
 			}
 
 			fu_main = document.createElement('fu-main');
 
-			fu_main.template = fu.JSON.parse( templateNode.value.replace(
-				/"fu\.field_templates\.([a-z_]+)"/g,
-				(match, fieldName) => {
-					return fu.field_templates?.[fieldName]??false
-						? fu.JSON.stringify( fu.field_templates[fieldName] )
-						: match;
-				})
-			);
-			fu_main.value = fu.JSON.parse( textarea.value.replace(
-				/"fu\.field_templates\.([a-z_]+)"/g,
-				(match, fieldName) => {
-					return fu.field_templates?.[fieldName]??false
-						? fu.JSON.stringify( fu.field_templates[fieldName] )
-						: match;
-				})
-			);
+			fu_main.template = fu.JSON.parse( template.value );
+			fu_main.value = fu.JSON.parse( data.value );
 
 			fieldsUX.appendChild( fu_main );
 
 			this.instances.push(fu_main);
+
+			const opened = fieldsUX.querySelector('.opened');
+			if( opened ) {
+				fu.Opened.set(opened.value);
+			}
 		});
 	},
 };

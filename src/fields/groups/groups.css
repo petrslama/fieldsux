@@ -136,6 +136,7 @@ fu-children {
 
 fu-group,
 .fu_repeater,
+.fu_radiotabs,
 .fu_tabs{
 	&.fu_gw_default{
 		grid-column: 1 / -1;
@@ -151,31 +152,31 @@ fu-group > .fu_container > fu-children {
 	padding: 0;
 }
 
-.fu_tabs{
-	.fu_tabs_buttons {
-		.fu_tab_button {
-			display: inline-block;
-			font-size: var(--fu_fontsize);
-			line-height: var(--fu_size);
-			padding: 0 var(--fu_size_half);
-			border: none;
-			background: var(--fu_body_bg);
-			cursor: pointer;
 
-			/* &:focus, */
-			&:hover {
-				background-color: var(--fu_primary);
-				color: var(--fu_bg);
-			}
 
-			input {
-				margin-right: var(--fu_size_half);
-				cursor: pointer;
-			}
-		}
+.fu_radiotab_button,
+.fu_tab_button {
+	display: inline-block;
+	font-size: var(--fu_fontsize);
+	line-height: var(--fu_size);
+	padding: 0 var(--fu_size_half);
+	border: none;
+	background: var(--fu_body_bg);
+	cursor: pointer;
+
+	/* &:focus, */
+	&:hover {
+		background-color: var(--fu_primary);
+		color: var(--fu_bg);
 	}
 
-	.fu_tabs_panels > fu-children:not(.fu_open_tab) {
-		display: none;
+	input {
+		margin-right: var(--fu_size_half);
+		cursor: pointer;
 	}
+}
+
+.fu_radiotabs_panels > fu-children:not(.fu_open_tab),
+.fu_tabs_panels > fu-children:not(.fu_open_tab) {
+	display: none;
 }

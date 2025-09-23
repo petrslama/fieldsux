@@ -26,7 +26,7 @@ fu.fields.repeater_single = class fu_fields_repeater_single extends fu.fields.re
 		document.activeElement.blur();
 
 		const created_row = this.create_row();
-		created_row.classList.add('fu_open');
+		created_row.classList.add('fu_open_row');
 
 		switch(position){
 			case 'before':
