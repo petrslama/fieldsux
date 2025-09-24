@@ -1,0 +1,1937 @@
+{
+	"fu_type": "quine",
+	"fu_label": "FieldsUX",
+	"fields": [
+		{
+			"fu_type": "text",
+			"fu_label": "Type",
+			"fu_name": "fu_type"
+		},{
+			"fu_type": "from_definition",
+			"definition": "fu_fields__attr_label"
+		},{
+			"fu_type": "tabs",
+			"fu_label": "Tabs",
+			"tabs": [
+				{
+					"fu_label": "Fields",
+					"fields": [
+						{
+							"fu_type": "from_definition",
+							"definition": "fu_fields"
+						}
+					]
+				},{
+					"fu_label": "Definitions",
+					"fields": [
+						{
+							"fu_type": "from_definition",
+							"definition": "fu_definitions"
+						}
+					]
+				},{
+					"fu_label": "Data Lists",
+					"fields": [
+						{
+							"fu_type": "from_definition",
+							"definition": "fu_datalists"
+						}
+					]
+				}
+			]
+		}
+	],
+	"definitions": [
+		{
+			"fu_name": "fu_fields",
+			"fields": [
+				{
+					"fu_type": "repeater_multiple",
+					"fu_label": "Fields",
+					"fu_name": "fields",
+					"picker": "fu_type",
+					"fu_repeater__labels": [
+						{
+							"fu_label": "Type"
+						},{
+							"fu_label": "Label"
+						},{
+							"fu_label": "Name"
+						}
+					],
+					"templates": [
+						{
+							"fu_type": "text",
+							"fu_label": "Text",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__texts"
+												}
+											]
+										},{
+											"fu_label": "Validation",
+											"fields": [
+												{
+													"fu_type": "number",
+													"fu_label": "Minimum Length",
+													"fu_name": "fu_minlength",
+													"width": "custom",
+													"size_0": "1"
+												},{
+													"fu_type": "number",
+													"fu_label": "Maximum Length",
+													"fu_name": "fu_maxlength",
+													"width": "custom",
+													"size_0": "1"
+												},{
+													"fu_type": "text",
+													"fu_label": "Datalist",
+													"fu_name": "fu_list"
+												},{
+													"fu_type": "text",
+													"fu_label": "Autocomplete",
+													"fu_name": "fu_autocomplete",
+													"fu_list": "fu_autocomplete"
+												},{
+													"fu_type": "radiotabs",
+													"fu_label": "Validate as",
+													"fu_name": "fu_validate_as",
+													"tabs": [
+														{
+															"fu_label": "Text",
+															"fields": []
+														},{
+															"fu_label": "E-mail",
+															"fu_value": "email",
+															"fields": []
+														},{
+															"fu_label": "URL",
+															"fu_value": "url",
+															"fields": []
+														},{
+															"fu_label": "Phone",
+															"fu_value": "tel",
+															"fields": []
+														}
+													]
+												},{
+													"fu_type": "text",
+													"fu_label": "Pattern",
+													"fu_name": "fu_pattern"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Is required?",
+													"fu_name": "fu_required",
+													"fu_after": "Yes"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Only for reading?",
+													"fu_name": "fu_readonly",
+													"fu_after": "Yes"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "textarea",
+							"fu_label": "Textarea",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "text",
+													"fu_label": "Placeholder",
+													"fu_name": "fu_placeholder"
+												},{
+													"fu_type": "textarea",
+													"fu_label": "Description",
+													"fu_name": "fu_description"
+												}
+											]
+										},{
+											"fu_label": "Validation",
+											"fields": [
+												{
+													"fu_type": "number",
+													"fu_label": "Minimum Length",
+													"fu_name": "fu_minlength"
+												},{
+													"fu_type": "number",
+													"fu_label": "Maximum Length",
+													"fu_name": "fu_maxlength"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Is required?",
+													"fu_name": "fu_required",
+													"fu_after": "Yes"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Only for reading?",
+													"fu_name": "fu_readonly",
+													"fu_after": "Yes"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "number",
+							"fu_label": "Number",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__texts"
+												}
+											]
+										},{
+											"fu_label": "Validation",
+											"fields": [
+												{
+													"fu_type": "number",
+													"fu_label": "Minimum Value",
+													"fu_name": "fu_min",
+													"width": "custom",
+													"size_0": "1"
+												},{
+													"fu_type": "number",
+													"fu_label": "Step",
+													"fu_name": "fu_step",
+													"width": "custom",
+													"size_0": "1"
+												},{
+													"fu_type": "number",
+													"fu_label": "Maximum Value",
+													"fu_name": "fu_max",
+													"width": "custom",
+													"size_0": "1"
+												},{
+													"fu_type": "text",
+													"fu_label": "Datalist",
+													"fu_name": "fu_list"
+												},{
+													"fu_type": "text",
+													"fu_label": "Pattern",
+													"fu_name": "fu_pattern"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Is required?",
+													"fu_name": "fu_required",
+													"fu_after": "Yes"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Only for reading?",
+													"fu_name": "fu_readonly",
+													"fu_after": "Yes"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "checkbox",
+							"fu_label": "Checkbox",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "text",
+									"fu_label": "Value",
+									"fu_name": "fu_value",
+									"fu_placeholder": "1"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "text",
+													"fu_label": "Text before field",
+													"fu_name": "fu_before"
+												},{
+													"fu_type": "text",
+													"fu_label": "Text after field",
+													"fu_name": "fu_after"
+												},{
+													"fu_type": "textarea",
+													"fu_label": "Description",
+													"fu_name": "fu_description"
+												}
+											]
+										},{
+											"fu_label": "Validation",
+											"fields": [
+												{
+													"fu_type": "checkbox",
+													"fu_label": "Is required?",
+													"fu_name": "fu_required",
+													"fu_after": "Yes"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Only for reading?",
+													"fu_name": "fu_readonly",
+													"fu_after": "Yes"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "color",
+							"fu_label": "Color",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "text",
+													"fu_label": "Text before field",
+													"fu_name": "fu_before"
+												},{
+													"fu_type": "text",
+													"fu_label": "Text after field",
+													"fu_name": "fu_after"
+												},{
+													"fu_type": "textarea",
+													"fu_label": "Description",
+													"fu_name": "fu_description"
+												}
+											]
+										},{
+											"fu_label": "Validation",
+											"fields": [
+												{
+													"fu_type": "text",
+													"fu_label": "Datalist",
+													"fu_name": "fu_list"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Is required?",
+													"fu_name": "fu_required",
+													"fu_after": "Yes"
+												},{
+													"fu_type": "checkbox",
+													"fu_label": "Only for reading?",
+													"fu_name": "fu_readonly",
+													"fu_after": "Yes"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "hidden",
+							"fu_label": "Hidden",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "-"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								}
+							]
+						},{
+							"fu_type": "checkboxes",
+							"fu_label": "Checkboxes",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_values"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "textarea",
+													"fu_label": "Description",
+													"fu_name": "fu_description"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "radios",
+							"fu_label": "Radios",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_values"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "textarea",
+													"fu_label": "Description",
+													"fu_name": "fu_description"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "select",
+							"fu_label": "Select",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_values"
+								},{
+									"fu_type": "tabs",
+									"fu_label": "Tabs",
+									"tabs": [
+										{
+											"fu_label": "Text",
+											"fields": [
+												{
+													"fu_type": "text",
+													"fu_label": "Text before field",
+													"fu_name": "fu_before"
+												},{
+													"fu_type": "text",
+													"fu_label": "Text after field",
+													"fu_name": "fu_after"
+												},{
+													"fu_type": "textarea",
+													"fu_label": "Description",
+													"fu_name": "fu_description"
+												}
+											]
+										},{
+											"fu_label": "Width",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__tab__width"
+												}
+											]
+										}
+									]
+								}
+							]
+						},{
+							"fu_type": "from_definition",
+							"fu_label": "Definition Instance",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "-"
+								},{
+									"fu_label": "[definition]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "text",
+									"fu_label": "Definition to use",
+									"fu_name": "definition"
+								}
+							]
+						},{
+							"fu_type": "group",
+							"fu_label": "Group",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "tabs",
+							"fu_label": "Tabs",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "-"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "repeater_single",
+									"fu_label": "Tabs",
+									"fu_name": "tabs",
+									"fu_repeater__labels": [
+										{
+											"fu_label": "Label"
+										},{
+											"fu_label": "Value"
+										}
+									],
+									"templates": [
+										{
+											"fu_row__labels": [
+												{
+													"fu_label": "[fu_label]"
+												},{
+													"fu_label": "[fu_value]"
+												}
+											],
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__attr_label"
+												},{
+													"fu_type": "text",
+													"fu_label": "Value",
+													"fu_name": "fu_value"
+												},{
+													"fu_type": "from_definition",
+													"definition": "fu_fields"
+												}
+											]
+										}
+									]
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "radiotabs",
+							"fu_label": "Radio Tabs",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "repeater_single",
+									"fu_label": "Tabs",
+									"fu_name": "tabs",
+									"fu_repeater__labels": [
+										{
+											"fu_label": "Label"
+										},{
+											"fu_label": "Value"
+										}
+									],
+									"templates": [
+										{
+											"fu_row__labels": [
+												{
+													"fu_label": "[fu_label]"
+												},{
+													"fu_label": "[fu_value]"
+												}
+											],
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__attr_label"
+												},{
+													"fu_type": "text",
+													"fu_label": "Value",
+													"fu_name": "fu_value"
+												},{
+													"fu_type": "from_definition",
+													"definition": "fu_fields"
+												}
+											]
+										}
+									]
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "repeater_table",
+							"fu_label": "Repeater Table",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "group",
+									"fu_name": "templates",
+									"fields": [
+										{
+											"fu_type": "group",
+											"fu_name": "0",
+											"fields": [
+												{
+													"fu_type": "repeater_table",
+													"fu_label": "Fields",
+													"fu_name": "fields",
+													"templates": [
+														{
+															"fields": [
+																{
+																	"fu_type": "text",
+																	"fu_label": "Type",
+																	"fu_name": "fu_type"
+																},{
+																	"fu_type": "text",
+																	"fu_label": "Label",
+																	"fu_name": "fu_label"
+																},{
+																	"fu_type": "text",
+																	"fu_label": "Name",
+																	"fu_name": "fu_name"
+																},{
+																	"fu_type": "text",
+																	"fu_label": "Width",
+																	"fu_name": "width"
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "repeater_single",
+							"fu_label": "Repeater Single",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_repeater__labels"
+								},{
+									"fu_type": "group",
+									"fu_name": "templates",
+									"fields": [
+										{
+											"fu_type": "group",
+											"fu_name": "0",
+											"fields": [
+												{
+													"fu_type": "from_definition",
+													"definition": "fu_row__labels"
+												},{
+													"fu_type": "from_definition",
+													"definition": "fu_fields"
+												}
+											]
+										}
+									]
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "repeater_multiple",
+							"fu_label": "Repeater Multiple",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[fu_label]"
+								},{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_label"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "text",
+									"fu_label": "Picker",
+									"fu_name": "picker"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_repeater__labels"
+								},{
+									"fu_type": "repeater_single",
+									"fu_label": "Templates",
+									"fu_name": "templates",
+									"fu_repeater__labels": [
+										{
+											"fu_label": "Repeater Template Type"
+										},{
+											"fu_label": "Repeater Template Label",
+											"width": "2"
+										}
+									],
+									"templates": [
+										{
+											"fu_row__labels": [
+												{
+													"fu_label": "[fu_type]"
+												},{
+													"fu_label": "[fu_label]",
+													"width": "2"
+												}
+											],
+											"fields": [
+												{
+													"fu_type": "text",
+													"fu_label": "Type",
+													"fu_name": "fu_type"
+												},{
+													"fu_type": "from_definition",
+													"definition": "fu_fields__attr_label"
+												},{
+													"fu_type": "from_definition",
+													"definition": "fu_row__labels"
+												},{
+													"fu_type": "from_definition",
+													"definition": "fu_fields"
+												}
+											]
+										}
+									]
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "h1",
+							"fu_label": "Main Header",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[html]"
+								},{
+									"fu_label": "-"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "textarea",
+									"fu_label": "Text / HTML",
+									"fu_name": "html",
+									"width": "fullwidth"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "h2",
+							"fu_label": "Medium Header",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[html]"
+								},{
+									"fu_label": "-"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "textarea",
+									"fu_label": "Text / HTML",
+									"fu_name": "html",
+									"width": "fullwidth"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "h3",
+							"fu_label": "Small Header",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[html]"
+								},{
+									"fu_label": "-"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "textarea",
+									"fu_label": "Text / HTML",
+									"fu_name": "html",
+									"width": "fullwidth"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "p",
+							"fu_label": "Paragraph",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[html]"
+								},{
+									"fu_label": "-"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "textarea",
+									"fu_label": "Text / HTML",
+									"fu_name": "html",
+									"width": "fullwidth"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						},{
+							"fu_type": "img",
+							"fu_label": "Image",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "-"
+								},{
+									"fu_label": "[src]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "text",
+									"fu_label": "Image URL",
+									"fu_name": "src",
+									"fu_placeholder": "https://",
+									"fu_validate_as": "url",
+									"width": "fullwidth"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__tab__width"
+								}
+							]
+						},{
+							"fu_type": "a",
+							"fu_label": "Link",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "[html]"
+								},{
+									"fu_label": "[href]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "textarea",
+									"fu_label": "Text / HTML",
+									"fu_name": "html",
+									"width": "fullwidth"
+								},{
+									"fu_type": "text",
+									"fu_label": "Link",
+									"fu_name": "href",
+									"fu_placeholder": "https://",
+									"fu_validate_as": "url",
+									"width": "fullwidth"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__tab__width"
+								}
+							]
+						},{
+							"fu_type": "hr",
+							"fu_label": "Line",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "—————————————————————————————————————————"
+								},{
+									"fu_label": "—————————————————————————————————————————"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__tab__width"
+								}
+							]
+						},{
+							"fu_type": "br",
+							"fu_label": "Space",
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_type]"
+								},{
+									"fu_label": "-"
+								},{
+									"fu_label": "-"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_type"
+								},{
+									"fu_type": "text",
+									"fu_label": "Space height",
+									"fu_name": "height",
+									"fu_placeholder": "32px",
+									"fu_description": "With unit (f.e. 32px)"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_width"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+			"fu_name": "fu_fields__attr_type",
+			"fields": [
+				{
+					"fu_type": "text",
+					"fu_label": "Type",
+					"fu_name": "fu_type",
+					"fu_list": "fu_type",
+					"fu_pattern": "^[a-z][a-z0-9_]*$"
+				}
+			]
+		},{
+			"fu_name": "fu_fields__attr_label",
+			"fields": [
+				{
+					"fu_type": "text",
+					"fu_label": "Label",
+					"fu_name": "fu_label"
+				}
+			]
+		},{
+			"fu_name": "fu_fields__attr_name",
+			"fields": [
+				{
+					"fu_type": "text",
+					"fu_label": "Name",
+					"fu_name": "fu_name",
+					"fu_pattern": "^[a-z][a-z0-9_]*$",
+					"fu_required": "1"
+				}
+			]
+		},{
+			"fu_name": "fu_fields__attr_values",
+			"fields": [
+				{
+					"fu_type": "repeater_table",
+					"fu_label": "Values",
+					"fu_name": "values",
+					"templates": [
+						{
+							"fields": [
+								{
+									"fu_type": "text",
+									"fu_label": "Label",
+									"fu_name": "fu_label"
+								},{
+									"fu_type": "text",
+									"fu_label": "Value",
+									"fu_name": "fu_value"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+			"fu_name": "fu_fields__attr_width",
+			"fields": [
+				{
+					"fu_type": "radiotabs",
+					"fu_label": "Width",
+					"fu_name": "width",
+					"tabs": [
+						{
+							"fu_label": "Default / Full Width",
+							"fields": []
+						},{
+							"fu_label": "Custom",
+							"fu_value": "custom",
+							"fields": [
+								{
+									"fu_type": "number",
+									"fu_label": "Default",
+									"fu_name": "size_0",
+									"fu_placeholder": "2",
+									"fu_after": "/ 2",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "2",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "640 +",
+									"fu_name": "size_1",
+									"fu_after": "/ 4",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "4",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "960 +",
+									"fu_name": "size_2",
+									"fu_after": "/ 6",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "6",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "1280 +",
+									"fu_name": "size_3",
+									"fu_after": "/ 8",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "8",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "1600 +",
+									"fu_name": "size_4",
+									"fu_after": "/ 10",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "10",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "1920 +",
+									"fu_name": "size_5",
+									"fu_after": "/ 12",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "12",
+									"width": "custom",
+									"size_0": "1"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+			"fu_name": "fu_fields__tab__width",
+			"fields": [
+				{
+					"fu_type": "radiotabs",
+					"fu_label": "Width",
+					"fu_name": "width",
+					"tabs": [
+						{
+							"fu_label": "Default",
+							"fields": []
+						},{
+							"fu_label": "Full Width",
+							"fu_value": "fullwidth",
+							"fields": []
+						},{
+							"fu_label": "Custom",
+							"fu_value": "custom",
+							"fields": [
+								{
+									"fu_type": "number",
+									"fu_label": "Default",
+									"fu_name": "size_0",
+									"fu_placeholder": "2",
+									"fu_after": "/ 2",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "2",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "640 +",
+									"fu_name": "size_1",
+									"fu_after": "/ 4",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "4",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "960 +",
+									"fu_name": "size_2",
+									"fu_after": "/ 6",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "6",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "1280 +",
+									"fu_name": "size_3",
+									"fu_after": "/ 8",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "8",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "1600 +",
+									"fu_name": "size_4",
+									"fu_after": "/ 10",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "10",
+									"width": "custom",
+									"size_0": "1"
+								},{
+									"fu_type": "number",
+									"fu_label": "1920 +",
+									"fu_name": "size_5",
+									"fu_after": "/ 12",
+									"fu_min": "1",
+									"fu_step": "1",
+									"fu_max": "12",
+									"width": "custom",
+									"size_0": "1"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+			"fu_name": "fu_fields__tab__texts",
+			"fields": [
+				{
+					"fu_type": "text",
+					"fu_label": "Text before field",
+					"fu_name": "fu_before",
+					"width": "custom",
+					"size_0": "1"
+				},{
+					"fu_type": "text",
+					"fu_label": "Placeholder",
+					"fu_name": "fu_placeholder"
+				},{
+					"fu_type": "text",
+					"fu_label": "Text after field",
+					"fu_name": "fu_after",
+					"width": "custom",
+					"size_0": "1"
+				},{
+					"fu_type": "textarea",
+					"fu_label": "Description",
+					"fu_name": "fu_description"
+				}
+			]
+		},{
+			"fu_name": "fu_repeater__labels",
+			"fields": [
+				{
+					"fu_type": "repeater_table",
+					"fu_label": "Repeater Labels",
+					"fu_name": "fu_repeater__labels",
+					"templates": [
+						{
+							"fields": [
+								{
+									"fu_type": "text",
+									"fu_label": "Repeater Header Label",
+									"fu_name": "fu_label"
+								},{
+									"fu_type": "number",
+									"fu_label": "Column Width",
+									"fu_name": "width"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+			"fu_name": "fu_row__labels",
+			"fields": [
+				{
+					"fu_type": "repeater_table",
+					"fu_label": "Row Labels",
+					"fu_name": "fu_row__labels",
+					"templates": [
+						{
+							"fields": [
+								{
+									"fu_type": "text",
+									"fu_label": "Row Header Label",
+									"fu_name": "fu_label"
+								},{
+									"fu_type": "number",
+									"fu_label": "Column Width",
+									"fu_name": "width"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+			"fu_name": "fu_definitions",
+			"fields": [
+				{
+					"fu_type": "repeater_single",
+					"fu_name": "definitions",
+					"fu_repeater__labels": [
+						{
+							"fu_label": "Definition Name"
+						}
+					],
+					"templates": [
+						{
+							"fu_row__labels": [
+								{
+									"fu_label": "[fu_name]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_name"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields"
+								}
+							]
+						}
+					]
+				}
+			]
+		},{
+			"fu_name": "fu_datalists",
+			"fields": [
+				{
+					"fu_type": "repeater_single",
+					"fu_name": "datalists",
+					"fu_repeater__labels": [
+						{
+							"fu_label": "Datalist ID"
+						}
+					],
+					"templates": [
+						{
+							"fu_row__labels": [
+								{
+									"fu_label": "#[id]"
+								}
+							],
+							"fields": [
+								{
+									"fu_type": "text",
+									"fu_label": "ID",
+									"fu_name": "id",
+									"fu_before": "#",
+									"fu_description": "The &lt;datalist&gt; element's ID attribute should not include the # character and must be unique across the entire page",
+									"width": "fullwidth"
+								},{
+									"fu_type": "from_definition",
+									"definition": "fu_fields__attr_values"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	],
+	"datalists": [
+		{
+			"id": "fu_type",
+			"values": [
+				{
+					"fu_label": "Fields"
+				},{
+					"fu_label": "Text",
+					"fu_value": "text"
+				},{
+					"fu_label": "Textarea",
+					"fu_value": "textarea"
+				},{
+					"fu_label": "Number",
+					"fu_value": "number"
+				},{
+					"fu_label": "Single Checkbox",
+					"fu_value": "checkbox"
+				},{
+					"fu_label": "Color",
+					"fu_value": "color"
+				},{
+					"fu_label": "Hidden",
+					"fu_value": "hidden"
+				},{
+					"fu_label": "Select",
+					"fu_value": "select"
+				},{
+					"fu_label": "Multi Checkboxes",
+					"fu_value": "checkboxes"
+				},{
+					"fu_label": "Radios",
+					"fu_value": "radios"
+				},{
+					"fu_label": "Groups"
+				},{
+					"fu_label": "Group",
+					"fu_value": "group"
+				},{
+					"fu_label": "Tabs",
+					"fu_value": "tabs"
+				},{
+					"fu_label": "RadioTabs",
+					"fu_value": "radiotabs"
+				},{
+					"fu_label": "From Definition",
+					"fu_value": "from_definition"
+				},{
+					"fu_label": "Repeaters"
+				},{
+					"fu_label": "Repeater Single",
+					"fu_value": "repeater_single"
+				},{
+					"fu_label": "Repeater Table",
+					"fu_value": "repeater_table"
+				},{
+					"fu_label": "Repeater Multiple",
+					"fu_value": "repeater_multiple"
+				},{
+					"fu_label": "HTML"
+				},{
+					"fu_label": "Main Header",
+					"fu_value": "h1"
+				},{
+					"fu_label": "Medium Header",
+					"fu_value": "h2"
+				},{
+					"fu_label": "Small Header",
+					"fu_value": "h3"
+				},{
+					"fu_label": "Paragraph",
+					"fu_value": "p"
+				},{
+					"fu_label": "Image",
+					"fu_value": "img"
+				},{
+					"fu_label": "Link",
+					"fu_value": "a"
+				},{
+					"fu_label": "Separator line",
+					"fu_value": "hr"
+				},{
+					"fu_label": "Extra Space",
+					"fu_value": "br"
+				}
+			]
+		},{
+			"id": "fu_autocomplete",
+			"values": [
+				{
+					"fu_label": "Disable autocomplete for this field",
+					"fu_value": "off"
+				},{
+					"fu_label": "Enable autocomplete (browser decides what to suggest)",
+					"fu_value": "on"
+				},{
+					"fu_label": "Full name of person",
+					"fu_value": "name"
+				},{
+					"fu_label": "First name",
+					"fu_value": "given-name"
+				},{
+					"fu_label": "Middle name",
+					"fu_value": "additional-name"
+				},{
+					"fu_label": "Last name (surname)",
+					"fu_value": "family-name"
+				},{
+					"fu_label": "Name prefix (Mr., Mrs., Dr., Prof., etc.)",
+					"fu_value": "honorific-prefix"
+				},{
+					"fu_label": "Name suffix (Jr., Sr., III, Ph.D., etc.)",
+					"fu_value": "honorific-suffix"
+				},{
+					"fu_label": "Nickname or handle",
+					"fu_value": "nickname"
+				},{
+					"fu_label": "Username or account name",
+					"fu_value": "username"
+				},{
+					"fu_label": "Email address",
+					"fu_value": "email"
+				},{
+					"fu_label": "Complete telephone number with country code",
+					"fu_value": "tel"
+				},{
+					"fu_label": "Country calling code (e.g., \"1\" for US)",
+					"fu_value": "tel-country-code"
+				},{
+					"fu_label": "Phone number without country code",
+					"fu_value": "tel-national"
+				},{
+					"fu_label": "Area code",
+					"fu_value": "tel-area-code"
+				},{
+					"fu_label": "Local phone number (no country/area code)",
+					"fu_value": "tel-local"
+				},{
+					"fu_label": "First part of local number",
+					"fu_value": "tel-local-prefix"
+				},{
+					"fu_label": "Last part of local number",
+					"fu_value": "tel-local-suffix"
+				},{
+					"fu_label": "Phone extension number",
+					"fu_value": "tel-extension"
+				},{
+					"fu_label": "Website URL",
+					"fu_value": "url"
+				},{
+					"fu_label": "Instant messaging protocol endpoint",
+					"fu_value": "impp"
+				},{
+					"fu_label": "Full street address (multiline)",
+					"fu_value": "street-address"
+				},{
+					"fu_label": "First line of street address",
+					"fu_value": "address-line1"
+				},{
+					"fu_label": "Second line of street address",
+					"fu_value": "address-line2"
+				},{
+					"fu_label": "Third line of street address",
+					"fu_value": "address-line3"
+				},{
+					"fu_label": "Broadest administrative level (state/province)",
+					"fu_value": "address-level1"
+				},{
+					"fu_label": "Second administrative level (city/town)",
+					"fu_value": "address-level2"
+				},{
+					"fu_label": "Third administrative level (district/locality)",
+					"fu_value": "address-level3"
+				},{
+					"fu_label": "Finest administrative level (neighborhood)",
+					"fu_value": "address-level4"
+				},{
+					"fu_label": "Country code (ISO format)",
+					"fu_value": "country"
+				},{
+					"fu_label": "Country name",
+					"fu_value": "country-name"
+				},{
+					"fu_label": "ZIP code or postal code",
+					"fu_value": "postal-code"
+				},{
+					"fu_label": "Full name on credit card",
+					"fu_value": "cc-name"
+				},{
+					"fu_label": "First name on credit card",
+					"fu_value": "cc-given-name"
+				},{
+					"fu_label": "Middle name on credit card",
+					"fu_value": "cc-additional-name"
+				},{
+					"fu_label": "Last name on credit card",
+					"fu_value": "cc-family-name"
+				},{
+					"fu_label": "Credit card number",
+					"fu_value": "cc-number"
+				},{
+					"fu_label": "Credit card expiration (MM/YY format)",
+					"fu_value": "cc-exp"
+				},{
+					"fu_label": "Credit card expiration month",
+					"fu_value": "cc-exp-month"
+				},{
+					"fu_label": "Credit card expiration year",
+					"fu_value": "cc-exp-year"
+				},{
+					"fu_label": "Credit card security code (CVV)",
+					"fu_value": "cc-csc"
+				},{
+					"fu_label": "Credit card type (Visa, MasterCard, etc.)",
+					"fu_value": "cc-type"
+				},{
+					"fu_label": "Currency for transaction",
+					"fu_value": "transaction-currency"
+				},{
+					"fu_label": "Transaction amount",
+					"fu_value": "transaction-amount"
+				},{
+					"fu_label": "Current password for login",
+					"fu_value": "current-password"
+				},{
+					"fu_label": "New password (account creation/password change)",
+					"fu_value": "new-password"
+				},{
+					"fu_label": "One-time password/verification code",
+					"fu_value": "one-time-code"
+				},{
+					"fu_label": "Company or organization name",
+					"fu_value": "organization"
+				},{
+					"fu_label": "Job title or position",
+					"fu_value": "organization-title"
+				},{
+					"fu_label": "Complete birth date",
+					"fu_value": "bday"
+				},{
+					"fu_label": "Birth day of month",
+					"fu_value": "bday-day"
+				},{
+					"fu_label": "Birth month",
+					"fu_value": "bday-month"
+				},{
+					"fu_label": "Birth year",
+					"fu_value": "bday-year"
+				},{
+					"fu_label": "Gender identity",
+					"fu_value": "sex"
+				},{
+					"fu_label": "Preferred language (BCP 47 format)",
+					"fu_value": "language"
+				},{
+					"fu_label": "URL to profile photo/avatar",
+					"fu_value": "photo"
+				},{
+					"fu_label": "Home contact information",
+					"fu_value": "home"
+				},{
+					"fu_label": "Work contact information",
+					"fu_value": "work"
+				},{
+					"fu_label": "Mobile contact information",
+					"fu_value": "mobile"
+				},{
+					"fu_label": "Fax contact information",
+					"fu_value": "fax"
+				},{
+					"fu_label": "Pager contact information",
+					"fu_value": "page"
+				},{
+					"fu_label": "Shipping address information",
+					"fu_value": "shipping"
+				},{
+					"fu_label": "Billing address information",
+					"fu_value": "billing"
+				},{
+					"fu_label": "Enable passkey/WebAuthn credentials (must be last token)",
+					"fu_value": "webauthn"
+				}
+			]
+		},{
+			"id": "fu_font_family",
+			"values": [
+				{
+					"fu_label": "Sans-serif Fonts"
+				},{
+					"fu_label": "Sans-serif (Generic)",
+					"fu_value": "sans-serif"
+				},{
+					"fu_label": "Arial",
+					"fu_value": "Arial, sans-serif"
+				},{
+					"fu_label": "Geneva",
+					"fu_value": "Geneva, sans-serif"
+				},{
+					"fu_label": "Helvetica",
+					"fu_value": "Helvetica, sans-serif"
+				},{
+					"fu_label": "Tahoma",
+					"fu_value": "Tahoma, sans-serif"
+				},{
+					"fu_label": "Verdana",
+					"fu_value": "Verdana, sans-serif"
+				},{
+					"fu_label": "Serif Fonts"
+				},{
+					"fu_label": "Serif (Generic)",
+					"fu_value": "serif"
+				},{
+					"fu_label": "Georgia",
+					"fu_value": "Georgia, serif"
+				},{
+					"fu_label": "Times",
+					"fu_value": "Times, serif"
+				},{
+					"fu_label": "Times New Roman",
+					"fu_value": "\"Times New Roman\", serif"
+				},{
+					"fu_label": "Monospace Fonts"
+				},{
+					"fu_label": "Monospace (Generic)",
+					"fu_value": "monospace"
+				},{
+					"fu_label": "Courier",
+					"fu_value": "Courier, monospace"
+				},{
+					"fu_label": "Courier New",
+					"fu_value": "\"Courier New\", monospace"
+				}
+			]
+		}
+	]
+}
