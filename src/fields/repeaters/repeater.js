@@ -3,7 +3,7 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 	get value(){
 		const value = Array.from(this.rows.childNodes)
-			.filter(row => row.tagName.toLowerCase() === 'fu-row')
+			.filter(row => row.classList.contains('fu_row'))
 			.map(row => row.value);
 
 		return value.length ? value : [];
@@ -268,12 +268,16 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 		this.rows = this.querySelector('fu-rows');
 
-		this.Sortable = new Sortable( this.rows, {
-			group: template_group_id,
-			handle: '.fu_icon.fu_move',
-			//ghostClass: '',
-			animation: 150,
-		});
+		if( 'undefined' == typeof Sortable ) {
+			throw new Error('Sortable is not defined, please be sure, that script with SortableJS is loaded before FieldsUX');
+		} else {
+			this.Sortable = new Sortable( this.rows, {
+				group: template_group_id,
+				handle: '.fu_icon.fu_move',
+				//ghostClass: '',
+				animation: 150,
+			});
+		}
 	}
 
 };

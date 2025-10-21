@@ -18,5 +18,41 @@
 				margin: -10px -20px 0 -22px;
 			}
 		}
+
+		.fu_submit_bar{
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			z-index: 999;
+
+			p{
+				margin: 0;
+				padding: var(--fu_size_half) var(--fu_size);
+				text-align: right;
+				background-color: var(--fu_bg);
+			}
+		}
 	}
 }
+
+@media screen and (max-width: 782px) {
+	.wp_options .fu_submit_bar{
+		left: 0;
+	}
+	#wpwrap.wp-responsive-open .fu_submit_bar{
+		left: 190px
+	}
+}
+
+
+@media screen and (min-width: 783px) {
+	.wp_options .fu_submit_bar{
+		left: 160px
+	}
+
+	.folded .wp_options .fu_submit_bar {
+		left: 36px;
+	}
+}
+
+

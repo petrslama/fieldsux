@@ -10,13 +10,7 @@
 	padding: var( --fu_size, 2rem );
 }
 
-.fieldsux > textarea.opened{
-	display: block;
-	width: 100%;
-	margin-bottom: 20px;
-}
-
-fu-main {
+.fieldsux {
 	&, :after, :before {
 		box-sizing: border-box;
 	}
@@ -24,8 +18,7 @@ fu-main {
 	/* Sizes */
 	--fu_size: 32px;
 	--fu_size_half: calc(0.5 * var(--fu_size));
-	/* --fu_fontsize: calc(0.35 * var(--fu_size)); */
-	--fu_fontsize: 15px;
+	--fu_fontsize: calc(0.46875 * var(--fu_size));
 	--fu_fontsize_xs: 14px;
 	--fu_label_width: calc( 4 * var(--fu_size) );;
 
@@ -389,8 +382,45 @@ fu-main:not(.debug) .fu_tabs .fu_tabs_buttons .fu_tab_button_debug{
 				margin: -10px -20px 0 -22px;
 			}
 		}
+
+		.fu_submit_bar{
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			z-index: 999;
+
+			p{
+				margin: 0;
+				padding: var(--fu_size_half) var(--fu_size);
+				text-align: right;
+				background-color: var(--fu_bg);
+			}
+		}
 	}
 }
+
+@media screen and (max-width: 782px) {
+	.wp_options .fu_submit_bar{
+		left: 0;
+	}
+	#wpwrap.wp-responsive-open .fu_submit_bar{
+		left: 190px
+	}
+}
+
+
+@media screen and (min-width: 783px) {
+	.wp_options .fu_submit_bar{
+		left: 160px
+	}
+
+	.folded .wp_options .fu_submit_bar {
+		left: 36px;
+	}
+}
+
+
+
 
 /* /fields/dialogs/dialog.css */
 

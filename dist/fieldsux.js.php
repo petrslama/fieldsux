@@ -17,7 +17,6 @@ foreach([
 	'/utils/JSON.js',
 	'/utils/DOM.js',
 	'/utils/Templates.js',
-	'/utils/Definitions.js',
 	'/utils/Opened.js',
 
 	'/fields/abstract.js',
@@ -48,9 +47,11 @@ foreach([
 
 	'/fields/repeaters/row.js',
 	'/fields/repeaters/row_table.js',
+	'/fields/repeaters/row_array.js',
 	'/fields/repeaters/repeater.js',
 	'/fields/repeaters/repeater_single.js',
 	'/fields/repeaters/repeater_table.js',
+	'/fields/repeaters/repeater_array.js',
 	'/fields/repeaters/repeater_multiple.js',
 
 	'/fields/html/h1.js',

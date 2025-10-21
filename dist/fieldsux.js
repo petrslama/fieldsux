@@ -8,6 +8,8 @@ const fu = {
 
 	version: '0.0.1',
 
+	Definitions: {},
+
 	field_templates: {},
 
 	fields: {},
@@ -22,12 +24,12 @@ const fu = {
 				return;
 			}
 
-			const template = fieldsUX.querySelector('.template');
+			const template = fieldsUX.querySelector('.fu_template');
 			if( ! template ) {
 				return;
 			}
 
-			const data = fieldsUX.querySelector('.data');
+			const data = fieldsUX.querySelector('.fu_data');
 			if( ! data ) {
 				return;
 			}
@@ -41,9 +43,14 @@ const fu = {
 
 			this.instances.push(fu_main);
 
-			const opened = fieldsUX.querySelector('.opened');
+			const opened = fieldsUX.querySelector('.fu_opened');
 			if( opened ) {
 				fu.Opened.set(opened.value);
+			}
+
+			const scroll = fieldsUX.querySelector('.fu_scroll');
+			if( scroll ) {
+				document.documentElement.scrollTop = scroll.value;
 			}
 		});
 	},
@@ -333,10 +340,6 @@ fu.Templates = class {
 		return this.group_ID_to_hash.length - 1;
 	}
 };
-
-// /utils/Definitions.js
-
-fu.Definitions = {};
 
 // /utils/Opened.js
 
@@ -2278,6 +2281,24 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 customElements.define('fu-row_table', fu.fields.row_table);
 
 
+// /fields/repeaters/row_array.js
+
+fu.fields.row_array = class fu_fields_row_array extends fu.fields.row_table {
+
+	get value(){
+		const input = this.querySelector('[fu_name="fu_row_array_field"]');
+		return input.value ?? '';
+	}
+
+	set value(value){
+		const input = this.querySelector('[fu_name="fu_row_array_field"]');
+		input.value = value ?? '';
+	}
+};
+
+customElements.define('fu-row_array', fu.fields.row_array);
+
+
 // /fields/repeaters/repeater.js
 
 
@@ -2285,7 +2306,7 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 	get value(){
 		const value = Array.from(this.rows.childNodes)
-			.filter(row => row.tagName.toLowerCase() === 'fu-row')
+			.filter(row => row.classList.contains('fu_row'))
 			.map(row => row.value);
 
 		return value.length ? value : [];
@@ -2550,12 +2571,16 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 
 		this.rows = this.querySelector('fu-rows');
 
-		this.Sortable = new Sortable( this.rows, {
-			group: template_group_id,
-			handle: '.fu_icon.fu_move',
-			//ghostClass: '',
-			animation: 150,
-		});
+		if( 'undefined' == typeof Sortable ) {
+			throw new Error('Sortable is not defined, please be sure, that script with SortableJS is loaded before FieldsUX');
+		} else {
+			this.Sortable = new Sortable( this.rows, {
+				group: template_group_id,
+				handle: '.fu_icon.fu_move',
+				//ghostClass: '',
+				animation: 150,
+			});
+		}
 	}
 
 };
@@ -2616,18 +2641,6 @@ customElements.define('fu-repeater_single', fu.fields.repeater_single);
 
 fu.fields.repeater_table = class fu_fields_repeater_table extends fu.fields.repeater_single {
 
-	get value(){
-		const value = Array.from(this.rows.childNodes)
-			.filter(row => row.tagName.toLowerCase() === 'fu-row_table')
-			.map(row => row.value);
-
-		return value.length ? value : null;
-	}
-
-	set value(value){
-		super.value = value;
-	}
-
 	create_row(value){
 		const row = fu.DOM.create({
 			'tag': 'fu-row_table',
@@ -2674,6 +2687,50 @@ fu.fields.repeater_table = class fu_fields_repeater_table extends fu.fields.repe
 };
 
 customElements.define('fu-repeater_table', fu.fields.repeater_table);
+
+
+// /fields/repeaters/repeater_array.js
+
+
+fu.fields.repeater_array = class fu_fields_repeater_array extends fu.fields.repeater_table {
+
+	array_template(){
+		return {
+			"fields": [{
+				"fu_type": "text",
+				"fu_name": "fu_row_array_field",
+			}]
+		}
+	}
+
+	create_row(value){
+		const row = fu.DOM.create({
+			'tag': 'fu-row_array',
+			'template': this.single_template,
+		});
+
+		row.value = value;
+
+		return row;
+	}
+
+	init_repeater( template ){
+		const forced_template = this.array_template();
+		this.single_template = forced_template;
+		this.single_template_id = fu.Templates.register_template(forced_template);
+
+		this.template_labels = [{
+			"fu_label": template.heading ?? ""
+		}];
+
+		return this.template_group_id = fu.Templates.register_group({
+			'': this.single_template_id
+		});
+	}
+
+};
+
+customElements.define('fu-repeater_array', fu.fields.repeater_array);
 
 
 // /fields/repeaters/repeater_multiple.js

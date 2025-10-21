@@ -2,6 +2,8 @@ const fu = {
 
 	version: '0.0.1',
 
+	Definitions: {},
+
 	field_templates: {},
 
 	fields: {},
@@ -16,12 +18,12 @@ const fu = {
 				return;
 			}
 
-			const template = fieldsUX.querySelector('.template');
+			const template = fieldsUX.querySelector('.fu_template');
 			if( ! template ) {
 				return;
 			}
 
-			const data = fieldsUX.querySelector('.data');
+			const data = fieldsUX.querySelector('.fu_data');
 			if( ! data ) {
 				return;
 			}
@@ -35,9 +37,14 @@ const fu = {
 
 			this.instances.push(fu_main);
 
-			const opened = fieldsUX.querySelector('.opened');
+			const opened = fieldsUX.querySelector('.fu_opened');
 			if( opened ) {
 				fu.Opened.set(opened.value);
+			}
+
+			const scroll = fieldsUX.querySelector('.fu_scroll');
+			if( scroll ) {
+				document.documentElement.scrollTop = scroll.value;
 			}
 		});
 	},
