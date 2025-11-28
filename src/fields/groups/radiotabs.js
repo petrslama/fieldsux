@@ -94,6 +94,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 					'class': 'fu_radiotabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': tab.fields??[],
 					})),
 				},

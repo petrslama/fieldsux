@@ -43,21 +43,29 @@ fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 	append_fields( children ){
 
 		children?.forEach( (template) => {
-			if( 'from_definition' == template.fu_type) {
-				const definition = fu.Definitions[template.definition];
-				this.append_fields(definition);
-				return;
+			switch(template.fu_type) {
+				case 'from_definition':
+					const definition = fu.Definitions[template.definition];
+					this.append_fields(definition);
+					return;
+				case 'function':
+					if( ( ! template.fu_name ) || ( 'function' !== typeof window[template.fu_name]) ) {
+						console?.error('Function "' + template.fu_name + '()" defined by attribute fu_name does not exist or is not a function.');
+						return;
+					}
+					const function_elements = window[template.fu_name]();
+					this.append_fields(function_elements);
+					return;
+				default:
+					const child
+						= fu.fields[template.fu_type]
+						? fu.DOM.create({ 'tag': 'fu-' + template.fu_type } )
+						: fu.DOM.create({ 'tag': 'fu-undefined' } )
+
+					child.template = template;
+					this.appendChild( child );
 			}
-
-			const child
-				= fu.fields[template.fu_type]
-				? fu.DOM.create({ 'tag': 'fu-' + template.fu_type } )
-				: fu.DOM.create({ 'tag': 'fu-undefined' } )
-
-			child.template = template;
-			this.appendChild( child );
 		});
-
 	}
 
 	/**

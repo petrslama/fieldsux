@@ -173,6 +173,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 					'class': 'fu_container',
 					'children': [{
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': template.fields
 					}]
 				}

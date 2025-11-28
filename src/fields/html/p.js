@@ -7,7 +7,7 @@ fu.fields.p = class fu_fields_p extends fu.fields.abstract {
 			'class': 'fu_html',
 			'children':[{
 				'tag': 'p',
-				'html': template.html ?? ''
+				'html': template.fu_label ?? ''
 			}]
 		});
 

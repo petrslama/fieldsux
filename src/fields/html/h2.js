@@ -7,7 +7,7 @@ fu.fields.h2 = class fu_fields_h2 extends fu.fields.abstract {
 			'class': 'fu_html',
 			'children':[{
 				'tag': 'h2',
-				'html': template.html ?? ''
+				'html': template.fu_label ?? ''
 			}]
 		});
 

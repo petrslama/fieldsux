@@ -87,12 +87,12 @@ fu.fields.abstract = class fu_fields_abstract extends HTMLElement {
 		}
 
 		let class_added = false;
-		let last_size = 2;
+		let last_size = 1;
 
-		for( let breakpoint = 0; breakpoint <= 5; breakpoint ++) {
+		for( let breakpoint = 0; breakpoint <= 6; breakpoint ++) {
 			let current_size = parseInt(template[`size_${breakpoint}`]) || last_size;
 
-			const max_columns = (breakpoint + 1) * 2;
+			const max_columns = breakpoint + 1;
 			if (current_size > max_columns) {
 				current_size = max_columns;
 			}

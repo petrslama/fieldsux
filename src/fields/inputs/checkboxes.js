@@ -35,30 +35,33 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 
 	create_field( index, template ){
 		return fu.DOM.create({
-			'class': 'fu_choices_wrapper',
-			'children': template.values?.map(config => {
-				index = fu.DOM.getIndex();
-				return {
-					'class': 'fu_input_wrapper',
-					'tag': 'label',
-					'for': index,
-					'children': [
-						{
-							'tag': 'input',
-							'type': 'checkbox',
-							'id': index,
-							'class': 'fu_checkbox',
-							'value': config.fu_value ?? '1',
-							'events': {
-								'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
-							},
-						}, ( ! config.fu_label ) ? null : {
-							'class': 'fu_checkboxes_label',
-							'html': ' ' + config.fu_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
-						}
-					]
-				};
-			})
+			'class': 'fu_choices_wrapper fu_container',
+			'children': [{
+				'class': 'fu_grid',
+				'children': template.values?.map(config => {
+					index = fu.DOM.getIndex();
+					return {
+						'class': 'fu_input_wrapper',
+						'tag': 'label',
+						'for': index,
+						'children': [
+							{
+								'tag': 'input',
+								'type': 'checkbox',
+								'id': index,
+								'class': 'fu_checkbox',
+								'value': config.fu_value ?? 'undefined checkboxes item value',
+								'events': {
+									'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
+								},
+							}, ( ! config.fu_label ) ? null : {
+								'class': 'fu_checkboxes_label',
+								'html': config.fu_label,
+							}
+						],
+					};
+				}),
+			}],
 		});
 	}
 };

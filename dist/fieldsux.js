@@ -188,35 +188,15 @@ fu.DOM = class {
 				continue;
 
 			if('html' == key) {
-				let new_value = value.replaceAll('<', '< ');
+				let new_value = value;
 
-				new_value = new_value
-					.replace(/<!--[\s\S]*?-->/g, '') // Remove comments
-					.replace(/<\s\/?[^>]*>/g, (tag) => { // Clean all remaining tags
-						const match = tag.match(/<\s\/?(\w+)/);
-						const tag_name = match ? match[1].toLowerCase() : '';
-						const allowed = ['p', 'u',  'div', 'span', 'b', 'i', 'strong', 'em', 'br', 'ul', 'ol', 'li'];
-						if( ! allowed.includes(tag_name) ) {
-							return '';
-						}
-						if( tag.startsWith('< /') ){
-							return '</' + tag_name + '>';
-						} else {
-							return '<' + tag_name + '>';
-						}
-					});
+				new_value.match(/\[[a-zA-Z_\-][a-zA-Z0-9_\-]*\]/g)?.forEach(match => {
+					const m = match.slice(1, -1);
+					new_value = new_value.replaceAll(match, `<span data-from="${m}">${match}</span>`);
+				});
 
-				if( new_value === value ){
-					new_value.match(/\[[a-zA-Z_\-][a-zA-Z0-9_\-]*\]/g)?.forEach(match => {
-						const m = match.slice(1, -1);
-						new_value = new_value.replaceAll(match, `<span data-from="${m}">${match}</span>`);
-					});
+				element.innerHTML = new_value
 
-					element.innerHTML = new_value
-				} else {
-					element.innerHTML = 'XSS Error';
-					console.error( 'HTML contains tags, that are not supported:', value );
-				}
 				continue;
 			}
 
@@ -464,12 +444,12 @@ fu.fields.abstract = class fu_fields_abstract extends HTMLElement {
 		}
 
 		let class_added = false;
-		let last_size = 2;
+		let last_size = 1;
 
-		for( let breakpoint = 0; breakpoint <= 5; breakpoint ++) {
+		for( let breakpoint = 0; breakpoint <= 6; breakpoint ++) {
 			let current_size = parseInt(template[`size_${breakpoint}`]) || last_size;
 
-			const max_columns = (breakpoint + 1) * 2;
+			const max_columns = breakpoint + 1;
 			if (current_size > max_columns) {
 				current_size = max_columns;
 			}
@@ -1042,21 +1022,29 @@ fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 	append_fields( children ){
 
 		children?.forEach( (template) => {
-			if( 'from_definition' == template.fu_type) {
-				const definition = fu.Definitions[template.definition];
-				this.append_fields(definition);
-				return;
+			switch(template.fu_type) {
+				case 'from_definition':
+					const definition = fu.Definitions[template.definition];
+					this.append_fields(definition);
+					return;
+				case 'function':
+					if( ( ! template.fu_name ) || ( 'function' !== typeof window[template.fu_name]) ) {
+						console?.error('Function "' + template.fu_name + '()" defined by attribute fu_name does not exist or is not a function.');
+						return;
+					}
+					const function_elements = window[template.fu_name]();
+					this.append_fields(function_elements);
+					return;
+				default:
+					const child
+						= fu.fields[template.fu_type]
+						? fu.DOM.create({ 'tag': 'fu-' + template.fu_type } )
+						: fu.DOM.create({ 'tag': 'fu-undefined' } )
+
+					child.template = template;
+					this.appendChild( child );
 			}
-
-			const child
-				= fu.fields[template.fu_type]
-				? fu.DOM.create({ 'tag': 'fu-' + template.fu_type } )
-				: fu.DOM.create({ 'tag': 'fu-undefined' } )
-
-			child.template = template;
-			this.appendChild( child );
 		});
-
 	}
 
 	/**
@@ -1131,6 +1119,7 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 					},
 					{
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': template.fields
 					}
 				],
@@ -1169,12 +1158,9 @@ fu.fields.main = class fu_fields_main extends fu.fields.group {
 			'id': index,
 			'children': [
 				{
-					'class': 'fu_main_header',
+					'class': 'fu_main_actions',
 					'children':[
 						{
-							'tag': 'strong',
-							'html': template.fu_label ?? '',
-						},{
 							'tag': 'button',
 							'type': 'button',
 							'class': 'fu_icon fu_debug',
@@ -1247,6 +1233,7 @@ fu.fields.main = class fu_fields_main extends fu.fields.group {
 					'class': 'fu_container',
 					'children': [{
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': template.fields
 					}]
 				}
@@ -1330,6 +1317,7 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 					'class': 'fu_tabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': tab.fields??[],
 					})),
 				},
@@ -1443,6 +1431,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 					'class': 'fu_radiotabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': tab.fields??[],
 					})),
 				},
@@ -1501,7 +1490,7 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 				this.create_field( index, template ),
 				( ! template.fu_description ) ? null : {
 					'class': 'fu_description',
-					'html': template.fu_description.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;')
+					'html': template.fu_description
 				},
 			]
 		});
@@ -1858,30 +1847,33 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 
 	create_field( index, template ){
 		return fu.DOM.create({
-			'class': 'fu_choices_wrapper',
-			'children': template.values?.map(config => {
-				index = fu.DOM.getIndex();
-				return {
-					'class': 'fu_input_wrapper',
-					'tag': 'label',
-					'for': index,
-					'children': [
-						{
-							'tag': 'input',
-							'type': 'checkbox',
-							'id': index,
-							'class': 'fu_checkbox',
-							'value': config.fu_value ?? '1',
-							'events': {
-								'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
-							},
-						}, ( ! config.fu_label ) ? null : {
-							'class': 'fu_checkboxes_label',
-							'html': ' ' + config.fu_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
-						}
-					]
-				};
-			})
+			'class': 'fu_choices_wrapper fu_container',
+			'children': [{
+				'class': 'fu_grid',
+				'children': template.values?.map(config => {
+					index = fu.DOM.getIndex();
+					return {
+						'class': 'fu_input_wrapper',
+						'tag': 'label',
+						'for': index,
+						'children': [
+							{
+								'tag': 'input',
+								'type': 'checkbox',
+								'id': index,
+								'class': 'fu_checkbox',
+								'value': config.fu_value ?? 'undefined checkboxes item value',
+								'events': {
+									'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
+								},
+							}, ( ! config.fu_label ) ? null : {
+								'class': 'fu_checkboxes_label',
+								'html': config.fu_label,
+							}
+						],
+					};
+				}),
+			}],
 		});
 	}
 };
@@ -1900,9 +1892,16 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 
 	set value(value){
 		const radios =  Array.from( this.querySelectorAll('input[type="radio"]') );
-		radios.forEach((input) => {
-			input.checked = ( -1 != value.indexOf( input.value ) )
-		});
+		if( '' == value ) {
+			radios.forEach((input) => {
+				const input_value = input.getAttribute('value');
+				input.checked = ( input_value == null );
+			});
+		} else {
+			radios.forEach((input) => {
+				input.checked = ( -1 != value.indexOf( input.value ) )
+			});
+		}
 		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
@@ -1913,30 +1912,33 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 
 	create_field( index, template ){
 		return fu.DOM.create({
-			'class': 'fu_choices_wrapper',
-			'children': template.values?.map(radio => {
-				index = fu.DOM.getIndex();
-				return {
-					'class': 'fu_input_wrapper',
-					'tag': 'label',
-					'for': index,
-					'children': [
-						{
-							'tag': 'input',
-							'id': index,
-							'class': 'fu_radio',
-							'type': 'radio',
-							'value': radio.fu_value ?? '1',
-							'events': {
-								'change': () => this.value = radio.fu_value ?? '1',
-							},
-						}, ( ! radio.fu_label ) ? null : {
-							'class': 'fu_radios_label',
-							'html': ' ' + radio.fu_label.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;') + ' ',
-						}
-					]
-				};
-			})
+			'class': 'fu_choices_wrapper fu_container',
+			'children': [{
+				'class': 'fu_grid',
+				'children': template.values?.map(radio => {
+					index = fu.DOM.getIndex();
+					return {
+						'class': 'fu_input_wrapper',
+						'tag': 'label',
+						'for': index,
+						'children': [
+							{
+								'tag': 'input',
+								'id': index,
+								'class': 'fu_radio',
+								'type': 'radio',
+								'value': radio.fu_value ?? '',
+								'events': {
+									'change': () => this.value = radio.fu_value ?? '',
+								},
+							}, ( ! radio.fu_label ) ? null : {
+								'class': 'fu_radios_label',
+								'html': radio.fu_label,
+							}
+						]
+					};
+				})
+			}]
 		});
 	}
 };
@@ -2176,6 +2178,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 					'class': 'fu_container',
 					'children': [{
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': template.fields
 					}]
 				}
@@ -2937,7 +2940,7 @@ fu.fields.h1 = class fu_fields_h1 extends fu.fields.abstract {
 			'class': 'fu_html',
 			'children':[{
 				'tag': 'h1',
-				'html': template.html ?? ''
+				'html': template.fu_label ?? ''
 			}]
 		});
 
@@ -2958,7 +2961,7 @@ fu.fields.h2 = class fu_fields_h2 extends fu.fields.abstract {
 			'class': 'fu_html',
 			'children':[{
 				'tag': 'h2',
-				'html': template.html ?? ''
+				'html': template.fu_label ?? ''
 			}]
 		});
 
@@ -2979,7 +2982,7 @@ fu.fields.h3 = class fu_fields_h3 extends fu.fields.abstract {
 			'class': 'fu_html',
 			'children':[{
 				'tag': 'h3',
-				'html': template.html ?? ''
+				'html': template.fu_label ?? ''
 			}]
 		});
 
@@ -3000,7 +3003,7 @@ fu.fields.p = class fu_fields_p extends fu.fields.abstract {
 			'class': 'fu_html',
 			'children':[{
 				'tag': 'p',
-				'html': template.html ?? ''
+				'html': template.fu_label ?? ''
 			}]
 		});
 
@@ -3042,7 +3045,7 @@ fu.fields.a = class fu_fields_a extends fu.fields.abstract {
 			'class': 'fu_html',
 			'children':[{
 				'tag': 'a',
-				'html': template.html ?? '',
+				'html': template.fu_label ?? '',
 				'href': template.href ?? '#',
 				'target': template.target ?? '_blank',
 			}]

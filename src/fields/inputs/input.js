@@ -41,7 +41,7 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 				this.create_field( index, template ),
 				( ! template.fu_description ) ? null : {
 					'class': 'fu_description',
-					'html': template.fu_description.replace(/\b([a-zA-Z]{1,2})\s/g, '$1&nbsp;')
+					'html': template.fu_description
 				},
 			]
 		});

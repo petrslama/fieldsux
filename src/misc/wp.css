@@ -3,56 +3,93 @@
 		content: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M4%208h12v4H4z%27%20fill%3D%27%233582c4%27%2F%3E%3C%2Fsvg%3E);
 	}
 
-	.wp_options{
-		fu-main{
-			--fu_primary: #2271b1;
+	.fieldsux{
+		--fu_primary: #2271b1;
 
-			@media screen and (max-width: 600px) {
-				margin: -56px -12px 0 -10px;
-			}
-			@media screen and (min-width: 601px) and (max-width: 782px) {
-				margin: -10px -12px 0 -10px;
-			}
+		p {
+			margin: 0;
+			font-size: var(--fu_fontsize);
+			line-height: var(--fu_size);
+		}
+	}
 
-			@media screen and (min-width: 783px) {
-				margin: -10px -20px 0 -22px;
+	@media screen and (max-width: 782px) {
+		.fu_field_input .fu_input_wrapper {
+			input[type=checkbox],
+			input[type=radio] {
+				height: 1.5625rem;
+				min-width: 1.5625rem;
+				margin-top: 0.25rem;
 			}
+		}
+	}
+
+	#fuxwp_options{
+		position: relative;
+		margin: 0;
+		padding: 0;
+
+		@media screen and (max-width: 600px) {
+			margin: -47px 0 0 -10px;
+		}
+		@media screen and (min-width: 601px) and (max-width: 782px) {
+			margin: 0 0 0 -10px;
+		}
+
+		@media screen and (min-width: 783px) {
+			margin: 0 0 0 -20px;
+		}
+
+		.notice {
+			margin: 16px 32px;
+		}
+
+		h1 {
+			padding: 0;
+			margin: 16px 32px;
+			line-height: 32px;
+			max-width: calc(100% - 128px);
+		}
+
+		.fu_main_actions{
+			display: inline-block;
+			position: absolute;
+			right: 32px;
+			top: 0;
+			height: 32px;
+			overflow: visible;
 		}
 
 		.fu_submit_bar{
-			position: fixed;
-			bottom: 0;
-			right: 0;
-			z-index: 999;
-
 			p{
-				margin: 0;
-				padding: var(--fu_size_half) var(--fu_size);
+				margin: 32px;
+				padding: 0;
 				text-align: right;
-				background-color: var(--fu_bg);
 			}
 		}
 	}
+
+	#poststuff .postbox .inside:has(.fuxwp_meta_box) {
+		padding: 0;
+		margin: 0;
+
+		.fu_main_actions{
+			display: block;
+			position: absolute;
+			height: 32px;
+			overflow: visible;
+
+			@media screen and (max-width: 782px) {
+				top: -36px;
+				right: 80px;
+			}
+
+			@media screen and (min-width: 783px) {
+				top: -34px;
+				right: 80px;
+			}
+
+		}
+	}
 }
-
-@media screen and (max-width: 782px) {
-	.wp_options .fu_submit_bar{
-		left: 0;
-	}
-	#wpwrap.wp-responsive-open .fu_submit_bar{
-		left: 190px
-	}
-}
-
-
-@media screen and (min-width: 783px) {
-	.wp_options .fu_submit_bar{
-		left: 160px
-	}
-
-	.folded .wp_options .fu_submit_bar {
-		left: 36px;
-	}
-}
-
 

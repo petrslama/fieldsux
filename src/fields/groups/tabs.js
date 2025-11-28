@@ -68,6 +68,7 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 					'class': 'fu_tabs_panels fu_switch fu_container',
 					'children': template.tabs?.map(tab => ({
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': tab.fields??[],
 					})),
 				},

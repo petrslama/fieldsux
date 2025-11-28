@@ -31,35 +31,15 @@ fu.DOM = class {
 				continue;
 
 			if('html' == key) {
-				let new_value = value.replaceAll('<', '< ');
+				let new_value = value;
 
-				new_value = new_value
-					.replace(/<!--[\s\S]*?-->/g, '') // Remove comments
-					.replace(/<\s\/?[^>]*>/g, (tag) => { // Clean all remaining tags
-						const match = tag.match(/<\s\/?(\w+)/);
-						const tag_name = match ? match[1].toLowerCase() : '';
-						const allowed = ['p', 'u',  'div', 'span', 'b', 'i', 'strong', 'em', 'br', 'ul', 'ol', 'li'];
-						if( ! allowed.includes(tag_name) ) {
-							return '';
-						}
-						if( tag.startsWith('< /') ){
-							return '</' + tag_name + '>';
-						} else {
-							return '<' + tag_name + '>';
-						}
-					});
+				new_value.match(/\[[a-zA-Z_\-][a-zA-Z0-9_\-]*\]/g)?.forEach(match => {
+					const m = match.slice(1, -1);
+					new_value = new_value.replaceAll(match, `<span data-from="${m}">${match}</span>`);
+				});
 
-				if( new_value === value ){
-					new_value.match(/\[[a-zA-Z_\-][a-zA-Z0-9_\-]*\]/g)?.forEach(match => {
-						const m = match.slice(1, -1);
-						new_value = new_value.replaceAll(match, `<span data-from="${m}">${match}</span>`);
-					});
+				element.innerHTML = new_value
 
-					element.innerHTML = new_value
-				} else {
-					element.innerHTML = 'XSS Error';
-					console.error( 'HTML contains tags, that are not supported:', value );
-				}
 				continue;
 			}
 

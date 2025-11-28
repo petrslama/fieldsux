@@ -21,12 +21,9 @@ fu.fields.main = class fu_fields_main extends fu.fields.group {
 			'id': index,
 			'children': [
 				{
-					'class': 'fu_main_header',
+					'class': 'fu_main_actions',
 					'children':[
 						{
-							'tag': 'strong',
-							'html': template.fu_label ?? '',
-						},{
 							'tag': 'button',
 							'type': 'button',
 							'class': 'fu_icon fu_debug',
@@ -99,6 +96,7 @@ fu.fields.main = class fu_fields_main extends fu.fields.group {
 					'class': 'fu_container',
 					'children': [{
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': template.fields
 					}]
 				}

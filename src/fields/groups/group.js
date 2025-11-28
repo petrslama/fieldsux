@@ -52,6 +52,7 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 					},
 					{
 						'tag': 'fu-children',
+						'class': 'fu_grid',
 						'template': template.fields
 					}
 				],
