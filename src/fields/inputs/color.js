@@ -5,8 +5,7 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 	}
 
 	get value(){
-		const value = this.get_input().value;
-		return value ? value : null;
+		return this.get_input()?.value ?? '';
 	}
 
 	/**
@@ -28,10 +27,8 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 		return fu.DOM.create({
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'class': 'fu_color',
 					'children': [
 						{
@@ -64,10 +61,8 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 							}
 						}
 					]
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}

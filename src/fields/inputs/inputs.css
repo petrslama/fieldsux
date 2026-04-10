@@ -39,10 +39,11 @@
 		row-gap: calc( .25 * var(--fu_size) );
 
 		.fu_input_wrapper{
+			padding: 0 var(--fu_size_half);
 			&:hover {
 				position: relative;
-				margin-left: calc( -1 * var(--fu_size_half) );
-				padding-left: var(--fu_size_half);
+				/* margin-left: calc( -1 * var(--fu_size_half) );
+				padding-left: var(--fu_size_half); */
 				background-color: var(--fu_primary);
 				color: var(--fu_bg);
 			}

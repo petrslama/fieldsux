@@ -22,10 +22,8 @@ fu.fields.select = class fu_fields_select extends fu.fields.input {
 		return fu.DOM.create({
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'tag': 'select',
 					'id': index,
 					'class': 'fu_input',
@@ -39,10 +37,8 @@ fu.fields.select = class fu_fields_select extends fu.fields.input {
 					'events': {
 						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}

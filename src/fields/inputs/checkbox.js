@@ -33,10 +33,8 @@ fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 			'for': index,
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'tag': 'input',
 					'type': 'checkbox',
 					'id': index,
@@ -48,10 +46,8 @@ fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 					'events': {
 						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}

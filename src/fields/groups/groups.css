@@ -17,7 +17,6 @@ fu-main {
 
 .fu_grid {
 	display: grid;
-	gap: var(--fu_size);
 	gap: var(--fu_size) calc( 1.5 * var(--fu_size) );
 	align-content: start;
 	padding: var(--fu_size);
@@ -50,6 +49,10 @@ fu-main {
 	@container fu_container (width >= 1920px) {
 		grid-template-columns: repeat(6, 1fr);
 	}
+}
+
+fu-group > .fu_container > .fu_grid {
+	padding: 0;
 }
 
 .fu_gw_default {
@@ -103,7 +106,13 @@ fu-main {
 	}
 
 	@container fu_container (width >= 2240px) {
-		/* Maybe in the future */
+		&.fu_gw_7_1{grid-column: span 1}
+		&.fu_gw_7_2{grid-column: span 2}
+		&.fu_gw_7_3{grid-column: span 3}
+		&.fu_gw_7_4{grid-column: span 4}
+		&.fu_gw_7_5{grid-column: span 5}
+		&.fu_gw_7_6{grid-column: span 6}
+		&.fu_gw_7_7{grid-column: span 7}
 	}
 }
 

@@ -38,10 +38,6 @@ fu-rows{
 		background-color: var(--fu_row_hover_bg);
 	}
 
-	& > .fu_container {
-		padding-left: calc( 2.5 * var(--fu_size) );
-	}
-
 	&:not(.fu_open_row) > .fu_container {
 		display: none;
 	}

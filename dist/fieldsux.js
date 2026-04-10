@@ -280,6 +280,7 @@ fu.Templates = class {
 
 	static register_template( template ){
 		if( 'string' == typeof template ){
+			console.log(template);
 			if( fu.fields?.[template]?.definition ){
 				template = fu.fields[template].definition;
 			}
@@ -1450,8 +1451,7 @@ customElements.define('fu-radiotabs', fu.fields.radiotabs);
 fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 
 	get value(){
-		const value = this.get_input().value;
-		return value ? value : null;
+		return this.get_input()?.value ?? '';
 	}
 
 	/**
@@ -1459,15 +1459,14 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 	 */
 	set value(value){
 		const input = this.get_input();
-		if( 'object' == typeof value ) {
-			value = JSON.stringify(value);
-		}
-		input.value = value ?? '';
+		const val = typeof value === 'object' ? JSON.stringify(value) : value;
+
+		input.value = val ?? '';
 		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
-		return this.value || '';
+		return this.value ?? '';
 	}
 
 	/**
@@ -1512,10 +1511,8 @@ fu.fields.text = class fu_fields_text extends fu.fields.input {
 		return fu.DOM.create({
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'tag': 'input',
 					'id': index,
 					'class': 'fu_input',
@@ -1532,10 +1529,8 @@ fu.fields.text = class fu_fields_text extends fu.fields.input {
 					'events': {
 						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}
@@ -1557,10 +1552,8 @@ fu.fields.number = class fu_fields_number extends fu.fields.input {
 		return fu.DOM.create({
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'tag': 'input',
 					'type': 'number',
 					'id': index,
@@ -1570,17 +1563,15 @@ fu.fields.number = class fu_fields_number extends fu.fields.input {
 					'step': template.fu_step,
 					'placeholder': template.fu_placeholder,
 					'pattern': template.fu_pattern,
-					'required':template.fu_required,
+					'required': template.fu_required,
 					'aria-required': template.fu_required ? 'true' : '',
-					'readonly':template.fu_readonly,
+					'readonly': template.fu_readonly,
 					'list': template.fu_list,
 					'events': {
 						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}
@@ -1593,7 +1584,9 @@ customElements.define('fu-number', fu.fields.number);
 
 fu.fields.textarea = class fu_fields_textarea extends fu.fields.input {
 
-	get_input(){ return this.querySelector('textarea'); }
+	get_input(){
+		return this.querySelector('textarea');
+	}
 
 	create_field( index, template ){
 		return fu.DOM.create({
@@ -1607,7 +1600,7 @@ fu.fields.textarea = class fu_fields_textarea extends fu.fields.input {
 					'minlength': template.fu_minlength,
 					'maxlength': template.fu_maxlength,
 					'required': template.fu_required,
-					'aria-required': template.fu_required    ? 'true' : '',
+					'aria-required': template.fu_required ? 'true' : '',
 					'readonly': template.fu_readonly,
 					'events': {
 						'input': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
@@ -1659,10 +1652,8 @@ fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 			'for': index,
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'tag': 'input',
 					'type': 'checkbox',
 					'id': index,
@@ -1674,10 +1665,8 @@ fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 					'events': {
 						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}
@@ -1695,8 +1684,7 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 	}
 
 	get value(){
-		const value = this.get_input().value;
-		return value ? value : null;
+		return this.get_input()?.value ?? '';
 	}
 
 	/**
@@ -1718,10 +1706,8 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 		return fu.DOM.create({
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'class': 'fu_color',
 					'children': [
 						{
@@ -1754,10 +1740,8 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 							}
 						}
 					]
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}
@@ -1972,10 +1956,8 @@ fu.fields.select = class fu_fields_select extends fu.fields.input {
 		return fu.DOM.create({
 			'class': 'fu_input_wrapper',
 			'children': [
-				( ! template.fu_before ) ? null : {
-					'class': 'fu_before',
-					'html': ' ' + template.fu_before + ' ',
-				},{
+				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
+				{
 					'tag': 'select',
 					'id': index,
 					'class': 'fu_input',
@@ -1989,10 +1971,8 @@ fu.fields.select = class fu_fields_select extends fu.fields.input {
 					'events': {
 						'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 					},
-				},( ! template.fu_after ) ? null : {
-					'class': 'fu_after',
-					'html': ' ' + template.fu_after + ' ',
-				}
+				},
+				template.fu_after && { 'class': 'fu_after', 'html': ` ${template.fu_after} ` },
 			]
 		});
 	}

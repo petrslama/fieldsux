@@ -1,8 +1,7 @@
 fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 
 	get value(){
-		const value = this.get_input().value;
-		return value ? value : null;
+		return this.get_input()?.value ?? '';
 	}
 
 	/**
@@ -10,15 +9,14 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 	 */
 	set value(value){
 		const input = this.get_input();
-		if( 'object' == typeof value ) {
-			value = JSON.stringify(value);
-		}
-		input.value = value ?? '';
+		const val = typeof value === 'object' ? JSON.stringify(value) : value;
+
+		input.value = val ?? '';
 		this.dispatchEvent( new CustomEvent( 'fu_field_input' ) );
 	}
 
 	get repeater_label(){
-		return this.value || '';
+		return this.value ?? '';
 	}
 
 	/**

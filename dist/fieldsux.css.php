@@ -42,11 +42,20 @@ foreach([
 $css = ob_get_clean();
 $minified = $css;
 $minified = preg_replace('/\/\*[\s\S]*?\*\//', '', $minified); // Remove comments
-$minified = preg_replace('/\s+/', ' ', $minified); // Replace multiple spaces with single space
+
+$minified = preg_replace('/\s+([>+~;,{}])/', '$1', $minified); // Remove spaces before combinators
+$minified = preg_replace('/([>+~;,{}])\s+/', '$1', $minified); // Remove spaces after combinators
+
 $minified = preg_replace('/;\s*}/', '}', $minified); // Remove semicolon before closing brace
 $minified = preg_replace('/\s*{\s*/', '{', $minified); // Remove spaces around opening brace
 $minified = preg_replace('/;\s*/', ';', $minified); // Remove spaces after semicolons
 $minified = preg_replace('/,\s*/', ',', $minified); // Remove spaces after commas
+
+$minified = preg_replace('/\s+:/', ':', $minified); // Remove spaces before colons (properties)
+$minified = preg_replace('/:\s+/', ':', $minified); // Remove spaces after colons (properties)
+
+
+
 $minified = trim($minified);
 
 echo $minified;
