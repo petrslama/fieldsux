@@ -84,34 +84,30 @@ fu.fields.abstract = class fu_fields_abstract extends HTMLElement {
 
 		if( 'fullwidth' == template.width ) {
 			element.classList.add('fu_gw_fullwidth');
+			return;
 		}
 
 		let class_added = false;
 		let last_size = 1;
 
-		for( let breakpoint = 0; breakpoint <= 6; breakpoint ++) {
-			let current_size = parseInt(template[`size_${breakpoint}`]) || last_size;
-
-			const max_columns = breakpoint + 1;
-			if (current_size > max_columns) {
-				current_size = max_columns;
-			}
+		for( let bp = 0; bp <= 6; bp ++) {
+			 const current_size = Math.min(
+				parseInt(template[`size_${bp}`]) || last_size,
+				bp + 1
+			);
 
 			if( last_size == current_size ) {
 				continue;
 			}
 
-			element.classList.add(`fu_gw_${breakpoint + 1}_${current_size}`);
+			element.classList.add(`fu_gw_${bp + 1}_${current_size}`);
 			class_added = true;
 
 			last_size = current_size;
 		}
 
-		if( class_added ) {
-			element.classList.add('fu_gw_custom');
-		} else {
-			element.classList.add('fu_gw_default');
-
-		}
+		element.classList.add(
+			class_added ? 'fu_gw_custom' : 'fu_gw_default'
+		);
 	}
 }

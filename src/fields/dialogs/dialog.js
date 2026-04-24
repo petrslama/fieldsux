@@ -4,19 +4,18 @@ fu.fields.dialog = class fu_fields_dialog extends fu.fields.abstract {
 		this.classList.add('fu_open_dialog');
 		document.body.classList.add('fu_dialog_opened');
 
-		this.esc_listener = document.addEventListener('keydown', (event) => {
-			if (event.key != 'Escape') {
-				return;
-			}
+		this.esc_handler = (event) => {
+			if (event.key !== 'Escape') return;
 			this.close();
-		});
+		};
+
+		document.addEventListener('keydown', this.esc_handler);
 	}
 
 	close(){
 		this.classList.remove('fu_open_dialog');
 		document.body.classList.remove('fu_dialog_opened');
-
-		document.removeEventListener('keydown', this.esc_listener);
+		document.removeEventListener('keydown', this.esc_handler);
 	}
 
 	/**

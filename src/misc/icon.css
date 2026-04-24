@@ -96,7 +96,7 @@ fu-row.fu_open_row > .fu_row_header .fu_toggle:before {
 	mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 20 5-5 5 5"/><path d="m7 4 5 5 5-5"/></svg>');
 }
 
-.row_add_row.fu_picker_fu_type {
+fu-repeater_multiple[fu_name="fields"] > .fu_repeater_wrapper > fu-rows > .row_add_row {
 	button[data-fu_type] {
 		position: relative;
 		padding-left: calc( 1 * var(--fu_size) );

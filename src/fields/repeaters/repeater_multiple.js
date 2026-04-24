@@ -15,14 +15,10 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 			return;
 		}
 
-		this.picker_options = [{}].concat(templates.map(template => ({
+		this.picker_options = templates.map(template => ({
 			'fu_type': template.fu_type,
 			'fu_label': template.fu_label
-		})));
-
-		if( template.picker ){
-			this.picker = template.picker;
-		}
+		}));
 
 		return this.template_group_id = fu.Templates.register_group( this.type_to_ID );
 	}
@@ -72,32 +68,16 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 	add_row(caller, position){
 		document.activeElement.blur();
 
-		const picker_id = this.picker ?? '__picker_default';
+		const picker = this.picker_options;
 
-		let datalist = document.getElementById(picker_id);
-
-		let picker = [];
-		if( datalist ) {
-			picker = Array.from( datalist.childNodes ).map(option => {
-				return {
-					'fu_type': option.getAttribute('value'),
-					'fu_label': option.getAttribute('label'),
-				}
-			});
-		} else {
-			picker = this.picker_options;
-		}
-
-		this.esc_listener = document.addEventListener('keydown', (event) => {
-			if (event.key != 'Escape') {
-				return;
-			}
+		this.esc_handler = (event) => {
+			if (event.key !== 'Escape') return;
 			pseudo_row.remove();
 			document.activeElement.blur();
-		});
+		};
 
 		const pseudo_row = fu.DOM.create({
-			'class': 'row_add_row fu_switch fu_picker_' + picker_id,
+			'class': 'row_add_row fu_switch',
 			'children': [
 				{
 					'class': 'fu_backdrop',
@@ -121,7 +101,7 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 							'events': {
 								'click': (e) => {
 									pseudo_row.remove();
-									document.removeEventListener('keydown', this.esc_listener);
+									document.removeEventListener('keydown', this.esc_handler);
 								}
 							},
 						}
@@ -129,50 +109,52 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 				},{
 					'class': 'fu_add_options',
 					'children': (()=>{
-						let actual = null;
-						const optgroup = [];
+						const groups = {'': []};
+
 						picker.forEach(option => {
-							if( option.fu_type ) {
-								if( ! actual ) {
-									optgroup.push({'class': 'fu_label'});
-									optgroup.push( actual = {
-										'class': 'fu_group',
-										'children': []
-									} );
-								}
-								actual.children.push({
-									'tag': 'button', 'type': 'button',
-									'class': ( ! this.type_to_ID[option.fu_type] ) ? 'template_not_defined' : '',
-									'html': option.fu_label ?? '???',
-									'data-fu_type': option.fu_type,
-									'events': {
-										'click': (e) => {
-											const created_row = this.create_row({ 'fu_type': option.fu_type });
-											if( null === created_row ) {
-												return;
-											}
-											created_row.classList.add('fu_open_row');
-											pseudo_row.replaceWith(created_row);
-											document.removeEventListener('keydown', this.esc_listener);
-										},
+							const label = option.fu_label ?? ( '&nbsp;No Label&nbsp;' + (typeof option) + ' ' + JSON.stringify(option) );
+							const parts = label.split('>>>');
+							const group = parts.length > 1 ? parts[0].trim() : '';
+							const text  = parts.length > 1 ? parts[1].trim() : label;
+
+							if( ! groups[group] ) groups[group] = [];
+
+							groups[group].push({
+								'tag': 'button', 'type': 'button',
+								'class': ( ! this.type_to_ID[option.fu_type] ) ? 'template_not_defined' : '',
+								'html': text,
+								'data-fu_type': option.fu_type,
+								'events': {
+									'click': (e) => {
+										const created_row = this.create_row({ 'fu_type': option.fu_type });
+										if( null === created_row ) {
+											return;
+										}
+										created_row.classList.add('fu_open_row');
+										pseudo_row.replaceWith(created_row);
+										document.removeEventListener('keydown', this.esc_handler);
 									},
-								});
-							} else {
-								optgroup.push({
-									'class': 'fu_label',
-									'html': option.fu_label ?? '???',
-								});
-								optgroup.push( actual = {
-									'class': 'fu_group',
-									'children': []
-								} );
-							}
+								},
+							});
 						});
+
+						const optgroup = [];
+						for( const [group, buttons] of Object.entries(groups) ){
+							if( ! buttons.length ) continue;
+							optgroup.push({
+								'class': 'fu_label',
+								'html': group,
+							});
+							optgroup.push({
+								'class': 'fu_group',
+								'children': buttons,
+							});
+						}
 						return optgroup;
 					})()
 				},
 			],
-		});;
+		});
 
 		switch(position){
 			case 'before':

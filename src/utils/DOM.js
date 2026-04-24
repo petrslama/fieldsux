@@ -10,10 +10,6 @@ fu.DOM = class {
 		return 'fu_' + fu.DOM.index;
 	}
 
-	static escape_html( html ) {
-
-	}
-
 	static attrs(element, attrs) {
 
 		for(let key in attrs) {
@@ -52,6 +48,7 @@ fu.DOM = class {
 					.replaceAll('"', "&quot;")
 					.replaceAll("'", "&#039;");
 				element.appendChild(pre);
+				continue;
 			}
 
 			if('style' == key) {

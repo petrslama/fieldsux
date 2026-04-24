@@ -11,7 +11,7 @@ fu.fields.main = class fu_fields_main extends fu.fields.group {
 
 		template.definitions?.forEach(definition => {
 			if( fu.Definitions[definition.fu_name] ) {
-				console.warn( 'Definition ${definition.fu_name} was rewritten');
+				console.warn( `Definition ${definition.fu_name} was rewritten`);
 			}
 			fu.Definitions[definition.fu_name] = definition.fields;
 		});

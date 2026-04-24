@@ -4,8 +4,6 @@ const fu = {
 
 	Definitions: {},
 
-	field_templates: {},
-
 	fields: {},
 
 	instances: [],

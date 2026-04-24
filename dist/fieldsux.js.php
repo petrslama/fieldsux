@@ -75,7 +75,7 @@ foreach([
 	readfile( $_SRC_DIR . $filepath );
 }
 echo  "\n\n\n";
-echo "fu.init();";
+echo "if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>fu.init());else fu.init();";
 echo "\n\n\n\n";
 
 

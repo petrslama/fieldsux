@@ -30,13 +30,17 @@ fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 		[...this.childNodes].forEach(field => {
 			const fu_name = field.fu_name;
 
-			if( value )
-				if ( fu_name )
+			if( value ){
+				if ( fu_name ) {
 					field.value = value[fu_name] ?? '';
-				else if ( field.classList.contains('fu_field') && ! field.classList.contains('fu_field_input') )
-					field.value = value;
-			else
+				} else {
+					if ( field.classList.contains('fu_field') && ! field.classList.contains('fu_field_input') ) {
+						field.value = value;
+					}
+				}
+			} else {
 				field.value = '';
+			}
 		});
 	}
 

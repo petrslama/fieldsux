@@ -1,6 +1,6 @@
 fu-main {
 	display: block;
-	padding: var(--size);
+	padding: var(--fu_size);
 	font-size: var(--fu_fontsize);
 	color: var(--zink_700);
 
