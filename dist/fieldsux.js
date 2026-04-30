@@ -320,7 +320,7 @@ fu.Templates = class {
 
 fu.Opened = {
 	selectors: [
-		'.fu_tab_button.fu_switch:not([data-index="0"])',
+		'.fu_tab_button[aria-selected="true"]:not([data-index="0"])',
 		'.fu_open_row',
 	],
 	get: function(){
@@ -1014,7 +1014,6 @@ fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 	}
 
 	append_fields( children ){
-
 		children?.forEach( (template) => {
 			switch(template.fu_type) {
 				case 'from_definition':
@@ -1104,20 +1103,16 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 			'class': 'fu_field',
 			'fu_name': template.fu_name,
 			'id': index,
-			'children': [{
-				'class': 'fu_container',
-				'children': [
-					! template.fu_label ? null : {
-						'class': 'fu_label',
-						'html': template.fu_label
-					},
-					{
-						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': template.fields
-					}
-				],
-			}]
+			'children': [
+				! template.fu_label ? null : {
+					'class': 'fu_label',
+					'html': template.fu_label
+				},
+				{
+					'tag': 'fu-children',
+					'template': template.fields
+				}
+			],
 		});
 
 		this.set_width( this, template );
@@ -1224,12 +1219,8 @@ fu.fields.main = class fu_fields_main extends fu.fields.group {
 						};
 					}),
 				},{
-					'class': 'fu_container',
-					'children': [{
-						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': template.fields
-					}]
+					'tag': 'fu-children',
+					'template': template.fields
 				}
 			],
 		});
@@ -1244,11 +1235,11 @@ customElements.define('fu-main', fu.fields.main);
 fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 
 	get buttons(){
-		return Array.from( this.childNodes[0].childNodes );
+		return Array.from(this.childNodes[0].childNodes);
 	}
 
 	get panels(){
-		return Array.from( this.childNodes[1].childNodes );
+		return Array.from(this.childNodes[1].childNodes);
 	}
 
 	get value(){
@@ -1257,182 +1248,239 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 	}
 
 	set value(value){
-		this.panels.forEach( (children) => children.value = value );
+		this.panels.forEach((panel) => panel.value = value);
+	}
+
+	select(index){
+		this.buttons.forEach((button, i) => {
+			const selected = i === index;
+			button.setAttribute('aria-selected', selected);
+			button.tabIndex = selected ? 0 : -1;
+		});
+		this.panels.forEach((panel, i) => panel.hidden = i !== index);
+		this.classList.remove('fu_tabs_show_all');
+	}
+
+	show_all(){
+		this.panels.forEach(panel => panel.hidden = false);
+		this.classList.add('fu_tabs_show_all');
+		this.querySelectorAll(':scope .fu_tabs').forEach(nested => {
+			nested.panels.forEach(panel => panel.hidden = false);
+			nested.classList.add('fu_tabs_show_all');
+		});
+	}
+
+	on_keydown(e){
+		const buttons = this.buttons.filter(b => b.checkVisibility());
+		const current = buttons.indexOf(e.target);
+		if( current === -1 ) return;
+
+		const total = buttons.length;
+		const next = {
+			'ArrowRight': (current + 1) % total,
+			'ArrowLeft':  (current - 1 + total) % total,
+			'Home': 0,
+			'End': total - 1,
+		}[e.key];
+		if( next === undefined ) return;
+
+		e.preventDefault();
+		e.stopPropagation();
+		this.select(next);
+		this.buttons[next]?.focus();
 	}
 
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
-
-		let last_index = 0;
+		const ID = fu.DOM.getIndex();
 
 		fu.DOM.attrs(this, {
 			'class': 'fu_tabs fu_field',
-			'children':[
+			'id': ID,
+			'children': [
 				{
-					'class': 'fu_tabs_buttons',
+					'class': 'fu_buttons',
+					'role': 'tablist',
+					'events': {
+						'keydown': (e) => this.on_keydown(e),
+					},
 					'children': [
-						template.tabs?.map((tab, index)=> ({
+						(template.tabs ?? []).map((tab, index) => ({
 							'tag': 'button', 'type': 'button',
-							'id': fu.DOM.getIndex(),
-							'class': 'fu_tab_button',
-							'data-index': last_index = index,
-							'html': tab.fu_label??'',
+							'id': `${ID}_${index}_button`,
+							'class': 'fu_button',
+							'role': 'tab',
+							'aria-controls': `${ID}_${index}_panel`,
+							'data-index': index,
+							'html': tab.fu_label ?? '',
 							'events': {
-								'click': (e) => {
-									const buttons = this.buttons;
-									buttons.forEach((button) => button.classList.remove('fu_switch') );
-									buttons[ index ].classList.add('fu_switch');
-
-									const panels = [...this.childNodes[1].childNodes];
-									panels.forEach((button) => button.classList.remove('fu_open_tab') );
-									panels[ index ].classList.add('fu_open_tab');
-								}
-							}
-						})),						{
+								'click': () => this.select(index),
+							},
+						})),
+						{
 							'tag': 'button', 'type': 'button',
 							'id': fu.DOM.getIndex(),
 							'class': 'fu_tab_button fu_tab_button_debug',
-							'data-index': last_index + 1,
+							'role': 'presentation',
 							'html': '- Everything -',
 							'events': {
-								'click': (e) => {
-									const buttons = this.buttons;
-									buttons.forEach((button) => button.classList.remove('fu_switch') );
-									buttons[ last_index + 1 ].classList.add('fu_switch');
-
-									this.panels.forEach((button) => button.classList.add('fu_open_tab') );
-								}
-							}
+								'click': () => this.show_all(),
+							},
 						},
-					]
-				},{
-					'class': 'fu_tabs_panels fu_switch fu_container',
-					'children': template.tabs?.map(tab => ({
+					],
+				},
+				{
+					'class': 'fu_panels',
+					'children': (template.tabs ?? []).map((tab, index) => ({
 						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': tab.fields??[],
+						'id': `${ID}_${index}_panel`,
+						'role': 'tabpanel',
+						'aria-labelledby': `${ID}_${index}_button`,
+						'tabindex': 0,
+						'template': tab.fields ?? [],
 					})),
 				},
 			],
 		});
 
-		this.set_width( this, template );
-
-		this.buttons[0]?.dispatchEvent( new Event('click') );
+		this.set_width(this, template);
+		this.select(0);
 	}
 };
 
 customElements.define('fu-tabs', fu.fields.tabs);
-
 
 // /fields/groups/radiotabs.js
 
 fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 
 	get buttons(){
-		return Array.from( this.querySelector('.fu_radiotabs_buttons').childNodes );
+		return Array.from(this.childNodes[0].childNodes);
 	}
 
 	get panels(){
-		return Array.from( this.querySelector('.fu_radiotabs_panels').childNodes );
+		return Array.from(this.childNodes[1].childNodes);
 	}
 
 	get value(){
-		const panel_value = this.querySelector('.fu_radiotabs_panels').querySelector('.fu_open_tab')?.value;
+		const panel_value = this.panels.find(p => !p.hidden)?.value;
 
-		const button = this.querySelector('.fu_radiotabs_buttons').querySelector('input:checked');
-		if (!button) return panel_value;
+		const input = this.childNodes[0].querySelector('input:checked');
+		if(!input) return panel_value;
 
-		const button_value = button.getAttribute('value');
+		const button_value = input.getAttribute('value');
 		const button_name = this.getAttribute('fu_radio_name');
 
-		if ( !button_value || !button_name) {
-			return panel_value;
-		}
+		if(!button_value || !button_name) return panel_value;
 
-		return { [button_name]: button_value, ...panel_value }
+		return { [button_name]: button_value, ...panel_value };
 	}
 
 	set value(value){
 		const fu_radio_name = this.getAttribute('fu_radio_name');
 		const fu_radio_value = value[fu_radio_name];
-		if( ( fu_radio_value ) && ( /[a-zA-Z0-9_\-]+/g.test(fu_radio_value) ) ){
-			const found = this.querySelector('.fu_radiotabs_buttons').querySelector('input[value="'+fu_radio_value+'"]');
-			if( found ) {
-				found.parentNode.dispatchEvent( new Event('click') );
-			} else {
-				this.buttons[0].dispatchEvent( new Event('click') );
-			}
-		} else {
-			this.buttons[0].dispatchEvent( new Event('click') );
-		}
 
-		this.panels.forEach( (children) => children.value = value );
+		const index = fu_radio_value && /[a-zA-Z0-9_\-]+/.test(fu_radio_value)
+			? this.buttons.findIndex(b => b.querySelector('input')?.getAttribute('value') === fu_radio_value)
+			: -1;
+
+		this.select(index !== -1 ? index : 0);
+		this.panels.forEach((panel) => panel.value = value);
+	}
+
+	select(index){
+		this.buttons.forEach((button, i) => {
+			const selected = i === index;
+			button.querySelector('input').checked = selected;
+			button.setAttribute('aria-selected', selected);
+			button.tabIndex = selected ? 0 : -1;
+		});
+		this.panels.forEach((panel, i) => panel.hidden = i !== index);
+	}
+
+	on_keydown(e){
+		const buttons = this.buttons.filter(b => b.checkVisibility());
+		const current = buttons.indexOf(e.target.closest('.fu_button'));
+		if( current === -1 ) return;
+
+		const total = buttons.length;
+		const next = {
+			'ArrowRight': (current + 1) % total,
+			'ArrowLeft':  (current - 1 + total) % total,
+			'Home': 0,
+			'End': total - 1,
+		}[e.key];
+		if( next === undefined ) return;
+
+		e.preventDefault();
+		e.stopPropagation();
+		this.select(next);
+		this.buttons[next]?.focus();
 	}
 
 	/**
 	 * @param {Object} template
 	 */
 	set template(template){
+		const ID = fu.DOM.getIndex();
+
 		fu.DOM.attrs(this, {
 			'class': 'fu_radiotabs fu_field',
+			'id': ID,
 			'fu_radio_name': template.fu_name,
-			'children':[
-				! template.fu_label ? null : {
-					'class': 'fu_label',
-					'html': template.fu_label
-				},
+			'children': [
 				{
-					'class': 'fu_radiotabs_buttons',
-					'children': template.tabs?.map((tab, index)=> ({
-						'tag': 'label',
-						'class': 'fu_radiotab_button',
-						'data-index': index,
-						'children':[
-							{
-								'tag': 'input',
-								'id': fu.DOM.getIndex(),
-								'class': 'fu_radio',
-								'type': 'radio',
-								'value': tab.fu_value ?? '',
-							},{
-								'tag': 'span',
-								'html': tab.fu_label ?? '',
+					'class': 'fu_buttons',
+					'role': 'tablist',
+					'events': {
+						'keydown': (e) => this.on_keydown(e),
+					},
+					'children': [
+						(template.tabs ?? []).map((tab, index) => ({
+							'tag': 'label',
+							'id': `${ID}_${index}_button`,
+							'class': 'fu_button',
+							'role': 'tab',
+							'aria-controls': `${ID}_${index}_panel`,
+							'aria-selected': false,
+							'tabindex': -1,
+							'data-index': index,
+							'children': [
+								{
+									'tag': 'input',
+									'id': `${ID}_${index}_radio`,
+									'name': ID,
+									'class': 'fu_radio',
+									'type': 'radio',
+									'value': tab.fu_value ?? '',
+									'tabindex': -1,
+								}, {
+									'tag': 'span',
+									'html': tab.fu_label ?? '',
+								}
+							],
+							'events': {
+								'click': () => this.select(index),
 							}
-						],
-						'events': {
-							'click': (e) => {
-								const buttons = this.buttons;
-								buttons.forEach((button) => {
-									button.classList.remove('fu_switch');
-									const radio = button.querySelector('input');
-									radio.checked = false;
-								});
-
-								const button = buttons[ index ]
-								button.classList.add('fu_switch');
-								button.querySelector('input').checked = true;
-
-								const panels = this.panels;
-								panels.forEach((button) => button.classList.remove('fu_open_tab') );
-								panels[ index ].classList.add('fu_open_tab');
-							}
-						}
-					})),
-				},{
-					'class': 'fu_radiotabs_panels fu_switch fu_container',
-					'children': template.tabs?.map(tab => ({
+						})),
+					],
+				}, {
+					'class': 'fu_panels',
+					'children': (template.tabs ?? []).map((tab, index) => ({
 						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': tab.fields??[],
+						'id': `${ID}_${index}_panel`,
+						'role': 'tabpanel',
+						'aria-labelledby': `${ID}_${index}_button`,
+						'tabindex': 0,
+						'template': tab.fields ?? [],
 					})),
 				},
 			],
 		});
 
-		this.set_width( this, template );
+		this.set_width(this, template);
 	}
 };
 
@@ -1815,43 +1863,51 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 	get repeater_label(){
 		const labels = [];
 		Array.from(
-			this.querySelectorAll('input:checked + .fu_checkboxes_label')
+			this.querySelectorAll('input:checked + div')
 		).forEach((label) => {
 			labels.push( label.innerHTML.trim() )
 		});
 		return labels.join(', ');
 	}
 
-	create_field( index, template ){
-		return fu.DOM.create({
-			'class': 'fu_choices_wrapper fu_container',
-			'children': [{
-				'class': 'fu_grid',
-				'children': template.values?.map(config => {
-					index = fu.DOM.getIndex();
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_choices',
+			'children':[
+				( ! template.fu_label ) ? null : {
+					'class': 'fu_label',
+					'html': template.fu_label,
+				},
+				template.values?.map(config => {
 					return {
-						'class': 'fu_input_wrapper',
 						'tag': 'label',
-						'for': index,
 						'children': [
 							{
 								'tag': 'input',
 								'type': 'checkbox',
-								'id': index,
-								'class': 'fu_checkbox',
-								'value': config.fu_value ?? 'undefined checkboxes item value',
+								'value': config.fu_value ?? '',
 								'events': {
 									'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 								},
 							}, ( ! config.fu_label ) ? null : {
-								'class': 'fu_checkboxes_label',
 								'html': config.fu_label,
 							}
 						],
 					};
 				}),
-			}],
+				( ! template.fu_description ) ? null : {
+					'class': 'fu_description',
+					'html': template.fu_description
+				},
+			]
 		});
+
+		this.set_width( this, template );
 	}
 };
 
@@ -1883,40 +1939,51 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 	}
 
 	get repeater_label(){
-		const after = this.querySelector('input:checked + .fu_radios_label')
-		return after ? after.innerHTML : '';
+		const label = this.querySelector('input:checked + div')
+		return label ? label.innerHTML : '';
 	}
 
-	create_field( index, template ){
-		return fu.DOM.create({
-			'class': 'fu_choices_wrapper fu_container',
-			'children': [{
-				'class': 'fu_grid',
-				'children': template.values?.map(radio => {
-					index = fu.DOM.getIndex();
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+
+		const index = fu.DOM.getIndex();
+
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_choices',
+			'children':[
+				( ! template.fu_label ) ? null : {
+					'class': 'fu_label',
+					'html': template.fu_label,
+				},
+				template.values?.map(config => {
 					return {
-						'class': 'fu_input_wrapper',
 						'tag': 'label',
-						'for': index,
 						'children': [
 							{
 								'tag': 'input',
-								'id': index,
-								'class': 'fu_radio',
 								'type': 'radio',
-								'value': radio.fu_value ?? '',
+								'name': index + '__radio',
+								'value': config.fu_value ?? '',
 								'events': {
-									'change': () => this.value = radio.fu_value ?? '',
+									'change': () => this.value = config.fu_value ?? '',
 								},
-							}, ( ! radio.fu_label ) ? null : {
-								'class': 'fu_radios_label',
-								'html': radio.fu_label,
+							}, ( ! config.fu_label ) ? null : {
+								'html': config.fu_label,
 							}
-						]
+						],
 					};
-				})
-			}]
+				}),
+				( ! template.fu_description ) ? null : {
+					'class': 'fu_description',
+					'html': template.fu_description
+				},
+			]
 		});
+
+		this.set_width( this, template );
 	}
 };
 
@@ -1996,35 +2063,12 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 		this.repeater.update_open_state();
 	}
 
-	button_add_to_top(){ return {
-		'tag': 'button', 'type': 'button',
-		'class': 'fu_icon fu_add to_top',
-		'aria-label': 'Add before row',
-		'events': {
-			'click': (e) => {
-				this.repeater.add_row(this, 'before');
-			},
-		}
-	}}
-
-	button_add_to_bottom(){ return {
-		'tag': 'button', 'type': 'button',
-		'class': 'fu_icon fu_add to_bottom',
-		'aria-label': 'Add after row',
-		'events': {
-			'click': (e) => {
-				this.repeater.add_row(this, 'after');
-			},
-		}
-	}}
-
 	icon_move(){ return {
 		'class': 'fu_icon fu_move'
 	}}
 
 	checkbox(){ return {
 		'tag': 'label',
-		'class': 'fu_r_checkbox',
 		'children': [
 			{
 				'tag': 'input',
@@ -2040,7 +2084,19 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 	}}
 
 	index(){ return  {
-		'class': 'fu_index'
+		'class': 'fu_index',
+		'children': [
+			{
+				'class': 'fu_add_between',
+				'events': {
+					'click': (e) => this.repeater.add_row(this, 'before')
+				},
+				'children': [{
+					'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_add to_top',
+					'aria-label': 'Add row',
+				}]
+			}
+		]
 	}}
 
 	button_delete(){ return {
@@ -2111,18 +2167,16 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 
 		fu.DOM.attrs(this, {
 			'id': fu.DOM.getIndex(),
-			'class': 'fu_row fu_switch',
+			'class': 'fu_row',
 			'children':[
 				{
-					'class': 'fu_header fu_row_header',
+					'class': 'fu_header',
 					'children':[
 						this.icon_move(),
-						this.checkbox(),
-						this.button_add_to_top(),
-						this.button_add_to_bottom(),
 						this.index(),
+						this.checkbox(),
 						{
-							'class': 'fu_row__labels',
+							'class': 'fu_labels',
 							'events': {
 								'click': () => this.toggle_open_state(),
 							},
@@ -2137,7 +2191,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 								};
 							}),
 						},{
-							'class': 'fu_actions',
+							'class': 'fu_buttons',
 							'children': [
 								this.button_delete(),
 								this.button_duplicate(),
@@ -2148,17 +2202,13 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 						},
 					],
 				},{
-					'class': 'fu_container',
-					'children': [{
-						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': template.fields
-					}]
+					'tag': 'fu-children',
+					'template': template.fields
 				}
 			]
 		});
 
-		this.querySelector('.fu_row_header').querySelectorAll('[data-from]')?.forEach( (label) => {
+		this.querySelector('.fu_header').querySelectorAll('[data-from]')?.forEach( (label) => {
 			const from = label.getAttribute('data-from');
 			let field;
 
@@ -2187,7 +2237,7 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 
 	get value(){
 		let value = {};
-		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+		this.querySelectorAll('.fu_header>.fu_fields input[fu_name]').forEach( (field) => {
 			const field_name = field.getAttribute('fu_name');
 			if( ! field_name ) return;
 			const field_value = field.value ?? '';
@@ -2199,7 +2249,7 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 
 	set value(value){
 		if (!value) return;
-		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+		this.querySelectorAll('.fu_header>.fu_fields input[fu_name]').forEach( (field) => {
 			const field_name = field.getAttribute('fu_name');
 			const field_value = value[field_name] ?? '';
 			field.value = field_value;
@@ -2212,18 +2262,16 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 	set template(template){
 
 		fu.DOM.attrs(this, {
-			'class': 'fu_row fu_switch',
+			'class': 'fu_row',
 			'children':[
 				{
-					'class': 'fu_header fu_row_header',
+					'class': 'fu_header',
 					'children':[
-						this.button_add_to_top(),
-						this.button_add_to_bottom(),
 						this.icon_move(),
-						this.checkbox(),
 						this.index(),
+						this.checkbox(),
 						{
-							'class': 'fu_row_fields',
+							'class': 'fu_fields',
 							'children': template.fields?.map(field => {
 								const index = fu.DOM.getIndex();
 								return {
@@ -2239,7 +2287,7 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 								};
 							})
 						},{
-							'class': 'fu_actions',
+							'class': 'fu_buttons',
 							'children': [
 								this.button_delete(),
 								this.button_duplicate(),
@@ -2322,18 +2370,15 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 	}
 
 	update_check_state(){
-		const repeater_checkbox
-			= this.querySelector('.fu_repeater_header')
-			.querySelector('input[type="checkbox"]');
+		const repeater_checkbox = this.querySelector('input[type="checkbox"]');
 
 		const rowNodes = Array.from(this.rows.childNodes);
 		const checked = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fu_row_header')
-				.querySelector('input[type="checkbox"]');
+			const row_checkbox = row.querySelector('input[type="checkbox"]');
 			return row_checkbox.checked;
 		});
 
-		repeater_checkbox.checked = ( checked.length == rowNodes.length );
+		repeater_checkbox.checked = rowNodes.length > 0 && checked.length == rowNodes.length;
 		repeater_checkbox.parentNode.classList.toggle('checked', checked.length > 0);
 
 		if (checked.length == rowNodes.length) {
@@ -2346,17 +2391,13 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 	}
 
 	toggle_check_state(){
-		const repeater_checkbox
-			= this.querySelector('.fu_repeater_header')
-			.querySelector('input[type="checkbox"]');
+		const repeater_checkbox = this.querySelector('input[type="checkbox"]');
 
 		const repeater_checked = repeater_checkbox.checked;
 		const rows = Array.from(this.rows.childNodes);
 
 		rows.forEach( (row) => {
-			const row_checkbox
-				= row.querySelector('.fu_row_header')
-				.querySelector('input[type="checkbox"]');
+			const row_checkbox = row.querySelector('input[type="checkbox"]');
 			row_checkbox.checked = repeater_checked;
 		});
 	}
@@ -2365,8 +2406,7 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 		const rowNodes = Array.from(this.rows.childNodes);
 
 		const checkedRows = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fu_row_header')
-				.querySelector('input[type="checkbox"]');
+			const row_checkbox = row.querySelector('input[type="checkbox"]');
 			return row_checkbox && row_checkbox.checked;
 		});
 
@@ -2393,6 +2433,64 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 		}
 	}
 
+	button_delete(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_delete',
+		'aria-label': 'Delete',
+		'events': {
+			'click': (e) => {
+				this.rows.innerHTML = '';
+				this.toggle_check_state();
+				this.update_open_state();
+			},
+		},
+	};}
+
+	button_json(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_json',
+		'aria-label': 'Edit as JSON',
+		'events': {
+			'click': () => {
+				this.edit_as_json();
+			},
+		}
+	};}
+
+	button_paste(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_paste',
+		'aria-label': 'Paste',
+		'events': {
+			'click': async (e) => {
+				this.paste( true );
+			},
+		}
+	};}
+
+	button_copy(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_copy',
+		'aria-label': 'Copy',
+		'events': {
+			'click': async () => this.copy()
+		}
+	};}
+
+	button_toggle(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_toggle',
+		'aria-label': 'Open / Close',
+		'events': {
+			'click': (e) => this.toggle_open_state(),
+		},
+	};}
+
+	buttons(){ return {
+		'class': 'fu_buttons',
+		'children': [
+			this.button_delete(),
+			this.button_json(),
+			this.button_paste(),
+			this.button_copy(),
+			this.button_toggle(),
+		],
+	};}
 
 	/**
 	 * @param {Object} template
@@ -2417,130 +2515,81 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 			'fu_name': template.fu_name,
 			'class': 'fu_repeater fu_field',
 			'data-group': template_group_id,
-			'children': [
-				! template.fu_label || {
-					'class': 'fu_label',
-					'html': template.fu_label,
-				},
-				{
-					'class': 'fu_input_wrapper fu_repeater_wrapper',
-					'children': [
-						{
-							'class': 'fu_header fu_repeater_header',
-							'children':[
-								{
-									'tag': 'label',
-									'class': 'fu_r_checkbox',
-									'children': [{
-										'tag': 'input',
-										'type': 'checkbox',
-										'id': fu.DOM.getIndex(),
-										'events': {
-											'change': (e) => {
-												this.toggle_check_state();
-												this.update_check_state();
-											},
-										},
-									}]
-								},{
-									'class': 'fu_for_selected_menu',
-									'children': [
-										{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_delete',
-											'aria-label': 'Delete Selected',
-											'events': {
-												'click': (e) => {
-													this.get_checked_rows().forEach( (row) => row.remove() );
-													this.update_check_state();
-													this.update_open_state();
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_copy',
-											'aria-label': 'Copy Selected',
-											'events': {
-												'click': async () => {
-													this.copy_selected();
-												}
-											}
-										}
-									],
-								},{
-									'class': 'fu_repeater__labels',
-									'events': {
-										'click': (e) => this.toggle_open_state(),
-									},
-									'children': this.template_labels?.map(label => ({
-										'class': 'fu_label',
-										'style': label.width ? `flex-grow: ${label.width}` : '',
-										'children': [{
-											'html': label.fu_label ?? ''
-										}],
-									})),
-								},{
-									'class': 'fu_actions',
-									'children': [
-										{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_delete',
-											'aria-label': 'Delete',
-											'events': {
-												'click': (e) => {
-													this.rows.innerHTML = '';
-													this.toggle_check_state();
-													this.update_open_state();
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_json',
-											'aria-label': 'Edit as JSON',
-											'events': {
-												'click': () => {
-													this.edit_as_json();
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_paste',
-											'aria-label': 'Paste',
-											'events': {
-												'click': async (e) => {
-													this.paste( true );
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_copy',
-											'aria-label': 'Copy',
-											'events': {
-												'click': async () => this.copy()
-											}
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_toggle',
-											'aria-label': 'Open / Close',
-											'events': {
-												'click': (e) => this.toggle_open_state(),
-											},
-										},
-									],
-								},
-							],
-						},{
-							'tag': 'fu-rows',
-						},{
-							'tag': 'button', 'type': 'button',
-							'class': 'add_button fu_icon fu_add',
+			'children': [{
+				'class': 'fu_header',
+				'children':[
+					{
+						'class': 'fu_move',
+						'html': '&nbsp;'
+					},{
+						'class': 'fu_index',
+						'html': '#'
+					},{
+						'tag': 'label',
+						'children': [{
+							'tag': 'input',
+							'type': 'checkbox',
+							'id': fu.DOM.getIndex(),
 							'events': {
-								'click': () => this.add_row(this, 'append')
-							}
+								'change': (e) => {
+									this.toggle_check_state();
+									this.update_check_state();
+								},
+							},
+						},{
+							'class': 'fu_menu',
+							'children': [
+								{
+									'tag': 'button', 'type': 'button',
+									'class': 'fu_icon fu_delete',
+									'aria-label': 'Delete Selected',
+									'events': {
+										'click': (e) => {
+											this.get_checked_rows().forEach( (row) => row.remove() );
+											this.update_check_state();
+											this.update_open_state();
+										},
+									},
+								},{
+									'tag': 'button', 'type': 'button',
+									'class': 'fu_icon fu_copy',
+									'aria-label': 'Copy Selected',
+									'events': {
+										'click': async () => {
+											this.copy_selected();
+										}
+									}
+								}
+							],
+						}]
+					},{
+						'class': 'fu_labels',
+						'events': {
+							'click': (e) => this.toggle_open_state(),
 						},
-					],
+						'children': this.template_labels?.map(label => ({
+							'class': 'fu_label',
+							'style': label.width ? `flex-grow: ${label.width}` : '',
+							'children': [{
+								'html': label.fu_label ?? ''
+							}],
+						})),
+					},
+					this.buttons()
+				],
+			},{
+				'tag': 'fu-rows',
+			},{
+				'class': 'fu_footer',
+				'events': {
+					'click': () => this.add_row(this, 'append')
 				},
-			],
+				'children': [{
+					'tag': 'button', 'type': 'button',
+					'class': 'fu_icon fu_add',
+					'aria-label': 'Add row',
+				}]
+			}],
 		});
 
 		this.set_width( this, template );
@@ -2553,7 +2602,6 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 			this.Sortable = new Sortable( this.rows, {
 				group: template_group_id,
 				handle: '.fu_icon.fu_move',
-				//ghostClass: '',
 				animation: 150,
 			});
 		}
@@ -2659,6 +2707,16 @@ fu.fields.repeater_table = class fu_fields_repeater_table extends fu.fields.repe
 				this.rows.append( created_row );
 		}
 	}
+
+	buttons(){ return {
+		'class': 'fu_buttons',
+		'children': [
+			this.button_delete(),
+			this.button_json(),
+			this.button_paste(),
+			this.button_copy(),
+		],
+	};}
 
 };
 
@@ -2790,94 +2848,105 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 		};
 
 		const pseudo_row = fu.DOM.create({
-			'class': 'row_add_row fu_switch',
+			'class': 'row_add_row',
 			'children': [
 				{
 					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => pseudo_row.remove()
 					},
-				},{
-					'class': 'fu_add_header',
+				},
+				{
+					'class': 'fu_picker',
 					'children': [
 						{
-							'class': 'fu_icon fu_add_row',
-						},{
-							'class': 'fu_add_label',
-							'children': [{
-								'html': 'Add new row',
-							}],
-						},{
-							'tag': 'button', 'type': 'button',
-							'class': 'fu_icon fu_delete',
-							'aria-label': 'Cancel new row',
+							'tag': 'input',
+							'type': 'text',
+							'id': fu.DOM.getIndex(),
+							'placeholder': 'Search…',
+							'autocomplete': 'off',
+							'spellcheck': 'false',
 							'events': {
-								'click': (e) => {
-									pseudo_row.remove();
-									document.removeEventListener('keydown', this.esc_handler);
-								}
-							},
-						}
-					]
-				},{
-					'class': 'fu_add_options',
-					'children': (()=>{
-						const groups = {'': []};
-
-						picker.forEach(option => {
-							const label = option.fu_label ?? ( '&nbsp;No Label&nbsp;' + (typeof option) + ' ' + JSON.stringify(option) );
-							const parts = label.split('>>>');
-							const group = parts.length > 1 ? parts[0].trim() : '';
-							const text  = parts.length > 1 ? parts[1].trim() : label;
-
-							if( ! groups[group] ) groups[group] = [];
-
-							groups[group].push({
-								'tag': 'button', 'type': 'button',
-								'class': ( ! this.type_to_ID[option.fu_type] ) ? 'template_not_defined' : '',
-								'html': text,
-								'data-fu_type': option.fu_type,
-								'events': {
-									'click': (e) => {
-										const created_row = this.create_row({ 'fu_type': option.fu_type });
-										if( null === created_row ) {
-											return;
-										}
-										created_row.classList.add('fu_open_row');
-										pseudo_row.replaceWith(created_row);
-										document.removeEventListener('keydown', this.esc_handler);
-									},
+								'input': ({ target: { value } }) => {
+									const q = value.trim().toLowerCase();
+									pseudo_row.querySelectorAll('button').forEach(item => {
+										item.hidden = q && !item.textContent.toLowerCase().includes(q);
+									});
+									pseudo_row.querySelectorAll('section').forEach(section => {
+										section.hidden = ![ ...section.querySelectorAll('button') ].some(b => !b.hidden);
+									});
 								},
-							});
-						});
-
-						const optgroup = [];
-						for( const [group, buttons] of Object.entries(groups) ){
-							if( ! buttons.length ) continue;
-							optgroup.push({
-								'class': 'fu_label',
-								'html': group,
-							});
-							optgroup.push({
-								'class': 'fu_group',
-								'children': buttons,
-							});
-						}
-						return optgroup;
-					})()
+								'keydown': (e) => {
+									const items = [...pseudo_row.querySelectorAll('button')].filter(i => !i.hidden);
+									if( !items.length ) return;
+									const current = pseudo_row.querySelector('button[data-selected="true"]');
+									const idx = items.indexOf(current);
+									let next;
+									if( e.key === 'ArrowDown' || e.key === 'Tab' ) {
+										next = items[(idx + 1) % items.length];
+									} else if( e.key === 'ArrowUp' ) {
+										next = items[idx <= 0 ? items.length - 1 : idx - 1];
+									} else if( e.key === 'Home' ) {
+										next = items[0];
+									} else if( e.key === 'End' ) {
+										next = items[items.length - 1];
+									} else if( e.key === 'Enter' ) {
+										e.preventDefault();
+										current?.click();
+										return;
+									}
+									if( next ) {
+										e.preventDefault();
+										current?.removeAttribute('data-selected');
+										next.setAttribute('data-selected', 'true');
+										next.scrollIntoView({ block: 'nearest' });
+									}
+								},
+							},
+						},{
+							'class': 'fu_results',
+							'data-label-empty': 'No results found.',
+							'children': Object.values( picker.reduce( (acc, option) => {
+								const label = option.fu_label ?? JSON.stringify(option);
+								const parts = label.split('>>>');
+								const name = parts.length > 1 ? parts[0].trim() : '';
+								const text = parts.length > 1 ? parts[1].trim() : label;
+								if( ! acc[name] ) acc[name] = {
+									'tag': 'section',
+									'children': name ? [{ 'tag': 'header', 'html': name }] : [],
+								};
+								acc[name].children.push({
+									'tag': 'button', 'type': 'button',
+									'class': ( ! this.type_to_ID[option.fu_type] ) ? 'template_not_defined' : undefined,
+									'html': text,
+									'data-fu_type': option.fu_type,
+									'events': {
+										'click': (e) => {
+											const created_row = this.create_row({ 'fu_type': option.fu_type });
+											if( null === created_row ) return;
+											created_row.classList.add('fu_open_row');
+											pseudo_row.replaceWith(created_row);
+											document.removeEventListener('keydown', this.esc_handler);
+										},
+									},
+								});
+								return acc;
+							}, {} ) ),
+					}],
 				},
 			],
 		});
 
 		switch(position){
-			case 'before':
-				caller.before( pseudo_row );
-				return;
-			case 'after':
-				caller.after( pseudo_row );
-				return;
-			case 'append':
-				this.rows.append( pseudo_row );
+			case 'before':  caller.before( pseudo_row ); break;
+			case 'after':   caller.after( pseudo_row );  break;
+			case 'append':  this.rows.append( pseudo_row );
+		}
+
+		pseudo_row.querySelector('input').focus();
+
+		if( pseudo_row.querySelector('.fu_picker').getBoundingClientRect().bottom > window.innerHeight ) {
+			pseudo_row.classList.add('fu_flip');
 		}
 	}
 };

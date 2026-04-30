@@ -43,20 +43,16 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 			'class': 'fu_field',
 			'fu_name': template.fu_name,
 			'id': index,
-			'children': [{
-				'class': 'fu_container',
-				'children': [
-					! template.fu_label ? null : {
-						'class': 'fu_label',
-						'html': template.fu_label
-					},
-					{
-						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': template.fields
-					}
-				],
-			}]
+			'children': [
+				! template.fu_label ? null : {
+					'class': 'fu_label',
+					'html': template.fu_label
+				},
+				{
+					'tag': 'fu-children',
+					'template': template.fields
+				}
+			],
 		});
 
 		this.set_width( this, template );

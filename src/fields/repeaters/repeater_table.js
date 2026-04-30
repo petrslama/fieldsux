@@ -44,6 +44,16 @@ fu.fields.repeater_table = class fu_fields_repeater_table extends fu.fields.repe
 		}
 	}
 
+	buttons(){ return {
+		'class': 'fu_buttons',
+		'children': [
+			this.button_delete(),
+			this.button_json(),
+			this.button_paste(),
+			this.button_copy(),
+		],
+	};}
+
 };
 
 customElements.define('fu-repeater_table', fu.fields.repeater_table);

@@ -2,7 +2,7 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 
 	get value(){
 		let value = {};
-		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+		this.querySelectorAll('.fu_header>.fu_fields input[fu_name]').forEach( (field) => {
 			const field_name = field.getAttribute('fu_name');
 			if( ! field_name ) return;
 			const field_value = field.value ?? '';
@@ -14,7 +14,7 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 
 	set value(value){
 		if (!value) return;
-		this.querySelectorAll('.fu_row_fields input[fu_name]').forEach( (field) => {
+		this.querySelectorAll('.fu_header>.fu_fields input[fu_name]').forEach( (field) => {
 			const field_name = field.getAttribute('fu_name');
 			const field_value = value[field_name] ?? '';
 			field.value = field_value;
@@ -27,18 +27,16 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 	set template(template){
 
 		fu.DOM.attrs(this, {
-			'class': 'fu_row fu_switch',
+			'class': 'fu_row',
 			'children':[
 				{
-					'class': 'fu_header fu_row_header',
+					'class': 'fu_header',
 					'children':[
-						this.button_add_to_top(),
-						this.button_add_to_bottom(),
 						this.icon_move(),
-						this.checkbox(),
 						this.index(),
+						this.checkbox(),
 						{
-							'class': 'fu_row_fields',
+							'class': 'fu_fields',
 							'children': template.fields?.map(field => {
 								const index = fu.DOM.getIndex();
 								return {
@@ -54,7 +52,7 @@ fu.fields.row_table = class fu_fields_row_table extends fu.fields.row {
 								};
 							})
 						},{
-							'class': 'fu_actions',
+							'class': 'fu_buttons',
 							'children': [
 								this.button_delete(),
 								this.button_duplicate(),

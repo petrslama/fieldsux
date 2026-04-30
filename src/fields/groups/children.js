@@ -45,7 +45,6 @@ fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 	}
 
 	append_fields( children ){
-
 		children?.forEach( (template) => {
 			switch(template.fu_type) {
 				case 'from_definition':

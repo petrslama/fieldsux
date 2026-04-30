@@ -1,8 +1,4 @@
 .wp-admin {
-	fu-main input[type=checkbox]:indeterminate::before {
-		content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M4 8h12v4H4z" fill="#3582c4"/></svg>');
-	}
-
 	.fieldsux{
 		--fu_primary: #2271b1;
 
@@ -54,9 +50,9 @@
 		.fu_main_actions{
 			display: inline-block;
 			position: absolute;
-			right: 32px;
+			right: var(--fu_size);
 			top: 0;
-			height: 32px;
+			height: var(--fu_size);
 			overflow: visible;
 		}
 

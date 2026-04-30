@@ -43,18 +43,15 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 	}
 
 	update_check_state(){
-		const repeater_checkbox
-			= this.querySelector('.fu_repeater_header')
-			.querySelector('input[type="checkbox"]');
+		const repeater_checkbox = this.querySelector('input[type="checkbox"]');
 
 		const rowNodes = Array.from(this.rows.childNodes);
 		const checked = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fu_row_header')
-				.querySelector('input[type="checkbox"]');
+			const row_checkbox = row.querySelector('input[type="checkbox"]');
 			return row_checkbox.checked;
 		});
 
-		repeater_checkbox.checked = ( checked.length == rowNodes.length );
+		repeater_checkbox.checked = rowNodes.length > 0 && checked.length == rowNodes.length;
 		repeater_checkbox.parentNode.classList.toggle('checked', checked.length > 0);
 
 		if (checked.length == rowNodes.length) {
@@ -67,17 +64,13 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 	}
 
 	toggle_check_state(){
-		const repeater_checkbox
-			= this.querySelector('.fu_repeater_header')
-			.querySelector('input[type="checkbox"]');
+		const repeater_checkbox = this.querySelector('input[type="checkbox"]');
 
 		const repeater_checked = repeater_checkbox.checked;
 		const rows = Array.from(this.rows.childNodes);
 
 		rows.forEach( (row) => {
-			const row_checkbox
-				= row.querySelector('.fu_row_header')
-				.querySelector('input[type="checkbox"]');
+			const row_checkbox = row.querySelector('input[type="checkbox"]');
 			row_checkbox.checked = repeater_checked;
 		});
 	}
@@ -86,8 +79,7 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 		const rowNodes = Array.from(this.rows.childNodes);
 
 		const checkedRows = rowNodes.filter(row => {
-			const row_checkbox = row.querySelector('.fu_row_header')
-				.querySelector('input[type="checkbox"]');
+			const row_checkbox = row.querySelector('input[type="checkbox"]');
 			return row_checkbox && row_checkbox.checked;
 		});
 
@@ -114,6 +106,64 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 		}
 	}
 
+	button_delete(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_delete',
+		'aria-label': 'Delete',
+		'events': {
+			'click': (e) => {
+				this.rows.innerHTML = '';
+				this.toggle_check_state();
+				this.update_open_state();
+			},
+		},
+	};}
+
+	button_json(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_json',
+		'aria-label': 'Edit as JSON',
+		'events': {
+			'click': () => {
+				this.edit_as_json();
+			},
+		}
+	};}
+
+	button_paste(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_paste',
+		'aria-label': 'Paste',
+		'events': {
+			'click': async (e) => {
+				this.paste( true );
+			},
+		}
+	};}
+
+	button_copy(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_copy',
+		'aria-label': 'Copy',
+		'events': {
+			'click': async () => this.copy()
+		}
+	};}
+
+	button_toggle(){ return {
+		'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_toggle',
+		'aria-label': 'Open / Close',
+		'events': {
+			'click': (e) => this.toggle_open_state(),
+		},
+	};}
+
+	buttons(){ return {
+		'class': 'fu_buttons',
+		'children': [
+			this.button_delete(),
+			this.button_json(),
+			this.button_paste(),
+			this.button_copy(),
+			this.button_toggle(),
+		],
+	};}
 
 	/**
 	 * @param {Object} template
@@ -138,130 +188,81 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 			'fu_name': template.fu_name,
 			'class': 'fu_repeater fu_field',
 			'data-group': template_group_id,
-			'children': [
-				! template.fu_label || {
-					'class': 'fu_label',
-					'html': template.fu_label,
-				},
-				{
-					'class': 'fu_input_wrapper fu_repeater_wrapper',
-					'children': [
-						{
-							'class': 'fu_header fu_repeater_header',
-							'children':[
-								{
-									'tag': 'label',
-									'class': 'fu_r_checkbox',
-									'children': [{
-										'tag': 'input',
-										'type': 'checkbox',
-										'id': fu.DOM.getIndex(),
-										'events': {
-											'change': (e) => {
-												this.toggle_check_state();
-												this.update_check_state();
-											},
-										},
-									}]
-								},{
-									'class': 'fu_for_selected_menu',
-									'children': [
-										{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_delete',
-											'aria-label': 'Delete Selected',
-											'events': {
-												'click': (e) => {
-													this.get_checked_rows().forEach( (row) => row.remove() );
-													this.update_check_state();
-													this.update_open_state();
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_copy',
-											'aria-label': 'Copy Selected',
-											'events': {
-												'click': async () => {
-													this.copy_selected();
-												}
-											}
-										}
-									],
-								},{
-									'class': 'fu_repeater__labels',
-									'events': {
-										'click': (e) => this.toggle_open_state(),
-									},
-									'children': this.template_labels?.map(label => ({
-										'class': 'fu_label',
-										'style': label.width ? `flex-grow: ${label.width}` : '',
-										'children': [{
-											'html': label.fu_label ?? ''
-										}],
-									})),
-								},{
-									'class': 'fu_actions',
-									'children': [
-										{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_delete',
-											'aria-label': 'Delete',
-											'events': {
-												'click': (e) => {
-													this.rows.innerHTML = '';
-													this.toggle_check_state();
-													this.update_open_state();
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_json',
-											'aria-label': 'Edit as JSON',
-											'events': {
-												'click': () => {
-													this.edit_as_json();
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_paste',
-											'aria-label': 'Paste',
-											'events': {
-												'click': async (e) => {
-													this.paste( true );
-												},
-											},
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_copy',
-											'aria-label': 'Copy',
-											'events': {
-												'click': async () => this.copy()
-											}
-										},{
-											'tag': 'button', 'type': 'button',
-											'class': 'fu_icon fu_toggle',
-											'aria-label': 'Open / Close',
-											'events': {
-												'click': (e) => this.toggle_open_state(),
-											},
-										},
-									],
-								},
-							],
-						},{
-							'tag': 'fu-rows',
-						},{
-							'tag': 'button', 'type': 'button',
-							'class': 'add_button fu_icon fu_add',
+			'children': [{
+				'class': 'fu_header',
+				'children':[
+					{
+						'class': 'fu_move',
+						'html': '&nbsp;'
+					},{
+						'class': 'fu_index',
+						'html': '#'
+					},{
+						'tag': 'label',
+						'children': [{
+							'tag': 'input',
+							'type': 'checkbox',
+							'id': fu.DOM.getIndex(),
 							'events': {
-								'click': () => this.add_row(this, 'append')
-							}
+								'change': (e) => {
+									this.toggle_check_state();
+									this.update_check_state();
+								},
+							},
+						},{
+							'class': 'fu_menu',
+							'children': [
+								{
+									'tag': 'button', 'type': 'button',
+									'class': 'fu_icon fu_delete',
+									'aria-label': 'Delete Selected',
+									'events': {
+										'click': (e) => {
+											this.get_checked_rows().forEach( (row) => row.remove() );
+											this.update_check_state();
+											this.update_open_state();
+										},
+									},
+								},{
+									'tag': 'button', 'type': 'button',
+									'class': 'fu_icon fu_copy',
+									'aria-label': 'Copy Selected',
+									'events': {
+										'click': async () => {
+											this.copy_selected();
+										}
+									}
+								}
+							],
+						}]
+					},{
+						'class': 'fu_labels',
+						'events': {
+							'click': (e) => this.toggle_open_state(),
 						},
-					],
+						'children': this.template_labels?.map(label => ({
+							'class': 'fu_label',
+							'style': label.width ? `flex-grow: ${label.width}` : '',
+							'children': [{
+								'html': label.fu_label ?? ''
+							}],
+						})),
+					},
+					this.buttons()
+				],
+			},{
+				'tag': 'fu-rows',
+			},{
+				'class': 'fu_footer',
+				'events': {
+					'click': () => this.add_row(this, 'append')
 				},
-			],
+				'children': [{
+					'tag': 'button', 'type': 'button',
+					'class': 'fu_icon fu_add',
+					'aria-label': 'Add row',
+				}]
+			}],
 		});
 
 		this.set_width( this, template );
@@ -274,7 +275,6 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 			this.Sortable = new Sortable( this.rows, {
 				group: template_group_id,
 				handle: '.fu_icon.fu_move',
-				//ghostClass: '',
 				animation: 150,
 			});
 		}

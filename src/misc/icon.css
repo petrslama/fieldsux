@@ -1,8 +1,8 @@
 .fu_icon {
 	position: relative;
 	display: inline-block;
-	width: var(--fu_size);
-	height: var(--fu_size);
+	width: var(--fu_size_md, 2em);
+	height: var(--fu_size_md, 2em);
 	font-style: normal;
 	text-decoration: none;
 	text-align: center;
@@ -12,8 +12,8 @@
 		position: absolute;
 		display: block;
 		inset: 0;
-		width: var(--fu_size);
-		height: var(--fu_size);
+		width: var(--fu_size_md, 2em);
+		height: var(--fu_size_md, 2em);
 		mask-repeat: no-repeat;
 		mask-position: center;
 		mask-size: 16px;
@@ -35,11 +35,12 @@ button.fu_icon {
 	border: none;
 	background: transparent;
 
-	&:hover{
-		background: var(--fu_primary);
-		&:before {
-			background: var(--fu_bg);
-		}
+	&:before {
+		background-color: var(--fu_text_color_light);
+	}
+
+	&:hover:before {
+		background-color: var(--fu_text_color);
 	}
 
 	&[aria-label]{
@@ -50,13 +51,16 @@ button.fu_icon {
 			display: none;
 			position: absolute;
 			top: 150%;
-			line-height: var(--fu_size);
-			height: var(--fu_size);
+			line-height: var(--fu_size_md, 2em);
+			height: var(--fu_size_md, 2em);
 			right: -50%;
 			white-space: pre;
-			background-color: var(--fu_row_hover_bg);
+			background-color: var(--fu_header_primary_bg);
+			box-shadow: 0 0 0 .5px var(--fu_border_color);
+			border-radius: var(--fu_border_radius);
 			z-index: 99;
-			padding: 0 var(--fu_size_half);
+			padding: 0 var(--fu_size_sm, 1em);
+			font-weight: 400;
 		}
 
 		/* &:focus:after, */
@@ -75,7 +79,6 @@ button.fu_icon {
 		background-color: red;
 		color: var(--fu_bg);
 		right: 0;
-		font-weight: 700;
 	}
 }
 
@@ -83,41 +86,32 @@ button.fu_icon {
 .fu_icon.fu_json:before {   mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg>'); }
 .fu_icon.fu_copy::before {  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/><path d="M16 4h2a2 2 0 0 1 2 2v4"/><path d="M21 14H11"/><path d="m15 10-4 4 4 4"/></svg>'); }
 .fu_icon.fu_paste::before { mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h10"/><path d="M16 4h2a2 2 0 0 1 2 2v1.344"/><path d="m17 18 4-4-4-4"/><path d="M8 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 1.793-1.113"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>'); }
-.fu_icon.fu_add::before {   mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>'); }
+.fu_icon.fu_add::before {   mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>'); }
 .fu_icon.fu_x2::before {    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="15" x2="15" y1="12" y2="18"/><line x1="12" x2="18" y1="15" y2="15"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'); }
 .fu_icon.fu_up::before {    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>') }
 .fu_icon.fu_down::before {  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>') }
 .fu_icon.fu_toggle:before { mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>'); }
 .fu_icon.fu_move:before {   mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>') }
-.fu_icon.fu_add_row:before {mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>'); }
 
 .fu_repeater.fu_open_repeater > .fu_input_wrapper > .fu_repeater_header .fu_toggle:before,
 fu-row.fu_open_row > .fu_row_header .fu_toggle:before {
 	mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 20 5-5 5 5"/><path d="m7 4 5 5 5-5"/></svg>');
 }
 
-fu-repeater_multiple[fu_name="fields"] > .fu_repeater_wrapper > fu-rows > .row_add_row {
+.fu_repeater[fu_name="fields"] > fu-rows > .row_add_row {
 	button[data-fu_type] {
 		position: relative;
-		padding-left: calc( 1 * var(--fu_size) );
 
 		&:before{
-			--icon-size: calc( .5 * var(--fu_size) );
+			--icon-size: var(--fu_size_sm, 1em);
 			content: ' ';
-			position: absolute;
 			display: block;
-			top: calc( .25 * var(--fu_size) );
-			left: calc( .25 * var(--fu_size) );
 			width: var(--icon-size);
 			height: var(--icon-size);
 
-			background: var(--fu_primary);
+			background: currentColor;
 			mask-size: var(--icon-size) var(--icon-size);
 		}
-	}
-	button[data-fu_type]:focus:before,
-	button[data-fu_type]:hover:before{
-		background: var(--fu_bg);
 	}
 
 	[data-fu_type="text"]:before{             mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h-1a2 2 0 0 1-2-2 2 2 0 0 1-2 2H6"/><path d="M13 8h7a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-7"/><path d="M5 16H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h1"/><path d="M6 4h1a2 2 0 0 1 2 2 2 2 0 0 1 2-2h1"/><path d="M9 6v12"/></svg>'); }

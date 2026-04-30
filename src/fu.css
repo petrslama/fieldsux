@@ -1,23 +1,4 @@
-.fieldsux > textarea {
-	/* display: block; */
-	display: none;
-	max-width: 100%;
-	field-sizing: content;
-	padding: var( --fu_size, 2rem );
-}
-
 .fieldsux {
-	&, :after, :before {
-		box-sizing: border-box;
-	}
-
-	/* Sizes */
-	--fu_size: 32px;
-	--fu_size_half: calc(0.5 * var(--fu_size));
-	--fu_fontsize: calc(0.46875 * var(--fu_size));
-	--fu_fontsize_xs: 14px;
-	--fu_label_width: calc( 4 * var(--fu_size) );;
-
 	/* Colors */
 
 	--zink_950: #09090B;
@@ -30,52 +11,141 @@
 	--zink_100: #F4F4F5;
 	--zink_50:  #FAFAFA;
 
+
+	/* Sizes */
+	--fu_size: 32px;
+	--fu_size_xxs: calc( 0.125 * var(--fu_size) ); /*   4px */
+	--fu_size_xs:  calc( 0.25  * var(--fu_size) ); /*   8px */
+	--fu_size_sm:  calc( 0.5   * var(--fu_size) ); /*  16px */
+	--fu_size_md:                var(--fu_size)  ; /*  32px */
+	--fu_size_lg:  calc( 2     * var(--fu_size) ); /*  64px */
+	--fu_size_xl:  calc( 4     * var(--fu_size) ); /* 128px */
+
+	--fu_fontsize: calc( .875 * var(--fu_size_sm) );
+	--fu_label_width: var(--fu_size_xl);
+	--fu_border_radius: var(--fu_size_xs);
+
+
 	/* Defined */
 	--fu_primary: var(--zink_950);
-	--fu_bg: #fff;
-	--fu_row_hover_bg: var(--zink_200);
+	--fu_bg: var( --zink_50 );
+	--fu_input_bg: #fff;
+	--fu_repeater_bg: var(--zink_100);
+	--fu_header_primary_bg: var(--zink_200);
+	--fu_header_secondary_bg: var(--zink_100);
 
 	/* Borders */
 	--fu_border_color: var(--zink_300);
+	--fu_border_color_focus: var( --zink_400 );
 
 	/* Text Colors */
-	--fu_text_color: var(--zink_700);
+	--fu_text_color: var(--zink_950);
 	--fu_text_color_light: var(--zink_500);
-
-	.fu_switch .fu_switch .fu_switch .fu_switch .fu_switch .fu_switch .fu_switch,
-	.fu_switch .fu_switch .fu_switch .fu_switch .fu_switch,
-	.fu_switch .fu_switch .fu_switch,
-	.fu_switch {
-		--fu_body_bg: var(--zink_150);
-	}
-
-	.fu_switch .fu_switch .fu_switch .fu_switch .fu_switch .fu_switch .fu_switch .fu_switch,
-	.fu_switch .fu_switch .fu_switch .fu_switch .fu_switch .fu_switch,
-	.fu_switch .fu_switch .fu_switch .fu_switch,
-	.fu_switch .fu_switch,
-	& {
-		--fu_body_bg: var(--zink_50);
-	}
-
-	/* .fu_switch {
-		--fu_body_bg: var(--zink_50);
-		.fu_switch {
-			--fu_body_bg: var(--zink_100);
-			.fu_switch {
-				--fu_body_bg: var(--zink_50);
-				.fu_switch {
-					--fu_body_bg: var(--zink_100);
-					.fu_switch {
-						--fu_body_bg: var(--zink_50);
-						.fu_switch {
-							--fu_body_bg: var(--zink_100);
-						}
-					}
-				}
-			}
-		}
-	} */
 
 	/* Dialogs and Menus Backdrop */
 	--fu_backdrop_bg: #77777777;
+
+
+	/* fieldsux css */
+
+	line-height: var(--fu_size_md, 2em);
+	background-color: var(--fu_bg);
+	color: var( --fu_text_color );
+
+	&, *, :after, :before {
+		box-sizing: border-box;
+	}
+
+	& > textarea {
+		/* display: block; */
+		display: none;
+		max-width: 100%;
+		field-sizing: content;
+		padding: var( --fu_size_md, 2rem );
+	}
+
+	[hidden] {
+		display: none !important;
+	}
+
+	input {
+		appearance: none;
+		border: none !important;
+		box-shadow: 0 0 0 1px var(--fu_border_color);
+		background: var(--fu_input_bg);
+		position: relative;
+		top: -1px;
+		z-index: 1;
+		font-size: var(--fu_fontsize);
+		line-height: inherit;
+		transition: all .3s;
+
+		&:focus {
+			box-shadow: 0 0 0 2px var(--fu_border_color_focus);
+		}
+
+		&:hover {
+			box-shadow: 0 0 0 2px var(--fu_text_color);
+		}
+	}
+
+	input[type="checkbox"],
+	input[type="radio"] {
+		width: var(--fu_size_sm);
+		height: var(--fu_size_sm);
+		min-width: var(--fu_size_sm);
+		min-height: var(--fu_size_sm);
+		border-radius: calc(0.25 * var(--fu_size_sm));
+		cursor: pointer;
+
+		&:checked {
+			background: var(--fu_text_color);
+
+			&:before {
+				content: ' ';
+				position: absolute;
+				z-index: 1;
+				margin: 0;
+				background: var(--fu_input_bg);
+			}
+		}
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+	}
+
+	input[type="checkbox"]:indeterminate{
+		background: var(--fu_text_color_light);
+	}
+
+
+	input[type="checkbox"]:checked,
+	input[type="checkbox"]:indeterminate{
+		&:before {
+			content: '';
+			position: absolute;
+			inset: calc(.125 * var(--fu_size_sm));
+			width: calc(.75 * var(--fu_size_sm));
+			height: calc(.75 * var(--fu_size_sm));
+			background: var(--fu_bg);
+			mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="check"><path d="M20 6 9 17l-5-5"></path></svg>');
+			mask-size: calc(.75 * var(--fu_size_sm));
+			mask-position: center;
+			mask-repeat: no-repeat;
+		}
+	}
+
+	input[type="radio"] {
+		border-radius: 50%;
+
+		&:checked:before {
+			inset: calc(.3125 * var(--fu_size_sm));
+			width: calc(.375 * var(--fu_size_sm));
+			height: calc(.375 * var(--fu_size_sm));
+			border-radius: 50%;
+		}
+	}
+
 }

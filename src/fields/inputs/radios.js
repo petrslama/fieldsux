@@ -21,40 +21,51 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 	}
 
 	get repeater_label(){
-		const after = this.querySelector('input:checked + .fu_radios_label')
-		return after ? after.innerHTML : '';
+		const label = this.querySelector('input:checked + div')
+		return label ? label.innerHTML : '';
 	}
 
-	create_field( index, template ){
-		return fu.DOM.create({
-			'class': 'fu_choices_wrapper fu_container',
-			'children': [{
-				'class': 'fu_grid',
-				'children': template.values?.map(radio => {
-					index = fu.DOM.getIndex();
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+
+		const index = fu.DOM.getIndex();
+
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_choices',
+			'children':[
+				( ! template.fu_label ) ? null : {
+					'class': 'fu_label',
+					'html': template.fu_label,
+				},
+				template.values?.map(config => {
 					return {
-						'class': 'fu_input_wrapper',
 						'tag': 'label',
-						'for': index,
 						'children': [
 							{
 								'tag': 'input',
-								'id': index,
-								'class': 'fu_radio',
 								'type': 'radio',
-								'value': radio.fu_value ?? '',
+								'name': index + '__radio',
+								'value': config.fu_value ?? '',
 								'events': {
-									'change': () => this.value = radio.fu_value ?? '',
+									'change': () => this.value = config.fu_value ?? '',
 								},
-							}, ( ! radio.fu_label ) ? null : {
-								'class': 'fu_radios_label',
-								'html': radio.fu_label,
+							}, ( ! config.fu_label ) ? null : {
+								'html': config.fu_label,
 							}
-						]
+						],
 					};
-				})
-			}]
+				}),
+				( ! template.fu_description ) ? null : {
+					'class': 'fu_description',
+					'html': template.fu_description
+				},
+			]
 		});
+
+		this.set_width( this, template );
 	}
 };
 

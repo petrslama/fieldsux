@@ -44,15 +44,14 @@ fu-main.debug {
 		display: inline-block;
 		color: var(--fu_primary);
 		position: absolute;
-		top: calc( -.5 * var(--fu_size_half) );
+		top: calc( -.5 * var(--fu_size_sm, 1em) );
 		/* top: 0; */
 		left: 0;
-		line-height: calc( .325 * var(--fu_size) );
+		line-height: var(--fu_size_xs, 0.5em);
 		font-family: 'Courier New', Courier, monospace;
 
 		content: attr(fu_name) ' / ' var(--field_type);
 		white-space: pre;
-		background-color: var(--fu_body_bg);
 	}
 
 	fu-radiotabs.fu_field:before {
@@ -62,11 +61,11 @@ fu-main.debug {
 	fu-children > :not(.fu_field){
 		border: 3px solid red;
 		position: relative;
-		min-height: var(--fu_size);
+		min-height: var(--fu_size_md, 2em);
 		&::after{
 			content: '???';
 			color:red;
-			font-size: calc( 0.4 * var(--fu_size) );
+			font-size: var(--fu_size_sm, 1em);
 			display: block;
 			position: absolute;
 			top: 50%;
@@ -76,7 +75,7 @@ fu-main.debug {
 	}
 
 	fu-group {
-		padding: var(--fu_size);
+		padding: var(--fu_size_md, 2em);
 	}
 
 	.fu_repeater[data-group]{
@@ -88,9 +87,9 @@ fu-main.debug {
 			top: 0;
 			right: 0;
 			z-index: 99;
-			width: var(--fu_size);
-			height: var(--fu_size) ;
-			line-height: var(--fu_size);
+			width: var(--fu_size_md, 2em);
+			height: var(--fu_size_md, 2em);
+			line-height: var(--fu_size_md, 2em);
 			background-color: yellowgreen;
 		}
 	}
@@ -109,6 +108,6 @@ fu-main.debug {
 	}
 }
 
-fu-main:not(.debug) .fu_tabs .fu_tabs_buttons .fu_tab_button_debug{
+fu-main:not(.debug) .fu_tabs .fu_buttons .fu_tab_button_debug{
 	display: none;
 }

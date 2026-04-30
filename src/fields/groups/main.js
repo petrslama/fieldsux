@@ -93,12 +93,8 @@ fu.fields.main = class fu_fields_main extends fu.fields.group {
 						};
 					}),
 				},{
-					'class': 'fu_container',
-					'children': [{
-						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': template.fields
-					}]
+					'tag': 'fu-children',
+					'template': template.fields
 				}
 			],
 		});

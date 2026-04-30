@@ -1,6 +1,6 @@
 fu.Opened = {
 	selectors: [
-		'.fu_tab_button.fu_switch:not([data-index="0"])',
+		'.fu_tab_button[aria-selected="true"]:not([data-index="0"])',
 		'.fu_open_row',
 	],
 	get: function(){

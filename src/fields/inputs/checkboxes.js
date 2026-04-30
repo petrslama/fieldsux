@@ -26,43 +26,51 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 	get repeater_label(){
 		const labels = [];
 		Array.from(
-			this.querySelectorAll('input:checked + .fu_checkboxes_label')
+			this.querySelectorAll('input:checked + div')
 		).forEach((label) => {
 			labels.push( label.innerHTML.trim() )
 		});
 		return labels.join(', ');
 	}
 
-	create_field( index, template ){
-		return fu.DOM.create({
-			'class': 'fu_choices_wrapper fu_container',
-			'children': [{
-				'class': 'fu_grid',
-				'children': template.values?.map(config => {
-					index = fu.DOM.getIndex();
+	/**
+	 * @param {Object} template
+	 */
+	set template(template){
+
+		fu.DOM.attrs(this, {
+			'fu_name': template.fu_name,
+			'class': 'fu_choices',
+			'children':[
+				( ! template.fu_label ) ? null : {
+					'class': 'fu_label',
+					'html': template.fu_label,
+				},
+				template.values?.map(config => {
 					return {
-						'class': 'fu_input_wrapper',
 						'tag': 'label',
-						'for': index,
 						'children': [
 							{
 								'tag': 'input',
 								'type': 'checkbox',
-								'id': index,
-								'class': 'fu_checkbox',
-								'value': config.fu_value ?? 'undefined checkboxes item value',
+								'value': config.fu_value ?? '',
 								'events': {
 									'change': () => this.dispatchEvent( new CustomEvent( 'fu_field_input' ) )
 								},
 							}, ( ! config.fu_label ) ? null : {
-								'class': 'fu_checkboxes_label',
 								'html': config.fu_label,
 							}
 						],
 					};
 				}),
-			}],
+				( ! template.fu_description ) ? null : {
+					'class': 'fu_description',
+					'html': template.fu_description
+				},
+			]
 		});
+
+		this.set_width( this, template );
 	}
 };
 

@@ -77,94 +77,105 @@ fu.fields.repeater_multiple = class fu_fields_repeater_multiple extends fu.field
 		};
 
 		const pseudo_row = fu.DOM.create({
-			'class': 'row_add_row fu_switch',
+			'class': 'row_add_row',
 			'children': [
 				{
 					'class': 'fu_backdrop',
 					'events': {
 						'click': (e) => pseudo_row.remove()
 					},
-				},{
-					'class': 'fu_add_header',
+				},
+				{
+					'class': 'fu_picker',
 					'children': [
 						{
-							'class': 'fu_icon fu_add_row',
-						},{
-							'class': 'fu_add_label',
-							'children': [{
-								'html': 'Add new row',
-							}],
-						},{
-							'tag': 'button', 'type': 'button',
-							'class': 'fu_icon fu_delete',
-							'aria-label': 'Cancel new row',
+							'tag': 'input',
+							'type': 'text',
+							'id': fu.DOM.getIndex(),
+							'placeholder': 'Search…',
+							'autocomplete': 'off',
+							'spellcheck': 'false',
 							'events': {
-								'click': (e) => {
-									pseudo_row.remove();
-									document.removeEventListener('keydown', this.esc_handler);
-								}
-							},
-						}
-					]
-				},{
-					'class': 'fu_add_options',
-					'children': (()=>{
-						const groups = {'': []};
-
-						picker.forEach(option => {
-							const label = option.fu_label ?? ( '&nbsp;No Label&nbsp;' + (typeof option) + ' ' + JSON.stringify(option) );
-							const parts = label.split('>>>');
-							const group = parts.length > 1 ? parts[0].trim() : '';
-							const text  = parts.length > 1 ? parts[1].trim() : label;
-
-							if( ! groups[group] ) groups[group] = [];
-
-							groups[group].push({
-								'tag': 'button', 'type': 'button',
-								'class': ( ! this.type_to_ID[option.fu_type] ) ? 'template_not_defined' : '',
-								'html': text,
-								'data-fu_type': option.fu_type,
-								'events': {
-									'click': (e) => {
-										const created_row = this.create_row({ 'fu_type': option.fu_type });
-										if( null === created_row ) {
-											return;
-										}
-										created_row.classList.add('fu_open_row');
-										pseudo_row.replaceWith(created_row);
-										document.removeEventListener('keydown', this.esc_handler);
-									},
+								'input': ({ target: { value } }) => {
+									const q = value.trim().toLowerCase();
+									pseudo_row.querySelectorAll('button').forEach(item => {
+										item.hidden = q && !item.textContent.toLowerCase().includes(q);
+									});
+									pseudo_row.querySelectorAll('section').forEach(section => {
+										section.hidden = ![ ...section.querySelectorAll('button') ].some(b => !b.hidden);
+									});
 								},
-							});
-						});
-
-						const optgroup = [];
-						for( const [group, buttons] of Object.entries(groups) ){
-							if( ! buttons.length ) continue;
-							optgroup.push({
-								'class': 'fu_label',
-								'html': group,
-							});
-							optgroup.push({
-								'class': 'fu_group',
-								'children': buttons,
-							});
-						}
-						return optgroup;
-					})()
+								'keydown': (e) => {
+									const items = [...pseudo_row.querySelectorAll('button')].filter(i => !i.hidden);
+									if( !items.length ) return;
+									const current = pseudo_row.querySelector('button[data-selected="true"]');
+									const idx = items.indexOf(current);
+									let next;
+									if( e.key === 'ArrowDown' || e.key === 'Tab' ) {
+										next = items[(idx + 1) % items.length];
+									} else if( e.key === 'ArrowUp' ) {
+										next = items[idx <= 0 ? items.length - 1 : idx - 1];
+									} else if( e.key === 'Home' ) {
+										next = items[0];
+									} else if( e.key === 'End' ) {
+										next = items[items.length - 1];
+									} else if( e.key === 'Enter' ) {
+										e.preventDefault();
+										current?.click();
+										return;
+									}
+									if( next ) {
+										e.preventDefault();
+										current?.removeAttribute('data-selected');
+										next.setAttribute('data-selected', 'true');
+										next.scrollIntoView({ block: 'nearest' });
+									}
+								},
+							},
+						},{
+							'class': 'fu_results',
+							'data-label-empty': 'No results found.',
+							'children': Object.values( picker.reduce( (acc, option) => {
+								const label = option.fu_label ?? JSON.stringify(option);
+								const parts = label.split('>>>');
+								const name = parts.length > 1 ? parts[0].trim() : '';
+								const text = parts.length > 1 ? parts[1].trim() : label;
+								if( ! acc[name] ) acc[name] = {
+									'tag': 'section',
+									'children': name ? [{ 'tag': 'header', 'html': name }] : [],
+								};
+								acc[name].children.push({
+									'tag': 'button', 'type': 'button',
+									'class': ( ! this.type_to_ID[option.fu_type] ) ? 'template_not_defined' : undefined,
+									'html': text,
+									'data-fu_type': option.fu_type,
+									'events': {
+										'click': (e) => {
+											const created_row = this.create_row({ 'fu_type': option.fu_type });
+											if( null === created_row ) return;
+											created_row.classList.add('fu_open_row');
+											pseudo_row.replaceWith(created_row);
+											document.removeEventListener('keydown', this.esc_handler);
+										},
+									},
+								});
+								return acc;
+							}, {} ) ),
+					}],
 				},
 			],
 		});
 
 		switch(position){
-			case 'before':
-				caller.before( pseudo_row );
-				return;
-			case 'after':
-				caller.after( pseudo_row );
-				return;
-			case 'append':
-				this.rows.append( pseudo_row );
+			case 'before':  caller.before( pseudo_row ); break;
+			case 'after':   caller.after( pseudo_row );  break;
+			case 'append':  this.rows.append( pseudo_row );
+		}
+
+		pseudo_row.querySelector('input').focus();
+
+		if( pseudo_row.querySelector('.fu_picker').getBoundingClientRect().bottom > window.innerHeight ) {
+			pseudo_row.classList.add('fu_flip');
 		}
 	}
 };

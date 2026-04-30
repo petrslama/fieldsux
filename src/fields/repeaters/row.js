@@ -18,35 +18,12 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 		this.repeater.update_open_state();
 	}
 
-	button_add_to_top(){ return {
-		'tag': 'button', 'type': 'button',
-		'class': 'fu_icon fu_add to_top',
-		'aria-label': 'Add before row',
-		'events': {
-			'click': (e) => {
-				this.repeater.add_row(this, 'before');
-			},
-		}
-	}}
-
-	button_add_to_bottom(){ return {
-		'tag': 'button', 'type': 'button',
-		'class': 'fu_icon fu_add to_bottom',
-		'aria-label': 'Add after row',
-		'events': {
-			'click': (e) => {
-				this.repeater.add_row(this, 'after');
-			},
-		}
-	}}
-
 	icon_move(){ return {
 		'class': 'fu_icon fu_move'
 	}}
 
 	checkbox(){ return {
 		'tag': 'label',
-		'class': 'fu_r_checkbox',
 		'children': [
 			{
 				'tag': 'input',
@@ -62,7 +39,19 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 	}}
 
 	index(){ return  {
-		'class': 'fu_index'
+		'class': 'fu_index',
+		'children': [
+			{
+				'class': 'fu_add_between',
+				'events': {
+					'click': (e) => this.repeater.add_row(this, 'before')
+				},
+				'children': [{
+					'tag': 'button', 'type': 'button', 'class': 'fu_icon fu_add to_top',
+					'aria-label': 'Add row',
+				}]
+			}
+		]
 	}}
 
 	button_delete(){ return {
@@ -133,18 +122,16 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 
 		fu.DOM.attrs(this, {
 			'id': fu.DOM.getIndex(),
-			'class': 'fu_row fu_switch',
+			'class': 'fu_row',
 			'children':[
 				{
-					'class': 'fu_header fu_row_header',
+					'class': 'fu_header',
 					'children':[
 						this.icon_move(),
-						this.checkbox(),
-						this.button_add_to_top(),
-						this.button_add_to_bottom(),
 						this.index(),
+						this.checkbox(),
 						{
-							'class': 'fu_row__labels',
+							'class': 'fu_labels',
 							'events': {
 								'click': () => this.toggle_open_state(),
 							},
@@ -159,7 +146,7 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 								};
 							}),
 						},{
-							'class': 'fu_actions',
+							'class': 'fu_buttons',
 							'children': [
 								this.button_delete(),
 								this.button_duplicate(),
@@ -170,17 +157,13 @@ fu.fields.row = class fu_fields_row extends fu.fields.group {
 						},
 					],
 				},{
-					'class': 'fu_container',
-					'children': [{
-						'tag': 'fu-children',
-						'class': 'fu_grid',
-						'template': template.fields
-					}]
+					'tag': 'fu-children',
+					'template': template.fields
 				}
 			]
 		});
 
-		this.querySelector('.fu_row_header').querySelectorAll('[data-from]')?.forEach( (label) => {
+		this.querySelector('.fu_header').querySelectorAll('[data-from]')?.forEach( (label) => {
 			const from = label.getAttribute('data-from');
 			let field;
 

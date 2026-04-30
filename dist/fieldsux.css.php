@@ -23,9 +23,9 @@ foreach([
 	'/fields/groups/groups.css',
 
 	'/fields/inputs/inputs.css',
+	'/fields/inputs/choices.css',
 
 	'/fields/repeaters/repeater.css',
-	'/fields/repeaters/row.css',
 
 	'/fields/html/html.css',
 
@@ -54,7 +54,7 @@ $minified = preg_replace('/,\s*/', ',', $minified); // Remove spaces after comma
 $minified = preg_replace('/\s+:/', ':', $minified); // Remove spaces before colons (properties)
 $minified = preg_replace('/:\s+/', ':', $minified); // Remove spaces after colons (properties)
 
-
+$minified = str_replace( ')+', ') + ', $minified); // Add spaces to better css calc
 
 $minified = trim($minified);
 

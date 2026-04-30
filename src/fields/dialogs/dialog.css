@@ -33,17 +33,17 @@ body.fu_dialog_opened {
 
 	.fu_header {
 		position: relative;
-		height: calc( 2 * var(--fu_size) );
-		line-height: calc( 2 * var(--fu_size) );
+		height: var(--fu_size_lg, 4em);
+		line-height: var(--fu_size_lg, 4em);
 
-		padding: 0 var(--fu_size);
-		background: var(--fu_row_hover_bg);
+		padding: 0 var(--fu_size_md, 2em);
+		background: var(--fu_repeater_bg);
 		font-size: calc(1.4 * var(--fu_fontsize));
 		font-weight: 500;
 
 		&:after{
 			font-weight: 600;
-			font-size: calc(0.6* var(--fu_size));
+			font-size: var(--fu_size_sm, 1em);
 		}
 
 		i {
@@ -51,14 +51,14 @@ body.fu_dialog_opened {
 			top: 0;
 			right: 0;
 			bottom: 1px;
-			width: calc( 2 * var(--fu_size) );
+			width: var(--fu_size_lg, 4em);
 			text-align: center;
 			cursor: pointer;
 
 			&:after {
 				content: '\00D7'; /* x */
 				font-style: normal;
-				font-size: calc( 1.5 * var(--fu_size_half) );
+				font-size: var(--fu_size_md, 2em);
 			}
 		}
 	}
@@ -72,7 +72,7 @@ body.fu_dialog_opened {
 		z-index: 1;
 		overflow: auto;
 		height: var(--fu_notice_height);
-		max-height: calc( var(--dialog_height) - 4 * var(--fu_size) );
+		max-height: calc( var(--dialog_height) - var(--fu_size_xl, 8em) );
 
 		&:before {
 			content: ' ';
@@ -85,8 +85,8 @@ body.fu_dialog_opened {
 		}
 
 		.fu_content {
-			padding: var(--fu_size);
-			padding-right: calc( 2 * var(--fu_size) );
+			padding: var(--fu_size_md, 2em);
+			padding-right: var(--fu_size_lg, 4em);
 		}
 
 		&:after {
@@ -94,10 +94,10 @@ body.fu_dialog_opened {
 			position: absolute;
 			display: inline-block;
 			z-index: 1;
-			top: calc( .5 * var(--fu_size) );
-			right: calc( .5 * var(--fu_size) );
+			top: var(--fu_size_sm, 1em);
+			right: var(--fu_size_sm, 1em);
 			font-style: normal;
-			font-size: var(--fu_size_half);
+			font-size: var(--fu_size_sm, 1em);
 		}
 
 		&:empty {
@@ -108,34 +108,34 @@ body.fu_dialog_opened {
 	.fu_section {
 		position: relative;
 		background: var(--fu_bg);
-		height: calc( var(--dialog_height) - 4 * var(--fu_size) - var(--fu_notice_height, 0px) );
+		height: calc( var(--dialog_height) - var(--fu_size_xl, 8em) - var(--fu_notice_height, 0px) );
 	}
 
 	.fu_footer {
 		position: relative;
-		height: calc( 2 * var(--fu_size) );
-		line-height: calc( 2 * var(--fu_size) );
-		background: var(--fu_row_hover_bg);
+		height: var(--fu_size_lg, 4em);
+		line-height: var(--fu_size_lg, 4em);
+		background: var(--fu_repeater_bg);
 		font-size: var(--fu_fontsize);
 		text-align: right;
 		overflow: auto;
 
 		@media screen and (max-width: 850px) {
-			padding: 0 var(--fu_size_half);
+			padding: 0 var(--fu_size_sm, 1em);
 		}
 		@media screen and (min-width: 851px) {
-			padding: 0 var(--fu_size);
+			padding: 0 var(--fu_size_md, 2em);
 		}
 
 		.fu_button {
 			display: inline-block;
-			line-height: var(--fu_size);
+			line-height: var(--fu_size_md, 2em);
 			cursor: pointer;
 			border: none;
 			color: var(--fu_primary);
 			background-color: var(--fu_bg);
-			margin: 0 0 0 var(--fu_size_half);
-			padding: 0 var(--fu_size_half);
+			margin: 0 0 0 var(--fu_size_sm, 1em);
+			padding: 0 var(--fu_size_sm, 1em);
 
 			&:hover {
 				background-color: var(--fu_primary);
