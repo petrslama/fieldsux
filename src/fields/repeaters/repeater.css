@@ -19,7 +19,6 @@
 
 		.fu_index {
 			text-align: center;
-			color: var(--fu_text_color_light);
 		}
 
 		.fu_labels {
@@ -56,6 +55,26 @@
 		&:hover .fu_buttons,
 		.fu_buttons:focus-within {
 			opacity: 1;
+		}
+	}
+
+	button.fu_add {
+		position: absolute;
+		z-index: 2;
+		transition: opacity .3s;
+		opacity: 0;
+		padding: 0;
+		left: calc( var(--fu_size_xs, .5em) + ( 2 * var(--fu_size_xxs, .25em) )  + var(--fu_size_md, 2em) );
+		background-color:  var(--fu_header_primary_bg);
+		border-radius: var(--fu_border_radius);
+		box-shadow: 0 0 0 1px var(--fu_text_color);
+
+		&:before {
+			background: var(--fu_text_color);
+		}
+
+		&::after{
+			display: none;
 		}
 	}
 }
@@ -161,6 +180,10 @@ fu-row_array.fu_row {
 		color: var(--fu_text_color_light);
 		font-weight: 500;
 
+		.fu_index {
+			color: var(--fu_text_color_light);
+		}
+
 		label {
 			position: relative;
 			z-index: 2;
@@ -220,37 +243,29 @@ fu-row_array.fu_row {
 		position: relative;
 		z-index: 1;
 
-		button {
+		&:before {
 			opacity: 0;
-			border-radius: var(--fu_border_radius);
-			background: var(--fu_header_secondary_bg);
-			box-shadow: 0 0 0 2px var(--fu_text_color);
+			z-index: 2;
 			position: absolute;
-			left: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_xs, .5em) + var(--fu_size_md, 2em) );
+			transition: opacity .3s;
+			content: '';
+			inset: -1px 0 auto 0;
+			height: 1px;
+			background: var(--fu_text_color);
+		}
+
+		button.fu_add {
 			bottom: var(--fu_size_xxs, .25em);
-			z-index: 3;
-
-			&:before {
-				background: var(--fu_text_color);
-			}
-
 			&::after{
-				display: block;
+				display: none;
 			}
 		}
 
+
 		&:hover,
 		&:focus-within {
-			&:before {
-				content: '';
-				position: absolute;
-				z-index: 2;
-				inset: -1px 0 auto 0;
-				height: 2px;
-				background: var(--fu_text_color);
-			}
-
-			button {
+			&:before,
+			button.fu_add {
 				opacity: 1;
 			}
 		}
@@ -276,11 +291,12 @@ fu-row_array.fu_row {
 		}
 
 		.fu_index{
+			color: var(--fu_text_color);
 			.fu_add_between {
 				position: absolute;
 				z-index: 2;
 				top: -1px;
-				height: 2px;
+				height: 0;
 				left: 0;
 				right: 0;
 				background: var(--fu_text_color);
@@ -290,26 +306,32 @@ fu-row_array.fu_row {
 				opacity: 0;
 
 				&:hover,
-				&:focus-within {
+				&:focus-within{
+					height: 1px;
+				}
+
+				&:hover,
+				&:focus-within,
+				button.fu_add {
 					opacity: 1;
 				}
 
-				button {
-					position: absolute;
-					left: calc( ( var( --fu_size_xs, 0.5em) * 2 ) + var(--fu_size_md, 2em) );
+				button.fu_add {
 					top: calc( -.5 * var(--fu_size_md, 2em) );
-					background-color:  var(--fu_header_primary_bg);
-					border-radius: var(--fu_border_radius);
-					box-shadow: 0 0 0 2px var(--fu_text_color);
-
-					&:before {
-						background: var(--fu_text_color);
+					&::after{
+						display: none;
 					}
 				}
 			}
 
 			&:after {
 				content: counter(line-number);
+			}
+		}
+
+		label {
+			input {
+				box-shadow: 0 0 0 1px var(--fu_text_color);
 			}
 		}
 

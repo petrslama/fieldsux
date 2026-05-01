@@ -14,6 +14,7 @@ fu-children {
 	gap: var(--fu_size_md, 2em) calc( 1.5 * var(--fu_size_md, 2em) );
 	grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
 	align-content: start;
+	background: var(--fu_bg);
 
 	&:empty {
 		display: none;
