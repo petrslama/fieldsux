@@ -1754,6 +1754,7 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 						{
 							'tag': 'input',
 							'type': 'color',
+							'id': index + '_color',
 							'events': {
 								'input': () => {
 									const color = this.querySelector('input[type="color"]');

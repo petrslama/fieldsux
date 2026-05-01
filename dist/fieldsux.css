@@ -58,6 +58,15 @@
 	&, *, :after, :before {
 		box-sizing: border-box;
 	}
+
+	& > textarea {
+		/* display: block; */
+		display: none;
+		max-width: 100%;
+		field-sizing: content;
+		padding: var( --fu_size_md, 2rem );
+	}
+
 }
 
 /* /misc/icon.css */
@@ -543,6 +552,42 @@ body.fu_dialog_opened {
 		position: relative;
 		background: var(--fu_bg);
 		height: calc( var(--dialog_height) - var(--fu_size_xl, 8em) - var(--fu_notice_height, 0px) );
+
+		textarea,
+		pre {
+			position: absolute;
+			padding: var(--fu_size_sm, 1em);
+			margin: 0;
+
+			font-family: 'Courier New', Courier, monospace;
+			font-weight: 400;
+			font-size: var(--fu_size_sm, 1em);
+			line-height: var(--fu_size_sm, 1em);
+			overflow: auto;
+			tab-size: 4;
+		}
+
+		textarea {
+			inset: 0 2px;
+			resize: none;
+			border-radius: 0;
+
+		}
+
+		pre{
+			inset: 0;
+			s {
+				background-color: #ffeef0;
+				color: #cf222e;
+				text-decoration-color: #cf222e;
+			}
+
+			b {
+				background-color: #e6ffed;
+				color: #1a7f37;
+
+			}
+		}
 	}
 
 	.fu_footer {
@@ -581,66 +626,6 @@ body.fu_dialog_opened {
 			background-color: var(--fu_primary);
 			color: var(--fu_bg);
 		}
-	}
-}
-
-
-/* /fields/dialogs/dialog_json.css */
-
-fu-dialog_json .fu_section textarea {
-	position: absolute;
-	inset: 0;
-	font-family: 'Courier New', Courier, monospace;
-	padding: var(--fu_size_sm, 1em) var(--fu_size_md, 2em);
-	resize: none;
-
-	border: none;
-	border-radius: 0;
-
-	overflow: auto;
-	tab-size: 2;
-}
-
-/* /fields/dialogs/dialog_copy.css */
-
-fu-dialog_copy .fu_section textarea {
-	position: absolute;
-	inset: 0;
-	font-family: 'Courier New', Courier, monospace;
-	padding: var(--fu_size_sm, 1em) var(--fu_size_md, 2em);
-	resize: none;
-
-	border: none;
-	border-radius: 0;
-
-	overflow: auto;
-	tab-size: 2;
-}
-
-/* /fields/dialogs/dialog_diff.css */
-
-fu-dialog_diff .fu_section  pre{
-	position: absolute;
-	inset: 0;
-	font-family: 'Courier New', Courier, monospace;
-	padding: var(--fu_size_sm, 1em);
-	margin: 0;
-	resize: none;
-	tab-size: 4;
-
-	overflow-wrap: normal;
-	overflow-x: auto;
-
-	s {
-		background-color: #ffeef0;
-		color: #cf222e;
-		text-decoration-color: #cf222e;
-	}
-
-	b {
-		background-color: #e6ffed;
-		color: #1a7f37;
-
 	}
 }
 
@@ -747,14 +732,6 @@ fu-group,
 /* /fields/inputs/inputs.css */
 
 .fieldsux{
-	textarea {
-		/* display: block; */
-		display: none;
-		max-width: 100%;
-		field-sizing: content;
-		padding: var( --fu_size_md, 2rem );
-	}
-
 	[hidden] {
 		display: none !important;
 	}
@@ -1241,14 +1218,33 @@ fu-row_array.fu_row {
 
 	& > .fu_footer {
 		border-radius: 0 0 var(--fu_border_radius) var(--fu_border_radius);
+		box-shadow: 0 0 0 .5px var(--fu_border_color);
 		background: var(--fu_header_primary_bg);
 		align-items: center;
 		padding: var(--fu_size_xxs, .25em) var(--fu_size_xs, .5em);
-		padding-left: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_xs, .5em) + var(--fu_size_md, 2em) );
-		height: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_md, 2em) );
+		height: calc( ( var(--fu_size_md, 2em) / 2 ) + var(--fu_size_xxs, .25em) );
 		cursor: pointer;
 		position: relative;
 		z-index: 1;
+
+		button {
+			opacity: 0;
+			border-radius: var(--fu_border_radius);
+			background: var(--fu_header_secondary_bg);
+			box-shadow: 0 0 0 2px var(--fu_text_color);
+			position: absolute;
+			left: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_xs, .5em) + var(--fu_size_md, 2em) );
+			bottom: var(--fu_size_xxs, .25em);
+			z-index: 3;
+
+			&:before {
+				background: var(--fu_text_color);
+			}
+
+			&::after{
+				display: block;
+			}
+		}
 
 		&:hover,
 		&:focus-within {
@@ -1256,25 +1252,13 @@ fu-row_array.fu_row {
 				content: '';
 				position: absolute;
 				z-index: 2;
-				top: -1px;
+				inset: -1px 0 auto 0;
 				height: 2px;
-				left: 0;
-				right: 0;
 				background: var(--fu_text_color);
 			}
 
 			button {
-				border-radius: var(--fu_border_radius);
-				background: var(--fu_header_secondary_bg);
-				box-shadow: 0 0 0 2px var(--fu_text_color);
-
-				&:before {
-					background: var(--fu_text_color);
-				}
-
-				&::after{
-					display: block;
-				}
+				opacity: 1;
 			}
 		}
 	}

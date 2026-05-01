@@ -211,14 +211,33 @@ fu-row_array.fu_row {
 
 	& > .fu_footer {
 		border-radius: 0 0 var(--fu_border_radius) var(--fu_border_radius);
+		box-shadow: 0 0 0 .5px var(--fu_border_color);
 		background: var(--fu_header_primary_bg);
 		align-items: center;
 		padding: var(--fu_size_xxs, .25em) var(--fu_size_xs, .5em);
-		padding-left: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_xs, .5em) + var(--fu_size_md, 2em) );
-		height: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_md, 2em) );
+		height: calc( ( var(--fu_size_md, 2em) / 2 ) + var(--fu_size_xxs, .25em) );
 		cursor: pointer;
 		position: relative;
 		z-index: 1;
+
+		button {
+			opacity: 0;
+			border-radius: var(--fu_border_radius);
+			background: var(--fu_header_secondary_bg);
+			box-shadow: 0 0 0 2px var(--fu_text_color);
+			position: absolute;
+			left: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_xs, .5em) + var(--fu_size_md, 2em) );
+			bottom: var(--fu_size_xxs, .25em);
+			z-index: 3;
+
+			&:before {
+				background: var(--fu_text_color);
+			}
+
+			&::after{
+				display: block;
+			}
+		}
 
 		&:hover,
 		&:focus-within {
@@ -226,25 +245,13 @@ fu-row_array.fu_row {
 				content: '';
 				position: absolute;
 				z-index: 2;
-				top: -1px;
+				inset: -1px 0 auto 0;
 				height: 2px;
-				left: 0;
-				right: 0;
 				background: var(--fu_text_color);
 			}
 
 			button {
-				border-radius: var(--fu_border_radius);
-				background: var(--fu_header_secondary_bg);
-				box-shadow: 0 0 0 2px var(--fu_text_color);
-
-				&:before {
-					background: var(--fu_text_color);
-				}
-
-				&::after{
-					display: block;
-				}
+				opacity: 1;
 			}
 		}
 	}

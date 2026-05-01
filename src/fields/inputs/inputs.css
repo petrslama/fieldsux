@@ -1,12 +1,4 @@
 .fieldsux{
-	textarea {
-		/* display: block; */
-		display: none;
-		max-width: 100%;
-		field-sizing: content;
-		padding: var( --fu_size_md, 2rem );
-	}
-
 	[hidden] {
 		display: none !important;
 	}

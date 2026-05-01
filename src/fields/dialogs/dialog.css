@@ -109,6 +109,42 @@ body.fu_dialog_opened {
 		position: relative;
 		background: var(--fu_bg);
 		height: calc( var(--dialog_height) - var(--fu_size_xl, 8em) - var(--fu_notice_height, 0px) );
+
+		textarea,
+		pre {
+			position: absolute;
+			padding: var(--fu_size_sm, 1em);
+			margin: 0;
+
+			font-family: 'Courier New', Courier, monospace;
+			font-weight: 400;
+			font-size: var(--fu_size_sm, 1em);
+			line-height: var(--fu_size_sm, 1em);
+			overflow: auto;
+			tab-size: 4;
+		}
+
+		textarea {
+			inset: 0 2px;
+			resize: none;
+			border-radius: 0;
+
+		}
+
+		pre{
+			inset: 0;
+			s {
+				background-color: #ffeef0;
+				color: #cf222e;
+				text-decoration-color: #cf222e;
+			}
+
+			b {
+				background-color: #e6ffed;
+				color: #1a7f37;
+
+			}
+		}
 	}
 
 	.fu_footer {

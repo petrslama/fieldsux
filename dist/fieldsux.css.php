@@ -16,9 +16,6 @@ foreach([
 	'/misc/wp.css',
 
 	'/fields/dialogs/dialog.css',
-	'/fields/dialogs/dialog_json.css',
-	'/fields/dialogs/dialog_copy.css',
-	'/fields/dialogs/dialog_diff.css',
 
 	'/fields/groups/groups.css',
 
