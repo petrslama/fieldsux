@@ -1,11 +1,37 @@
 fu-h1,
 fu-h2,
-fu-h3,
+fu-h3 {
+	grid-column: 1 / -1;
+}
+
+.fu_h1 {
+	font-weight: 600;
+	font-size: calc( 2 * var(--fu_fontsize) );
+	line-height: calc( 2 * var(--fu_size_md) );
+
+	border-bottom: 2px solid var(--zink_200);
+}
+
+.fu_h2 {
+	font-weight: 600;
+	font-size: calc( 1.5 * var(--fu_fontsize) );
+	line-height: calc( 1.5 * var(--fu_size_md) );
+	border-bottom: 2px solid var(--zink_200);
+}
+
+.fu_h3 {
+	font-weight: 500;
+	font-size: var(--fu_fontsize);
+	line-height: var(--fu_size_md);
+	border-bottom: 2px solid var(--zink_200);
+
+}
+
 fu-p,
+fu-hr,
 fu-space{
 	&.fu_gw_default{
 		grid-column: 1 / -1;
-		min-width: max-content;
 	}
 }
 

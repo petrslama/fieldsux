@@ -2603,6 +2603,14 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 				group: template_group_id,
 				handle: '.fu_icon.fu_move',
 				animation: 150,
+				onStart: (e) => {
+					document.body.classList.add('sortable-dragging');
+					document.documentElement.classList.add('sortable-dragging');
+				},
+				onEnd: () => {
+					document.body.classList.remove('sortable-dragging');
+					document.documentElement.classList.remove('sortable-dragging');
+				}
 			});
 		}
 	}
@@ -2963,7 +2971,7 @@ fu.fields.h1 = class fu_fields_h1 extends fu.fields.abstract {
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
 			'children':[{
-				'tag': 'h1',
+				'class': 'fu_h1',
 				'html': template.fu_label ?? ''
 			}]
 		});
@@ -2984,7 +2992,7 @@ fu.fields.h2 = class fu_fields_h2 extends fu.fields.abstract {
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
 			'children':[{
-				'tag': 'h2',
+				'class': 'fu_h2',
 				'html': template.fu_label ?? ''
 			}]
 		});
@@ -3005,7 +3013,7 @@ fu.fields.h3 = class fu_fields_h3 extends fu.fields.abstract {
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
 			'children':[{
-				'tag': 'h3',
+				'class': 'fu_h3',
 				'html': template.fu_label ?? ''
 			}]
 		});

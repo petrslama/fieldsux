@@ -276,6 +276,14 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 				group: template_group_id,
 				handle: '.fu_icon.fu_move',
 				animation: 150,
+				onStart: (e) => {
+					document.body.classList.add('sortable-dragging');
+					document.documentElement.classList.add('sortable-dragging');
+				},
+				onEnd: () => {
+					document.body.classList.remove('sortable-dragging');
+					document.documentElement.classList.remove('sortable-dragging');
+				}
 			});
 		}
 	}

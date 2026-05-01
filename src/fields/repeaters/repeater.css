@@ -206,7 +206,7 @@ fu-row_array.fu_row {
 		counter-reset: line-number;
 		display: block;
 		position: relative;
-		min-height: calc( var(--fu_size_md, 2em) + 2 * var(--fu_size_xxs, .25em) );
+		min-height: var(--fu_size_md, 2em);
 	}
 
 	& > .fu_footer {
@@ -217,14 +217,34 @@ fu-row_array.fu_row {
 		padding-left: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_xs, .5em) + var(--fu_size_md, 2em) );
 		height: calc( ( 2 * var(--fu_size_xxs, .25em) ) + var(--fu_size_md, 2em) );
 		cursor: pointer;
+		position: relative;
+		z-index: 1;
 
-		&:hover button,
-		button:focus {
-			border-radius: var(--fu_border_radius);
-			background: var(--fu_header_secondary_bg);
+		&:hover,
+		&:focus-within {
+			&:before {
+				content: '';
+				position: absolute;
+				z-index: 2;
+				top: -1px;
+				height: 2px;
+				left: 0;
+				right: 0;
+				background: var(--fu_text_color);
+			}
 
-			&::after{
-				display: block;
+			button {
+				border-radius: var(--fu_border_radius);
+				background: var(--fu_header_secondary_bg);
+				box-shadow: 0 0 0 2px var(--fu_text_color);
+
+				&:before {
+					background: var(--fu_text_color);
+				}
+
+				&::after{
+					display: block;
+				}
 			}
 		}
 	}
@@ -234,27 +254,9 @@ fu-row_array.fu_row {
 	counter-increment: line-number;
 	position: relative;
 
-	&.sortable-chosen,
-	&.sortable-ghost,
-	&.sortable-drag,
-	&.sortable-fallback {
-		& *{
-			cursor: grabbing !important;
-		}
-
-		.fu_add_between{
-			display: none;
-		}
-	}
 	&.sortable-chosen {
 		z-index: 99;
 		opacity: 0.9;
-		cursor: grabbing;
-		& > .fu_header {
-			.fu_buttons {
-				visibility: hidden;
-			}
-		}
 	}
 
 	& > .fu_header {
@@ -262,7 +264,7 @@ fu-row_array.fu_row {
 		color: var(--fu_text_color);
 		font-weight: 400;
 
-		.fu_icon.fu_move{
+		.fu_icon.fu_move {
 			cursor: grab;
 		}
 
@@ -289,11 +291,12 @@ fu-row_array.fu_row {
 					position: absolute;
 					left: calc( ( var( --fu_size_xs, 0.5em) * 2 ) + var(--fu_size_md, 2em) );
 					top: calc( -.5 * var(--fu_size_md, 2em) );
-					background: var(--fu_text_color);
-					border-radius: 50%;
+					background-color:  var(--fu_header_primary_bg);
+					border-radius: var(--fu_border_radius);
+					box-shadow: 0 0 0 2px var(--fu_text_color);
 
 					&:before {
-						background: var(--fu_bg);
+						background: var(--fu_text_color);
 					}
 				}
 			}
@@ -327,6 +330,25 @@ fu-row_array.fu_row {
 		visibility: hidden;
 	}
 }
+
+.sortable-dragging,
+.sortable-dragging * ,
+.sortable-dragging :after,
+.sortable-dragging :before{
+	cursor: grabbing !important;
+}
+
+.sortable-dragging .fu_header {
+	.fu_icon.fu_move {
+		background-color:  var(--fu_header_primary_bg);
+	}
+
+	.fu_index .fu_add_between,
+	.fu_buttons {
+		display: none;
+	}
+}
+
 
 fu-row.fu_row {
 	& > .fu_header .fu_labels:hover + .fu_buttons .fu_toggle{

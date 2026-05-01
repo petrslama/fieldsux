@@ -37,7 +37,7 @@ body.fu_dialog_opened {
 		line-height: var(--fu_size_lg, 4em);
 
 		padding: 0 var(--fu_size_md, 2em);
-		background: var(--fu_repeater_bg);
+		background: var(--fu_header_primary_bg);
 		font-size: calc(1.4 * var(--fu_fontsize));
 		font-weight: 500;
 
@@ -115,7 +115,7 @@ body.fu_dialog_opened {
 		position: relative;
 		height: var(--fu_size_lg, 4em);
 		line-height: var(--fu_size_lg, 4em);
-		background: var(--fu_repeater_bg);
+		background: var(--fu_header_primary_bg);
 		font-size: var(--fu_fontsize);
 		text-align: right;
 		overflow: auto;

@@ -32,7 +32,6 @@ fu-group,
 .fu_tabs{
 	&.fu_gw_default{
 		grid-column: 1 / -1;
-		min-width: max-content;
 	}
 }
 
