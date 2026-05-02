@@ -270,6 +270,16 @@ fu-row_array.fu_row {
 			}
 		}
 	}
+
+	& > fu-rows:empty + .fu_footer:after {
+		content: '';
+		display: block;
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+		right: 0;
+		height: var(--fu_size_md, 2em);
+	}
 }
 
 .fu_row {
@@ -332,6 +342,9 @@ fu-row_array.fu_row {
 		label {
 			input {
 				box-shadow: 0 0 0 1px var(--fu_text_color);
+			}
+			&:hover input {
+				box-shadow: 0 0 0 2px var(--fu_text_color);
 			}
 		}
 
