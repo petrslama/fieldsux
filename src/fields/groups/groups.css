@@ -11,20 +11,14 @@ fu-main {
 
 fu-children {
 	display: grid;
-	gap: var(--fu_size_md, 2em) calc( 1.5 * var(--fu_size_md, 2em) );
-	grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+	gap: var(--fu_size_md, 2em);
+	grid-template-columns: repeat(auto-fill, minmax(var( --fu_size_xl ), 1fr));
 	align-content: start;
 	background: var(--fu_bg);
 
 	&:empty {
 		display: none;
 	}
-
-	/* &.fu_boxed {
-		padding: var(--fu_size_sm) var(--fu_size_md);
-		box-shadow: 0 0 0 .5px var(--fu_border_color);
-		border-radius: var(--fu_border_radius);
-	} */
 }
 
 fu-group,

@@ -65,7 +65,7 @@
 		opacity: 0;
 		padding: 0;
 		left: calc( var(--fu_size_xs, .5em) + ( 2 * var(--fu_size_xxs, .25em) )  + var(--fu_size_md, 2em) );
-		background-color:  var(--fu_header_primary_bg);
+		background:  var(--fu_header_primary_bg);
 		border-radius: var(--fu_border_radius);
 		box-shadow: 0 0 0 1px var(--fu_text_color);
 
@@ -382,7 +382,7 @@ fu-row_array.fu_row {
 
 .sortable-dragging .fu_header {
 	.fu_icon.fu_move {
-		background-color:  var(--fu_header_primary_bg);
+		background:  var(--fu_header_primary_bg);
 	}
 
 	.fu_index .fu_add_between,
@@ -507,7 +507,7 @@ fu-row.fu_row {
 					line-height: var(--fu_size_md, 2em);
 					font-size: inherit;
 					outline: none;
-					transition: background-color .3s;
+					transition: background .3s;
 
 					&:hover,
 					&[data-selected="true"] {

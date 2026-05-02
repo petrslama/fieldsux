@@ -644,20 +644,14 @@ fu-main {
 
 fu-children {
 	display: grid;
-	gap: var(--fu_size_md, 2em) calc( 1.5 * var(--fu_size_md, 2em) );
-	grid-template-columns: repeat(auto-fill, minmax(20em, 1fr));
+	gap: var(--fu_size_md, 2em);
+	grid-template-columns: repeat(auto-fill, minmax(var( --fu_size_xl ), 1fr));
 	align-content: start;
 	background: var(--fu_bg);
 
 	&:empty {
 		display: none;
 	}
-
-	/* &.fu_boxed {
-		padding: var(--fu_size_sm) var(--fu_size_md);
-		box-shadow: 0 0 0 .5px var(--fu_border_color);
-		border-radius: var(--fu_border_radius);
-	} */
 }
 
 fu-group,
@@ -731,6 +725,24 @@ fu-group,
 
 
 /* /fields/inputs/inputs.css */
+
+.fieldsux{
+	fu-text,
+	fu-number,
+	fu-checkbox,
+	fu-color,
+	fu-hidden,
+	fu-select
+	{
+		grid-column: span 2;
+	}
+
+	fu-textarea,
+	fu-checkboxes,
+	fu-radios {
+		grid-column: 1 / -1;
+	}
+}
 
 .fieldsux{
 	[hidden] {
@@ -948,22 +960,15 @@ fu-group,
 	}
 }
 
-.fu_field_hidden{
-	grid-column: span 2;
-	display: none;
-}
-
-
-/* /fields/inputs/choices.css */
-
 .fu_choices {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(8em, 1fr));
-	gap: var(--fu_size_xxs, 0.25em) calc(1.5 * var(--fu_size_md, 2em));
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--fu_size_sm, 1em) var(--fu_size_md, 2em);
 	align-items: start;
 
 	.fu_label {
-		display: block;
+		display: flex;
+		flex: 1 1 100%;
 		font-weight: 500;
 		line-height: var(--fu_size_md, 2em);
 		font-size: var(--fu_fontsize);
@@ -974,7 +979,16 @@ fu-group,
 		cursor: pointer;
 		display: flex;
 		align-items: flex-start;
-		gap: var(--fu_size_xs, 0.5em);
+		gap: var(--fu_sfu_size_smize_xs, 1em);
+		box-shadow: 0 0 0 .5px var(--fu_border_color);
+		background:  var(--fu_header_secondary_bg);
+		border-radius: var(--fu_border_radius);
+		padding: 0 var(--fu_size_sm, 1em);
+
+		&:hover,
+		&:focus-within {
+			background:  var(--fu_header_primary_bg);
+		}
 
 		input {
 			margin: var(--fu_size_xs, 0.5em) 0 0 0;
@@ -1003,6 +1017,12 @@ fu-group,
 		grid-column: 1 / -1;
 	}
 }
+
+.fu_field_hidden{
+	grid-column: span 2;
+	display: none;
+}
+
 
 /* /fields/repeaters/repeater.css */
 
@@ -1073,7 +1093,7 @@ fu-group,
 		opacity: 0;
 		padding: 0;
 		left: calc( var(--fu_size_xs, .5em) + ( 2 * var(--fu_size_xxs, .25em) )  + var(--fu_size_md, 2em) );
-		background-color:  var(--fu_header_primary_bg);
+		background:  var(--fu_header_primary_bg);
 		border-radius: var(--fu_border_radius);
 		box-shadow: 0 0 0 1px var(--fu_text_color);
 
@@ -1390,7 +1410,7 @@ fu-row_array.fu_row {
 
 .sortable-dragging .fu_header {
 	.fu_icon.fu_move {
-		background-color:  var(--fu_header_primary_bg);
+		background:  var(--fu_header_primary_bg);
 	}
 
 	.fu_index .fu_add_between,
@@ -1515,7 +1535,7 @@ fu-row.fu_row {
 					line-height: var(--fu_size_md, 2em);
 					font-size: inherit;
 					outline: none;
-					transition: background-color .3s;
+					transition: background .3s;
 
 					&:hover,
 					&[data-selected="true"] {

@@ -20,7 +20,6 @@ foreach([
 	'/fields/groups/groups.css',
 
 	'/fields/inputs/inputs.css',
-	'/fields/inputs/choices.css',
 
 	'/fields/repeaters/repeater.css',
 
