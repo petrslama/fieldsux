@@ -25,13 +25,12 @@
 	--fu_label_width: var(--fu_size_xl);
 	--fu_border_radius: var(--fu_size_xs);
 
-
 	/* Defined */
 	--fu_primary: var(--zink_950);
 	--fu_bg: var( --zink_50 );
 	--fu_input_bg: #fff;
-	--fu_header_primary_bg: var(--zink_100);
-	--fu_header_secondary_bg: var(--zink_50);
+	--fu_header_secondary_bg: var(--zink_100);
+	--fu_header_primary_bg: var(--zink_150);
 
 	/* Borders */
 	--fu_border_color: var(--zink_300);

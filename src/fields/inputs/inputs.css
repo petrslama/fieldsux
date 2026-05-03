@@ -232,7 +232,7 @@
 	}
 }
 
-.fu_choices {
+.fu_field_choices {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--fu_size_sm, 1em) var(--fu_size_md, 2em);

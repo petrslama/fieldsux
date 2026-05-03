@@ -5,7 +5,7 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 	}
 
 	get value(){
-		return this.get_input()?.value ?? '';
+		return this.get_input()?.value ?? null;
 	}
 
 	/**

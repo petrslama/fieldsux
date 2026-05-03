@@ -72,6 +72,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 
 		fu.DOM.attrs(this, {
 			'class': 'fu_radiotabs fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
 			'id': ID,
 			'fu_radio_name': template.fu_name,
 			'children': [
@@ -123,8 +124,6 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 				},
 			],
 		});
-
-		this.set_width(this, template);
 	}
 };
 

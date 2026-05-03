@@ -6,6 +6,7 @@ fu.fields.undefined = class fu_fields_undefined extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'fu_name': template.fu_name,
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[
 				{
 					'class': 'fu_label',

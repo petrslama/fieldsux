@@ -29,9 +29,9 @@ fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 
 	create_field( index, template ){
 		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'tag': 'label',
 			'for': index,
-			'class': 'fu_input_wrapper',
 			'children': [
 				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
 				{

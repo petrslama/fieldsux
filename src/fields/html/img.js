@@ -5,13 +5,12 @@ fu.fields.img = class fu_fields_img extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'tag': 'img',
 				'src': template.src ?? ''
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 

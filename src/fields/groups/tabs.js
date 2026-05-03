@@ -64,6 +64,7 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 
 		fu.DOM.attrs(this, {
 			'class': 'fu_tabs fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
 			'id': ID,
 			'children': [
 				{
@@ -111,7 +112,6 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 			],
 		});
 
-		this.set_width(this, template);
 		this.select(0);
 	}
 };

@@ -2,7 +2,7 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 
 	get value(){
 		const checked = this.querySelector('input[type="radio"]:checked');
-		return checked ? checked.value : null;
+		return checked ? checked.getAttribute('value') : null;
 	}
 
 	set value(value){
@@ -33,8 +33,9 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 		const index = fu.DOM.getIndex();
 
 		fu.DOM.attrs(this, {
+			'class': 'fu_field fu_field_choices',
+			'fu_colspan': template.fu_colspan ?? '',
 			'fu_name': template.fu_name,
-			'class': 'fu_choices',
 			'children':[
 				( ! template.fu_label ) ? null : {
 					'class': 'fu_label',
@@ -64,8 +65,6 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 				},
 			]
 		});
-
-		this.set_width( this, template );
 	}
 };
 

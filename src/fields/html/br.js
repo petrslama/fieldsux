@@ -5,10 +5,9 @@ fu.fields.br = class fu_fields_br extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'style': 'height:' + ( template.height || '32px' )
 		});
-
-		this.set_width( this, template );
 	}
 };
 

@@ -5,6 +5,7 @@ fu.fields.a = class fu_fields_a extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'tag': 'a',
 				'html': template.fu_label ?? '',
@@ -12,8 +13,6 @@ fu.fields.a = class fu_fields_a extends fu.fields.abstract {
 				'target': template.target ?? '_blank',
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 

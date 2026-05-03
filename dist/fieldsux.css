@@ -29,13 +29,12 @@
 	--fu_label_width: var(--fu_size_xl);
 	--fu_border_radius: var(--fu_size_xs);
 
-
 	/* Defined */
 	--fu_primary: var(--zink_950);
 	--fu_bg: var( --zink_50 );
 	--fu_input_bg: #fff;
-	--fu_header_primary_bg: var(--zink_100);
-	--fu_header_secondary_bg: var(--zink_50);
+	--fu_header_secondary_bg: var(--zink_100);
+	--fu_header_primary_bg: var(--zink_150);
 
 	/* Borders */
 	--fu_border_color: var(--zink_300);
@@ -631,6 +630,12 @@ body.fu_dialog_opened {
 
 /* /fields/groups/groups.css */
 
+fu-group,
+fu-tabs,
+fu-radiotabs {
+	grid-column: 1 / -1;
+}
+
 fu-main {
 	display: block;
 	font-size: var(--fu_fontsize);
@@ -652,15 +657,21 @@ fu-children {
 	&:empty {
 		display: none;
 	}
-}
 
-fu-group,
-.fu_repeater,
-.fu_radiotabs,
-.fu_tabs{
-	&.fu_gw_default{
-		grid-column: 1 / -1;
+	.fu_field,
+	.fu_html {
+		&[fu_colspan="1"]    { grid-column: span 1; }
+		&[fu_colspan="2"]    { grid-column: span 2; }
+		&[fu_colspan="3"]    { grid-column: span 3; }
+		&[fu_colspan="4"]    { grid-column: span 4; }
+		&[fu_colspan="5"]    { grid-column: span 5; }
+		&[fu_colspan="6"]    { grid-column: span 6; }
+		&[fu_colspan="7"]    { grid-column: span 7; }
+		&[fu_colspan="8"]    { grid-column: span 8; }
+		&[fu_colspan="full"] { grid-column: 1 / -1; }
 	}
+
+	fu-undefined { grid-column: 1 / -1; }
 }
 
 
@@ -697,9 +708,7 @@ fu-group,
 				right: 0;
 				bottom: 0;
 				height: 2px;
-				transform: scaleX(0);
-				transition: all .3s;
-				background-color: transparent;
+				background: var(--fu_border_color);
 			}
 
 			&:has(input[type="radio"]:checked),
@@ -707,8 +716,7 @@ fu-group,
 			&:focus {
 				color: var(--fu_text_color);
 				&::after {
-					transform: scaleX(1);
-					background-color: var(--fu_text_color);
+					background: var(--fu_text_color);
 				}
 			}
 
@@ -960,7 +968,7 @@ fu-group,
 	}
 }
 
-.fu_choices {
+.fu_field_choices {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--fu_size_sm, 1em) var(--fu_size_md, 2em);
@@ -1025,6 +1033,13 @@ fu-group,
 
 
 /* /fields/repeaters/repeater.css */
+
+fu-repeater_multiple.fu_repeater,
+fu-repeater_single.fu_repeater,
+fu-repeater_table.fu_repeater,
+fu-repeater_array.fu_repeater {
+	grid-column: 1 / -1;
+}
 
 .fu_repeater,
 .fu_row {
@@ -1558,9 +1573,18 @@ fu-row.fu_row {
 
 fu-h1,
 fu-h2,
-fu-h3 {
+fu-h3,
+fu-p,
+fu-hr,
+fu-space{
 	grid-column: 1 / -1;
 }
+
+fu-a,
+fu-img {
+	grid-column: span 2;
+}
+
 
 .fu_h1 {
 	font-weight: 600;
@@ -1583,14 +1607,6 @@ fu-h3 {
 	line-height: var(--fu_size_md);
 	border-bottom: 2px solid var(--zink_200);
 
-}
-
-fu-p,
-fu-hr,
-fu-space{
-	&.fu_gw_default{
-		grid-column: 1 / -1;
-	}
 }
 
 fu-img img {

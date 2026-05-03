@@ -1,3 +1,10 @@
+fu-repeater_multiple.fu_repeater,
+fu-repeater_single.fu_repeater,
+fu-repeater_table.fu_repeater,
+fu-repeater_array.fu_repeater {
+	grid-column: 1 / -1;
+}
+
 .fu_repeater,
 .fu_row {
 	box-shadow: 0 0 0 .5px var(--fu_border_color);

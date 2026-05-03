@@ -5,13 +5,12 @@ fu.fields.h1 = class fu_fields_h1 extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'class': 'fu_h1',
 				'html': template.fu_label ?? ''
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 

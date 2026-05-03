@@ -1,3 +1,9 @@
+fu-group,
+fu-tabs,
+fu-radiotabs {
+	grid-column: 1 / -1;
+}
+
 fu-main {
 	display: block;
 	font-size: var(--fu_fontsize);
@@ -19,15 +25,22 @@ fu-children {
 	&:empty {
 		display: none;
 	}
-}
 
-fu-group,
-.fu_repeater,
-.fu_radiotabs,
-.fu_tabs{
-	&.fu_gw_default{
-		grid-column: 1 / -1;
+	.fu_field,
+	.fu_html {
+		&[fu_colspan="1"]    { grid-column: span 1; }
+		&[fu_colspan="2"]    { grid-column: span 2; }
+		&[fu_colspan="3"]    { grid-column: span 3; }
+		&[fu_colspan="4"]    { grid-column: span 4; }
+		&[fu_colspan="5"]    { grid-column: span 5; }
+		&[fu_colspan="6"]    { grid-column: span 6; }
+		&[fu_colspan="7"]    { grid-column: span 7; }
+		&[fu_colspan="8"]    { grid-column: span 8; }
+		&[fu_colspan="full"] { grid-column: 1 / -1; }
 	}
+
+	fu-hidden,
+	fu-undefined { grid-column: 1 / -1; }
 }
 
 
@@ -64,9 +77,7 @@ fu-group,
 				right: 0;
 				bottom: 0;
 				height: 2px;
-				transform: scaleX(0);
-				transition: all .3s;
-				background-color: transparent;
+				background: var(--fu_border_color);
 			}
 
 			&:has(input[type="radio"]:checked),
@@ -74,8 +85,7 @@ fu-group,
 			&:focus {
 				color: var(--fu_text_color);
 				&::after {
-					transform: scaleX(1);
-					background-color: var(--fu_text_color);
+					background: var(--fu_text_color);
 				}
 			}
 

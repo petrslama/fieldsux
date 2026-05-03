@@ -19,7 +19,7 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 
 	get inputs(){
 		return Array.from(
-			this.querySelectorAll('.fu_choices_wrapper input[type="checkbox"]')
+			this.querySelectorAll('input')
 		);
 	}
 
@@ -39,8 +39,9 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 	set template(template){
 
 		fu.DOM.attrs(this, {
+			'class': 'fu_field fu_field_choices',
+			'fu_colspan': template.fu_colspan ?? '',
 			'fu_name': template.fu_name,
-			'class': 'fu_choices',
 			'children':[
 				( ! template.fu_label ) ? null : {
 					'class': 'fu_label',
@@ -69,8 +70,6 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 				},
 			]
 		});
-
-		this.set_width( this, template );
 	}
 };
 

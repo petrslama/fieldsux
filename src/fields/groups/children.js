@@ -34,7 +34,7 @@ fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 				if ( fu_name ) {
 					field.value = value[fu_name] ?? '';
 				} else {
-					if ( field.classList.contains('fu_field') && ! field.classList.contains('fu_field_input') ) {
+					if ( field.classList.contains('fu_field') ) {
 						field.value = value;
 					}
 				}

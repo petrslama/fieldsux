@@ -475,6 +475,7 @@ fu.fields.undefined = class fu_fields_undefined extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'fu_name': template.fu_name,
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[
 				{
 					'class': 'fu_label',
@@ -1003,7 +1004,7 @@ fu.fields.children = class fu_fields_children extends fu.fields.abstract {
 				if ( fu_name ) {
 					field.value = value[fu_name] ?? '';
 				} else {
-					if ( field.classList.contains('fu_field') && ! field.classList.contains('fu_field_input') ) {
+					if ( field.classList.contains('fu_field') ) {
 						field.value = value;
 					}
 				}
@@ -1101,6 +1102,7 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 
 		fu.DOM.attrs(this, {
 			'class': 'fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
 			'fu_name': template.fu_name,
 			'id': index,
 			'children': [
@@ -1114,8 +1116,6 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 				}
 			],
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -1298,6 +1298,7 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 
 		fu.DOM.attrs(this, {
 			'class': 'fu_tabs fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
 			'id': ID,
 			'children': [
 				{
@@ -1345,7 +1346,6 @@ fu.fields.tabs = class fu_fields_tabs extends fu.fields.abstract {
 			],
 		});
 
-		this.set_width(this, template);
 		this.select(0);
 	}
 };
@@ -1428,6 +1428,7 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 
 		fu.DOM.attrs(this, {
 			'class': 'fu_radiotabs fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
 			'id': ID,
 			'fu_radio_name': template.fu_name,
 			'children': [
@@ -1479,8 +1480,6 @@ fu.fields.radiotabs = class fu_fields_radiotabs extends fu.fields.abstract {
 				},
 			],
 		});
-
-		this.set_width(this, template);
 	}
 };
 
@@ -1492,7 +1491,7 @@ customElements.define('fu-radiotabs', fu.fields.radiotabs);
 fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 
 	get value(){
-		return this.get_input()?.value ?? '';
+		return this.get_input()?.value ?? null;
 	}
 
 	/**
@@ -1518,8 +1517,9 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 		const index = fu.DOM.getIndex();
 
 		fu.DOM.attrs(this, {
-			'fu_name': template.fu_name,
 			'class': 'fu_field fu_field_input',
+			'fu_colspan': template.fu_colspan ?? '',
+			'fu_name': template.fu_name,
 			'children':[
 				( ! template.fu_label ) ? null : {
 					'tag': 'label',
@@ -1534,8 +1534,6 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 				},
 			]
 		});
-
-		this.set_width( this, template );
 	}
 
 }
@@ -1689,9 +1687,9 @@ fu.fields.checkbox = class fu_fields_checkbox extends fu.fields.input {
 
 	create_field( index, template ){
 		return fu.DOM.create({
+			'class': 'fu_input_wrapper',
 			'tag': 'label',
 			'for': index,
-			'class': 'fu_input_wrapper',
 			'children': [
 				template.fu_before && { 'class': 'fu_before', 'html': ` ${template.fu_before} ` },
 				{
@@ -1725,7 +1723,7 @@ fu.fields.color = class fu_fields_color extends fu.fields.input {
 	}
 
 	get value(){
-		return this.get_input()?.value ?? '';
+		return this.get_input()?.value ?? null;
 	}
 
 	/**
@@ -1857,7 +1855,7 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 
 	get inputs(){
 		return Array.from(
-			this.querySelectorAll('.fu_choices_wrapper input[type="checkbox"]')
+			this.querySelectorAll('input')
 		);
 	}
 
@@ -1877,8 +1875,9 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 	set template(template){
 
 		fu.DOM.attrs(this, {
+			'class': 'fu_field_choices',
+			'fu_colspan': template.fu_colspan ?? '',
 			'fu_name': template.fu_name,
-			'class': 'fu_choices',
 			'children':[
 				( ! template.fu_label ) ? null : {
 					'class': 'fu_label',
@@ -1907,8 +1906,6 @@ fu.fields.checkboxes = class fu_fields_checkboxes extends fu.fields.input {
 				},
 			]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -1921,7 +1918,7 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 
 	get value(){
 		const checked = this.querySelector('input[type="radio"]:checked');
-		return checked ? checked.value : null;
+		return checked ? checked.getAttribute('value') : null;
 	}
 
 	set value(value){
@@ -1952,8 +1949,9 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 		const index = fu.DOM.getIndex();
 
 		fu.DOM.attrs(this, {
+			'class': 'fu_field fu_field_choices',
+			'fu_colspan': template.fu_colspan ?? '',
 			'fu_name': template.fu_name,
-			'class': 'fu_choices',
 			'children':[
 				( ! template.fu_label ) ? null : {
 					'class': 'fu_label',
@@ -1983,8 +1981,6 @@ fu.fields.radios = class fu_fields_radios extends fu.fields.input {
 				},
 			]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -2513,8 +2509,9 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 		// Do it
 
 		fu.DOM.attrs(this, {
-			'fu_name': template.fu_name,
 			'class': 'fu_repeater fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
+			'fu_name': template.fu_name,
 			'data-group': template_group_id,
 			'children': [{
 				'class': 'fu_header',
@@ -2592,8 +2589,6 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 				}]
 			}],
 		});
-
-		this.set_width( this, template );
 
 		this.rows = this.querySelector('fu-rows');
 
@@ -2971,13 +2966,12 @@ fu.fields.h1 = class fu_fields_h1 extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'class': 'fu_h1',
 				'html': template.fu_label ?? ''
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -2992,13 +2986,12 @@ fu.fields.h2 = class fu_fields_h2 extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'class': 'fu_h2',
 				'html': template.fu_label ?? ''
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -3013,13 +3006,12 @@ fu.fields.h3 = class fu_fields_h3 extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'class': 'fu_h3',
 				'html': template.fu_label ?? ''
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -3034,13 +3026,12 @@ fu.fields.p = class fu_fields_p extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'tag': 'p',
 				'html': template.fu_label ?? ''
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -3055,13 +3046,12 @@ fu.fields.img = class fu_fields_img extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'tag': 'img',
 				'src': template.src ?? ''
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -3076,6 +3066,7 @@ fu.fields.a = class fu_fields_a extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'tag': 'a',
 				'html': template.fu_label ?? '',
@@ -3083,8 +3074,6 @@ fu.fields.a = class fu_fields_a extends fu.fields.abstract {
 				'target': template.target ?? '_blank',
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -3099,10 +3088,9 @@ fu.fields.br = class fu_fields_br extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'style': 'height:' + ( template.height || '32px' )
 		});
-
-		this.set_width( this, template );
 	}
 };
 
@@ -3117,12 +3105,11 @@ fu.fields.hr = class fu_fields_hr extends fu.fields.abstract {
 	set template(template){
 		fu.DOM.attrs(this, {
 			'class': 'fu_html',
+			'fu_colspan': template.fu_colspan ?? '',
 			'children':[{
 				'tag': 'hr',
 			}]
 		});
-
-		this.set_width( this, template );
 	}
 };
 

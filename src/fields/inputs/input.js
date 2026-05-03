@@ -1,7 +1,7 @@
 fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 
 	get value(){
-		return this.get_input()?.value ?? '';
+		return this.get_input()?.value ?? null;
 	}
 
 	/**
@@ -27,8 +27,9 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 		const index = fu.DOM.getIndex();
 
 		fu.DOM.attrs(this, {
-			'fu_name': template.fu_name,
 			'class': 'fu_field fu_field_input',
+			'fu_colspan': template.fu_colspan ?? '',
+			'fu_name': template.fu_name,
 			'children':[
 				( ! template.fu_label ) ? null : {
 					'tag': 'label',
@@ -43,8 +44,6 @@ fu.fields.input = class fu_fields_input extends fu.fields.abstract {
 				},
 			]
 		});
-
-		this.set_width( this, template );
 	}
 
 }

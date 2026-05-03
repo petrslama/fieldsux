@@ -185,8 +185,9 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 		// Do it
 
 		fu.DOM.attrs(this, {
-			'fu_name': template.fu_name,
 			'class': 'fu_repeater fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
+			'fu_name': template.fu_name,
 			'data-group': template_group_id,
 			'children': [{
 				'class': 'fu_header',
@@ -264,8 +265,6 @@ fu.fields.repeater = class fu_fields_repeater extends fu.fields.abstract {
 				}]
 			}],
 		});
-
-		this.set_width( this, template );
 
 		this.rows = this.querySelector('fu-rows');
 

@@ -41,6 +41,7 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 
 		fu.DOM.attrs(this, {
 			'class': 'fu_field',
+			'fu_colspan': template.fu_colspan ?? '',
 			'fu_name': template.fu_name,
 			'id': index,
 			'children': [
@@ -54,8 +55,6 @@ fu.fields.group = class fu_fields_group extends fu.fields.abstract {
 				}
 			],
 		});
-
-		this.set_width( this, template );
 	}
 };
 

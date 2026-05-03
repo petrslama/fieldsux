@@ -1,8 +1,17 @@
 fu-h1,
 fu-h2,
-fu-h3 {
+fu-h3,
+fu-p,
+fu-hr,
+fu-space{
 	grid-column: 1 / -1;
 }
+
+fu-a,
+fu-img {
+	grid-column: span 2;
+}
+
 
 .fu_h1 {
 	font-weight: 600;
@@ -25,14 +34,6 @@ fu-h3 {
 	line-height: var(--fu_size_md);
 	border-bottom: 2px solid var(--zink_200);
 
-}
-
-fu-p,
-fu-hr,
-fu-space{
-	&.fu_gw_default{
-		grid-column: 1 / -1;
-	}
 }
 
 fu-img img {
